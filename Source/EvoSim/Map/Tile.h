@@ -6,15 +6,15 @@
 #include "GameFramework/Actor.h"
 #include "Tile.generated.h"
 
-UENUM()
-enum class ETileType
+UENUM(Blueprintable)
+enum class ETileType : uint8
 {
 	Water, Obstacle,
     Land, Plant
 };
 
-UENUM()
-enum class EDirection
+UENUM(Blueprintable)
+enum class EDirection : uint8
 {
 	N, NE,
 	E, SE,
@@ -31,20 +31,27 @@ public:
 	// Sets default values for this actor's properties
 	ATile();
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
     ETileType Type = ETileType::Water;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
     FVector2D Coords = {0, 0};
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
     ATile* GetNeighbour(EDirection Direction) const;
+	UFUNCTION(BlueprintCallable)
+	void Update();
+	
+	UFUNCTION()
+	void SetNeighbours(ATile* UpTile, ATile* DownTile, ATile* LeftTile, ATile* RightTile);
+	UFUNCTION(BlueprintNativeEvent)
+	void SetTileType(ETileType NewType);
 	
 protected:
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	ATile* Left = nullptr;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	ATile* Right = nullptr;
-	UPROPERTY()	
+	UPROPERTY(BlueprintReadWrite)
 	ATile* Up = nullptr;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	ATile* Down = nullptr;
 };

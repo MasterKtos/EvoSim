@@ -6,14 +6,18 @@
 #include "GameFramework/Actor.h"
 #include "MapManager.generated.h"
 
+enum class ETileType : uint8;
 class ATile;
 
-USTRUCT()
+USTRUCT(Blueprintable)
 struct FInitialParameters
 {
 	GENERATED_BODY()
 
-	TArray<ATile> InitialMap;
+	UPROPERTY(BlueprintReadWrite)
+	TArray<ETileType> InitialMap = {};
+	UPROPERTY(BlueprintReadWrite)
+	int InitialMapRowNum = 0;
 };
 
 UCLASS()
@@ -25,11 +29,21 @@ public:
 	// Sets default values for this actor's properties
 	AMapManager();
 
-	UFUNCTION()
-	void GenerateMap(FInitialParameters Parameters);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
+	void GenerateMap(const FInitialParameters& Parameters);
+	UFUNCTION(BlueprintCallable)
 	void UpdateTiles();
-	
-	UPROPERTY()
-	TArray<ATile*> Tiles;
+
+	UFUNCTION(BlueprintCallable)
+	int MapCoordsToIndex(int CoordX, int CoordY) const;
+	UFUNCTION(BlueprintCallable)
+	ATile* GetTileFromCoords(int CoordX, int CoordY);
+
+protected:
+	UPROPERTY(BlueprintReadWrite)
+	TArray<ATile*> Tiles = {};
+	UPROPERTY(BlueprintReadWrite)
+	int TilesRowSize = 0;
+	UPROPERTY(BlueprintReadWrite)
+	TSubclassOf<ATile> TilePrefab;
 };

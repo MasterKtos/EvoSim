@@ -25,3 +25,23 @@ ATile* ATile::GetNeighbour(const EDirection Direction) const
 		default: return nullptr;
 	}
 }
+
+void ATile::Update()
+{
+	if(Type != ETileType::Plant)
+		return;
+	// Grow da plant
+}
+
+void ATile::SetNeighbours(ATile* UpTile, ATile* DownTile, ATile* LeftTile, ATile* RightTile)
+{
+	Up = UpTile;
+	Down = DownTile;
+	Left = LeftTile;
+	Right = RightTile;
+}
+
+void ATile::SetTileType_Implementation(ETileType NewType)
+{
+	Type = NewType;
+}
