@@ -29,6 +29,9 @@ public:
 	// Sets default values for this actor's properties
 	AMapManager();
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	ATile* SetNewTarget(ATile* From);
+	
 	UFUNCTION(BlueprintCallable)
 	void GenerateMap(const FInitialParameters& Parameters);
 	UFUNCTION(BlueprintCallable)
@@ -39,11 +42,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	ATile* GetTileFromCoords(int CoordX, int CoordY);
 
-protected:
 	UPROPERTY(BlueprintReadWrite)
 	TArray<ATile*> Tiles = {};
 	UPROPERTY(BlueprintReadWrite)
 	int TilesRowSize = 0;
+
+protected:
 	UPROPERTY(BlueprintReadWrite)
 	TSubclassOf<ATile> TilePrefab;
 };

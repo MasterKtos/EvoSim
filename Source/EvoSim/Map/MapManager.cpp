@@ -10,6 +10,11 @@ AMapManager::AMapManager()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+ATile* AMapManager::SetNewTarget_Implementation(ATile* From)
+{
+	return From;
+}
+
 void AMapManager::GenerateMap(const FInitialParameters& Parameters)
 {
 	for (const auto TileType : Parameters.InitialMap)
