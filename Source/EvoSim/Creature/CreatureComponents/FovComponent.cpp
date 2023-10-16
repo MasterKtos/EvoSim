@@ -5,7 +5,7 @@
 
 #include "ComponentReregisterContext.h"
 #include "VectorTypes.h"
-#include "EvoSim/Creature.h"
+#include "EvoSim/Creature/Creature.h"
 #include "EvoSim/Map/MapManager.h"
 #include "EvoSim/Map/Tile.h"
 
@@ -48,17 +48,32 @@ void UFovComponent::UpdateTilesInSight()
 		if(UE::Geometry::Distance(TileLocation, OwnerLocation) > Owner->ViewDistance * 100)
 			continue;
 
+		// Is in field of view?
+		FVector CreatureTileVector = (OwnerLocation3D - TileLocation3D).GetSafeNormal();
+		FVector CreatureForwardVector = Owner->GetActorForwardVector();
+
+		float DotProduct = FVector::DotProduct(CreatureTileVector, CreatureForwardVector);
+		FVector CrossProduct = FVector::CrossProduct(CreatureTileVector, CreatureForwardVector);
+		float CrossProductMagnitude = CrossProduct.Size();
+
+		float AngleInRadians = FMath::Atan2(CrossProductMagnitude, DotProduct);
+		float AngleInDegrees = FMath::RadiansToDegrees(AngleInRadians);
+
+		if(AngleInDegrees * 2 > Owner->FieldOfView)
+			continue;
+		
+		// Is obstacle in the way?
 		FHitResult HitResult;
 		FVector End = TileLocation3D;
 		FVector Start = OwnerLocation3D;
 		Start.Z = End.Z;
 		
-		// Is obstacle in the way?
 		if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_WorldStatic, FCollisionQueryParams()))
 			continue;
 		
 		DrawDebugLine(GetWorld(), Start + FVector(0,0,30), End + FVector(0,0,30), FColor::Red, false, 0.0f, 0, 5);
-		
+
+		// Tile is in field of view.
 		if(Tile->Type == ETileType::Water)
 		{
 			WaterTiles.Add(Tile);
