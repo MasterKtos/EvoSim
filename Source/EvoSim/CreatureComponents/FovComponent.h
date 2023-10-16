@@ -17,25 +17,27 @@ class EVOSIM_API UFovComponent : public UActorComponent
 
 public:	
 	UFovComponent();
+	
+	UFUNCTION(BlueprintCallable)
+	void UpdateTilesInSight();
+	
+	UFUNCTION(BlueprintCallable)
+	const TArray<ATile*>& GetWaterTilesInSight() const;
+	UFUNCTION(BlueprintCallable)
+	const TArray<ATile*>& GetPlantTilesInSight() const;
+	UFUNCTION(BlueprintCallable)
+	const TArray<ATile*>& GetMeatInSight() const;
 
 protected:
 	virtual void BeginPlay() override;
-
-public:
-	void UpdateTilesInSight();
-
-private:
+	
 	UPROPERTY()
 	ACreature* Owner = nullptr;
 
+	UPROPERTY(BlueprintReadWrite)
 	TArray<ATile*> WaterTiles;
+	UPROPERTY(BlueprintReadWrite)
 	TArray<ATile*> PlantTiles;
+	UPROPERTY(BlueprintReadWrite)
 	TArray<ATile*> MeatTiles;
-
-public:
-	[[nodiscard]] const TArray<ATile*>& GetWaterTilesInSight() const;
-
-	[[nodiscard]] const TArray<ATile*>& GetPlantTilesInSight() const;
-
-	[[nodiscard]] const TArray<ATile*>& GetMeatInSight() const;
 };

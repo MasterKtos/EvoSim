@@ -19,8 +19,8 @@ void UFovComponent::BeginPlay()
 	Super::BeginPlay();
 
 	Owner = Cast<ACreature>(GetOwner());
-	if(Owner == nullptr)
-		UE_LOG(LogActorComponent, Log, TEXT("FovComponent | No Owner."));
+	if(!ensure(Owner))
+		UE_LOG(LogActorComponent, Log, TEXT("FovComponent | No Owner (or owner is not a Creature)."));
 }
 
 void UFovComponent::UpdateTilesInSight()
