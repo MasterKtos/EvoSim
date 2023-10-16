@@ -4,6 +4,7 @@
 #include "CreatureMovementComponent.h"
 
 #include "ComponentReregisterContext.h"
+#include "VectorTypes.h"
 #include "EvoSim/Creature/Creature.h"
 
 UCreatureMovementComponent::UCreatureMovementComponent()
@@ -30,13 +31,18 @@ void UCreatureMovementComponent::TickComponent(float DeltaTime, ELevelTick TickT
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if(const FVector OwnerLocation = Owner->GetActorLocation(); OwnerLocation != Target)
-		Owner->SetActorLocation(FMath::VInterpConstantTo(OwnerLocation, Target, DeltaTime, Owner->Speed));
+	if(!IsAtTarget())
+		Owner->SetActorLocation(FMath::VInterpConstantTo(Owner->GetActorLocation(), Target, DeltaTime, Owner->Speed));
 }
 
 void UCreatureMovementComponent::SetNewTarget(const FVector& NewTarget)
 {
 	Owner->SetActorLocation(Target);
 	Target = NewTarget;
+}
+
+bool UCreatureMovementComponent::IsAtTarget() const
+{
+	return UE::Geometry::Distance(Owner->GetActorLocation(), Target) < 1;
 }
 

@@ -44,14 +44,14 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	bool Move(TArray<EDirection>::ElementType Direction) const;
+	bool Move(EDirection Direction);
 
-	UPROPERTY();
+	UPROPERTY()
 	UFovComponent* FovComponent;
+	UPROPERTY()
+	UCreatureMovementComponent* MovementComponent;
 	
 private:
-	UPROPERTY();
-	UCreatureMovementComponent* MovementComponent;
-	UPROPERTY();
+	UPROPERTY()
 	UAIComponent* AIComponent;
 };

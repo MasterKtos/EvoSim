@@ -23,7 +23,7 @@ void AAIManager::BeginPlay()
 TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 {
 	TArray<UAINode*> OpenedNodes = {};
-	TSet<UAINode*> ClosedNodes = {};
+	TSet<ATile*> ClosedNodes = {};
 
 	UAINode* FirstNode = NewObject<UAINode>();
 	FirstNode->Tile = From;
@@ -36,7 +36,7 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 	{
 		// Find node with lowest cost
 		UAINode* CurrentNode = OpenedNodes[0];
-		for (const auto Node : OpenedNodes)
+		for (auto* Node : OpenedNodes)
 		{
 			if(Node->GetCost() < CurrentNode->GetCost() ||
 				Node->GetCost() == CurrentNode->GetCost() && Node->DestinationCost < CurrentNode->DestinationCost)
@@ -44,7 +44,7 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 		}
 		
 		OpenedNodes.Remove(CurrentNode);
-		ClosedNodes.Add(CurrentNode);
+		ClosedNodes.Add(CurrentNode->Tile);
 
 		// Found node!
 		if(CurrentNode->Tile->Coords == To->Coords)
@@ -58,15 +58,25 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 			{
 				UAINode* Neighbour = NewObject<UAINode>();
 				Neighbour->Tile = CurrentNode->Tile->GetNeighbour(Direction);
+
+				if(!IsValid(Neighbour->Tile))
+					continue;
 				
+				Neighbour->Parent = CurrentNode;
+				Neighbour->ParentDirection = Direction;
+				// Found node!
+				if(Neighbour->Tile->Coords == To->Coords)
+				{
+					return GetPath(Neighbour, FirstNode);
+				}
 				CurrentNode->Neighbours.Add(Neighbour, Direction);
 			}
 		}
 
 		for (auto& Neighbour : CurrentNode->Neighbours)
 		{
-			auto NeighbourNode = Neighbour.Key;			
-			if(!NeighbourNode->IsWalkable() || ClosedNodes.Contains(NeighbourNode))
+			auto* NeighbourNode = Neighbour.Key;
+			if(!NeighbourNode->IsWalkable() || ClosedNodes.Contains(NeighbourNode->Tile))
 				continue;
 
 			const uint8 NewNeighbourSourceCost = CurrentNode->SourceCost + GetDistance(CurrentNode, NeighbourNode);
@@ -74,7 +84,6 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 			{
 				NeighbourNode->SourceCost = NewNeighbourSourceCost;
 				NeighbourNode->DestinationCost = GetDistance(NeighbourNode, LastNode);
-				NeighbourNode->Parent = CurrentNode;
 
 				if(!OpenedNodes.Contains(NeighbourNode))
 					OpenedNodes.Add(NeighbourNode);
@@ -91,6 +100,9 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, TArray<ATile*> To)
 	
 	for (ATile* Tile : To)
 	{
+		if(From == Tile)
+			continue;
+		
 		TArray<EDirection> ThisPath = FindPathToTile(From, Tile);
 
 		if(!ThisPath.IsEmpty() && ThisPath.Num() < BestScore)
@@ -119,9 +131,11 @@ TArray<EDirection> AAIManager::GetPath(UAINode* FromNode, UAINode* ToNode)
 	TArray<EDirection> Path = {};
 
 	UAINode* CurrentNode = FromNode;
-	while(CurrentNode != ToNode)
+	while(IsValid(CurrentNode->Parent))
 	{
-		EDirection DirectionFromParentToNode = *CurrentNode->Parent->Neighbours.Find(CurrentNode);
+		// EDirection DirectionFromParentToNode = *CurrentNode->Parent->Neighbours.Find(CurrentNode);
+		// EDirection DirectionFromParentToNode = static_cast<EDirection>((static_cast<uint8>(CurrentNode->ParentDirection)+4)%8);
+		EDirection DirectionFromParentToNode = CurrentNode->ParentDirection;
 		Path.Add(DirectionFromParentToNode);
 		CurrentNode = CurrentNode->Parent;
 	}

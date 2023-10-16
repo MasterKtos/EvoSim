@@ -24,15 +24,19 @@ void ACreature::BeginPlay()
 	Speed = 100.f;
 	FieldOfView = 360;
 	ViewDistance = 7;
+	Hunger = 45;	
+	Thirst = 40;
 }
 
-bool ACreature::Move(TArray<EDirection>::ElementType Direction) const
+bool ACreature::Move(const EDirection Direction)
 {
-	const ATile* NeighbourTile = CurrentTile->GetNeighbour(Direction);
-	if(NeighbourTile == nullptr)
+	ATile* NeighbourTile = CurrentTile->GetNeighbour(Direction); 
+	if(!IsValid(NeighbourTile))
 		return false;
-
-	MovementComponent->SetNewTarget(NeighbourTile->GetActorLocation());
+		
+	CurrentTile = NeighbourTile;
+	
+	MovementComponent->SetNewTarget(CurrentTile->GetActorLocation());
 	return true;
 }
 
