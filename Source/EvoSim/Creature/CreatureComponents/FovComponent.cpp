@@ -5,7 +5,7 @@
 
 #include "ComponentReregisterContext.h"
 #include "VectorTypes.h"
-#include "EvoSim/Creature.h"
+#include "EvoSim/Creature/Creature.h"
 #include "EvoSim/Map/MapManager.h"
 #include "EvoSim/Map/Tile.h"
 
