@@ -84,6 +84,24 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 	return {};
 }
 
+TArray<EDirection> AAIManager::FindPathToTile(ATile* From, TArray<ATile*> To)
+{
+	int BestScore = 100;
+	TArray<EDirection> BestPath;
+	
+	for (ATile* Tile : To)
+	{
+		TArray<EDirection> ThisPath = FindPathToTile(From, Tile);
+
+		if(!ThisPath.IsEmpty() && ThisPath.Num() < BestScore)
+		{
+			BestScore = ThisPath.Num();
+			BestPath = ThisPath;
+		}
+	}
+	return BestPath;
+}
+
 
 uint8 AAIManager::GetDistance(const UAINode* FromNode, const UAINode* ToNode)
 {

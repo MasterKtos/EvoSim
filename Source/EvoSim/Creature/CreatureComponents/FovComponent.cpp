@@ -71,7 +71,7 @@ void UFovComponent::UpdateTilesInSight()
 		if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_WorldStatic, FCollisionQueryParams()))
 			continue;
 		
-		DrawDebugLine(GetWorld(), Start + FVector(0,0,30), End + FVector(0,0,30), FColor::Red, false, 0.0f, 0, 5);
+		DrawDebugLine(GetWorld(), Start + FVector(0,0,30), End + FVector(0,0,30), FColor::Red, false, 1.0f, 0, 5);
 
 		// Tile is in field of view.
 		if(Tile->Type == ETileType::Water)

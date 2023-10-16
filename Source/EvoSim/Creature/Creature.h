@@ -3,9 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EvoSim/AI/AIComponent.h"
 #include "GameFramework/Actor.h"
 #include "Creature.generated.h"
 
+class UAIComponent;
+class UCreatureMovementComponent;
 class UFovComponent;
 class AMapManager;
 class ATile;
@@ -22,21 +25,33 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	AMapManager* MapManager;
 
-	float FieldOfView = 0;
-	float ViewDistance = 0;
-
-protected:
-	virtual void BeginPlay() override;
-
-	virtual void TickActor(float DeltaTime, ELevelTick TickType, FActorTickFunction& ThisTickFunction) override;
-	
 	UPROPERTY(BlueprintReadWrite)
-	ATile* CurrentTile;
-
+	float FieldOfView = 0;
+	UPROPERTY(BlueprintReadWrite)
+	float ViewDistance = 0;
 	UPROPERTY(BlueprintReadWrite)
 	float Speed = 0;
 
-private:
+	UPROPERTY()
+	int Hunger = 0;	
+	UPROPERTY()
+	int Thirst = 0;
+	
+	UPROPERTY(BlueprintReadWrite)
+	ATile* CurrentTile = nullptr;
+	
+protected:
+	virtual void BeginPlay() override;
+
+public:
+	bool Move(TArray<EDirection>::ElementType Direction) const;
+
 	UPROPERTY();
 	UFovComponent* FovComponent;
+	
+private:
+	UPROPERTY();
+	UCreatureMovementComponent* MovementComponent;
+	UPROPERTY();
+	UAIComponent* AIComponent;
 };

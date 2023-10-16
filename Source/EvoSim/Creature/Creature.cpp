@@ -3,28 +3,36 @@
 
 #include "Creature.h"
 
+#include "CreatureComponents/CreatureMovementComponent.h"
 #include "CreatureComponents/FovComponent.h"
+#include "EvoSim/AI/AIComponent.h"
+#include "EvoSim/Map/Tile.h"
 
 ACreature::ACreature()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
 	FovComponent = CreateDefaultSubobject<UFovComponent>(TEXT("FovComponent"));
+	MovementComponent = CreateDefaultSubobject<UCreatureMovementComponent>(TEXT("MovementComponent"));
+	AIComponent = CreateDefaultSubobject<UAIComponent>(TEXT("AIComponent"));
 }
 
 void ACreature::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FieldOfView = 270;
-	ViewDistance = 4;
+	Speed = 100.f;
+	FieldOfView = 360;
+	ViewDistance = 7;
 }
 
-void ACreature::TickActor(float DeltaTime, ELevelTick TickType, FActorTickFunction& ThisTickFunction)
+bool ACreature::Move(TArray<EDirection>::ElementType Direction) const
 {
-	Super::TickActor(DeltaTime, TickType, ThisTickFunction);
+	const ATile* NeighbourTile = CurrentTile->GetNeighbour(Direction);
+	if(NeighbourTile == nullptr)
+		return false;
 
-	if(FovComponent != nullptr)
-		FovComponent->UpdateTilesInSight();
+	MovementComponent->SetNewTarget(NeighbourTile->GetActorLocation());
+	return true;
 }
 

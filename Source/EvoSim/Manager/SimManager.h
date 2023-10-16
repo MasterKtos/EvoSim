@@ -19,8 +19,6 @@ class EVOSIM_API USimManager : public UGameInstance
 	
 	virtual void Init() override;
 
-	virtual void Shutdown() override;
-	
 	FTimerHandle TimerHandle;
 
 	void Tick();
