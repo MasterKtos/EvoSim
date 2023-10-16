@@ -22,6 +22,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	AMapManager* MapManager;
 
+	float FieldOfView = 0;
 	float ViewDistance = 0;
 
 protected:

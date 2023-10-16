@@ -16,6 +16,7 @@ void ACreature::BeginPlay()
 {
 	Super::BeginPlay();
 
+	FieldOfView = 270;
 	ViewDistance = 4;
 }
 
