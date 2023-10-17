@@ -5,12 +5,6 @@
 
 #include "ManagerInterface.h"
 
-void USimManager::Init()
-{
-	Super::Init();
-
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &USimManager::Tick, 1.0f, true, 1.0f);
-}
 
 void USimManager::Tick()
 {
@@ -29,3 +23,19 @@ void USimManager::RemoveFromUpdate(IManagerInterface* Manager)
 {
 	Managers.Remove(Manager);
 }
+
+void USimManager::StartSimulation()
+{
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &USimManager::Tick, 1.0f, true, 1.0f);
+}
+
+void USimManager::PauseSimulation()
+{
+	GetWorld()->GetTimerManager().PauseTimer(TimerHandle);
+}
+
+void USimManager::ContinueSimulation()
+{
+	GetWorld()->GetTimerManager().UnPauseTimer(TimerHandle);
+}
+

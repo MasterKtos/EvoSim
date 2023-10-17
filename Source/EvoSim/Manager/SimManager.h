@@ -17,8 +17,6 @@ class EVOSIM_API USimManager : public UGameInstance
 	
 	TArray<IManagerInterface*> Managers;
 	
-	virtual void Init() override;
-
 	FTimerHandle TimerHandle;
 
 	void Tick();
@@ -27,4 +25,11 @@ public:
 	void AddToUpdate(IManagerInterface* Manager);
 
 	void RemoveFromUpdate(IManagerInterface* Manager);
+
+	UFUNCTION(BlueprintCallable)
+	void StartSimulation();
+	UFUNCTION(BlueprintCallable)
+	void PauseSimulation();
+	UFUNCTION(BlueprintCallable)
+	void ContinueSimulation();
 };
