@@ -32,9 +32,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	float Speed = 0;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	int Hunger = 0;	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	int Thirst = 0;
 	
 	UPROPERTY(BlueprintReadWrite)

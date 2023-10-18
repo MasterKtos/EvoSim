@@ -28,9 +28,7 @@ ATile* ATile::GetNeighbour(const EDirection Direction) const
 
 void ATile::Update()
 {
-	if(Type != ETileType::Plant)
-		return;
-	// Grow da plant
+	
 }
 
 void ATile::SetNeighbours(ATile* UpTile, ATile* DownTile, ATile* LeftTile, ATile* RightTile)
@@ -41,7 +39,7 @@ void ATile::SetNeighbours(ATile* UpTile, ATile* DownTile, ATile* LeftTile, ATile
 	Right = RightTile;
 }
 
-void ATile::SetTileType_Implementation(ETileType NewType)
+void ATile::SetTileType_Implementation(const ETileType NewType)
 {
 	Type = NewType;
 }

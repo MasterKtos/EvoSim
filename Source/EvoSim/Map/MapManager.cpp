@@ -2,6 +2,7 @@
 
 #include "MapManager.h"
 #include "Tile.h"
+#include "TilePlant.h"
 
 // Sets default values
 AMapManager::AMapManager()
@@ -19,7 +20,17 @@ void AMapManager::GenerateMap(const FInitialParameters& Parameters)
 {
 	for (const auto TileType : Parameters.InitialMap)
 	{
-		auto* NewTile = Cast<ATile>(GetWorld()->SpawnActor(TilePrefab.Get()));
+		TSubclassOf<ATile> ChosenTilePrefab;
+		switch(TileType)
+		{
+			case ETileType::Water: //falls through
+			case ETileType::Obstacle: //falls through
+			case ETileType::Land: ChosenTilePrefab = TilePrefab; break;
+			case ETileType::Plant: ChosenTilePrefab = TilePlantPrefab; break;
+			
+			default: ChosenTilePrefab = TilePrefab;
+		}
+		ATile* NewTile = Cast<ATile>(GetWorld()->SpawnActor(ChosenTilePrefab.Get()));
 		NewTile->SetTileType(TileType);
 		Tiles.Add(NewTile);
 	}

@@ -31,5 +31,5 @@ protected:
 	UFUNCTION()
 	static uint8 GetDistance(const UAINode* FromNode, const UAINode* ToNode);
 	UFUNCTION()
-	static TArray<EDirection> GetPath(UAINode* FromNode, UAINode* ToNode);
+	static TArray<EDirection> GetPath(const UAINode* FromNode);
 };

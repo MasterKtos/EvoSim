@@ -10,6 +10,7 @@
 #include "EvoSim/Creature/CreatureComponents/FovComponent.h"
 #include "EvoSim/Manager/SimManager.h"
 #include "EvoSim/Map/Tile.h"
+#include "EvoSim/Map/TilePlant.h"
 
 UAIComponent::UAIComponent()
 {
@@ -31,7 +32,7 @@ void UAIComponent::BeginPlay()
 void UAIComponent::Update()
 {
 	Owner->Hunger++;
-	Owner->Thirst++;
+	// Owner->Thirst++;
 
 	const int Hunger = Owner->Hunger;
 	const int Thirst = Owner->Thirst;
@@ -51,6 +52,7 @@ void UAIComponent::Update()
 				Owner->Thirst = 0;
 				break;
 			case ETileType::Plant:
+				Cast<ATilePlant>(Owner->CurrentTile)->Eat();
 				Owner->Hunger = 0;
 				break;
 			default: break;
@@ -59,7 +61,8 @@ void UAIComponent::Update()
 		else
 			return;
 	}
-	
+
+	// Creature died of thirst and/or hunger 
 	if(Hunger >= 100 || Thirst >= 100)
 	{
 		if(USimManager* SimManager = Cast<USimManager>(GetWorld()->GetGameInstance()))
@@ -67,29 +70,40 @@ void UAIComponent::Update()
 		Owner->Destroy();
 		return;
 	}
-	
+
+	// Satisfy creature needs
 	if(Hunger < 50 && Thirst < 50)
 	{
 		// RandomDirection
 		return;
 	}
+	else
+		FindNewPath();
+	
+	
+}
+
+void UAIComponent::FindNewPath()
+{
+	const int Hunger = Owner->Hunger;
+	const int Thirst = Owner->Thirst;
 	
 	Owner->FovComponent->UpdateTilesInSight();
-
-	const TArray<ATile*> Plants = Owner->FovComponent->GetPlantTilesInSight();
-	const TArray<ATile*> Water = Owner->FovComponent->GetWaterTilesInSight();
-	
-	if(Hunger > Thirst && !Plants.IsEmpty())
-	{
-		MovesToDo = AAIManager::FindPathToTile(Owner->CurrentTile, Plants);
-	}
-	else if(!Water.IsEmpty())
-	{
-		MovesToDo = AAIManager::FindPathToTile(Owner->CurrentTile, Water);
-	}
-	else
-	{
-		// Go to random tile
-	}
+    
+    const TArray<ATile*> Plants = Owner->FovComponent->GetPlantTilesInSight();
+    // const TArray<ATile*> Water = Owner->FovComponent->GetWaterTilesInSight();
+    
+    if(Hunger > Thirst && !Plants.IsEmpty())
+    {
+    	MovesToDo = AAIManager::FindPathToTile(Owner->CurrentTile, Plants);
+    }
+    // else if(!Water.IsEmpty())
+    // {
+    // 	MovesToDo = AAIManager::FindPathToTile(Owner->CurrentTile, Water);
+    // }
+    else
+    {
+    	// Go to random tile
+    }
 }
 

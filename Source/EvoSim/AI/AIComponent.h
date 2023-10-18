@@ -20,11 +20,15 @@ class EVOSIM_API UAIComponent : public UActorComponent, public IManagerInterface
 public:	
 	UAIComponent();
 
+	UFUNCTION()
 	virtual void BeginPlay() override;
-
+	UFUNCTION()
 	virtual void Update() override;
 
 private:
+	UFUNCTION()
+	void FindNewPath();
+	
 	UPROPERTY()
 	ACreature* Owner;
 

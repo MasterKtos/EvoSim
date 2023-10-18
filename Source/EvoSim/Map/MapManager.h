@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "MapManager.generated.h"
 
+class ATilePlant;
 enum class ETileType : uint8;
 class ATile;
 
@@ -50,4 +51,6 @@ public:
 protected:
 	UPROPERTY(BlueprintReadWrite)
 	TSubclassOf<ATile> TilePrefab;
+	UPROPERTY(BlueprintReadWrite)
+	TSubclassOf<ATilePlant> TilePlantPrefab;
 };

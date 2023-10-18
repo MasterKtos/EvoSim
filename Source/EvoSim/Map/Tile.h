@@ -40,7 +40,7 @@ public:
 	UFUNCTION(BlueprintCallable)
     ATile* GetNeighbour(EDirection Direction) const;
 	UFUNCTION(BlueprintCallable)
-	void Update();
+	virtual void Update();
 	
 	UFUNCTION()
 	void SetNeighbours(ATile* UpTile, ATile* DownTile, ATile* LeftTile, ATile* RightTile);

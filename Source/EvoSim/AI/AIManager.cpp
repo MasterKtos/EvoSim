@@ -11,7 +11,6 @@ AAIManager::AAIManager()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
 }
 
 // Called when the game starts or when spawned
@@ -49,7 +48,7 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 		// Found node!
 		if(CurrentNode->Tile->Coords == To->Coords)
 		{
-			return GetPath(CurrentNode, FirstNode);
+			return GetPath(CurrentNode);
 		}
 
 		if(CurrentNode->Neighbours.IsEmpty())
@@ -67,7 +66,7 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 				// Found node!
 				if(Neighbour->Tile->Coords == To->Coords)
 				{
-					return GetPath(Neighbour, FirstNode);
+					return GetPath(Neighbour);
 				}
 				CurrentNode->Neighbours.Add(Neighbour, Direction);
 			}
@@ -126,15 +125,13 @@ uint8 AAIManager::GetDistance(const UAINode* FromNode, const UAINode* ToNode)
 	return 14*Distance.X + 10*(Distance.Y-Distance.X);
 }
 
-TArray<EDirection> AAIManager::GetPath(UAINode* FromNode, UAINode* ToNode)
+TArray<EDirection> AAIManager::GetPath(const UAINode* FromNode)
 {
 	TArray<EDirection> Path = {};
 
-	UAINode* CurrentNode = FromNode;
+	const UAINode* CurrentNode = FromNode;
 	while(IsValid(CurrentNode->Parent))
 	{
-		// EDirection DirectionFromParentToNode = *CurrentNode->Parent->Neighbours.Find(CurrentNode);
-		// EDirection DirectionFromParentToNode = static_cast<EDirection>((static_cast<uint8>(CurrentNode->ParentDirection)+4)%8);
 		EDirection DirectionFromParentToNode = CurrentNode->ParentDirection;
 		Path.Add(DirectionFromParentToNode);
 		CurrentNode = CurrentNode->Parent;
