@@ -8,6 +8,12 @@
 #include "EvoSim/Creature/Creature.h"
 #include "EvoSim/Creature/CreatureComponents/CreatureMovementComponent.h"
 #include "EvoSim/Creature/CreatureComponents/FovComponent.h"
+#include "EvoSim/Creature/States/CreatureState.h"
+#include "EvoSim/Creature/States/CreatureStateDrink.h"
+#include "EvoSim/Creature/States/CreatureStateEat.h"
+#include "EvoSim/Creature/States/CreatureStateReproduce.h"
+#include "EvoSim/Creature/States/CreatureStateRest.h"
+#include "EvoSim/Creature/States/CreatureStateTravel.h"
 #include "EvoSim/Manager/SimManager.h"
 #include "EvoSim/Map/Tile.h"
 #include "EvoSim/Map/TilePlant.h"
@@ -27,12 +33,28 @@ void UAIComponent::BeginPlay()
 
 	if(USimManager* SimManager = Cast<USimManager>(GetWorld()->GetGameInstance()))
 		SimManager->AddToUpdate(this);
+
+	CreatureStateMap = {
+		{ECreatureStateName::Rest, NewObject<UCreatureStateRest>()},
+		{ECreatureStateName::Eat, NewObject<UCreatureStateEat>()},
+		{ECreatureStateName::Drink, NewObject<UCreatureStateDrink>()},
+		{ECreatureStateName::Travel, NewObject<UCreatureStateTravel>()},
+		{ECreatureStateName::Reproduce, NewObject<UCreatureStateReproduce>()},
+	 };
+
+	CurrentCreatureState = CreatureStateMap[ECreatureStateName::Rest];
 }
 
 void UAIComponent::Update()
 {
 	Owner->Hunger++;
-	// Owner->Thirst++;
+	Owner->Thirst++;
+	Owner->Randy++;
+	CurrentCreatureState->Update();
+	return;
+	
+	Owner->Hunger++;
+	Owner->Thirst++;
 
 	const int Hunger = Owner->Hunger;
 	const int Thirst = Owner->Thirst;
@@ -81,6 +103,16 @@ void UAIComponent::Update()
 		FindNewPath();
 	
 	
+}
+
+bool UAIComponent::ChangeCurrentState(const ECreatureStateName NewStateName)
+{
+	if(CreatureStateMap[NewStateName]->TryEnterState(CurrentCreatureState->StateName))
+	{
+		CurrentCreatureState = CreatureStateMap[NewStateName];
+		return true;
+	}
+	return false;
 }
 
 void UAIComponent::FindNewPath()

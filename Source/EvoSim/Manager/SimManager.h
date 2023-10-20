@@ -6,7 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "SimManager.generated.h"
 
-class IManagerInterface;
+class IEvoSimLifetime;
 
 UCLASS()
 class EVOSIM_API USimManager : public UGameInstance
@@ -15,16 +15,16 @@ class EVOSIM_API USimManager : public UGameInstance
 
 	FTSTicker::FDelegateHandle TickDelegateHandle;
 	
-	TArray<IManagerInterface*> Managers;
+	TArray<IEvoSimLifetime*> Managers;
 	
 	FTimerHandle TimerHandle;
 
 	void Tick();
 
 public:
-	void AddToUpdate(IManagerInterface* Manager);
+	void AddToUpdate(IEvoSimLifetime* Manager);
 
-	void RemoveFromUpdate(IManagerInterface* Manager);
+	void RemoveFromUpdate(IEvoSimLifetime* Manager);
 
 	UFUNCTION(BlueprintCallable)
 	void StartSimulation();

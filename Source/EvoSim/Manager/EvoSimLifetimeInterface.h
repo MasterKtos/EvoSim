@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "ManagerInterface.generated.h"
+#include "EvoSimLifetimeInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UManagerInterface : public UInterface
+class UEvoSimLifetime : public UInterface
 {
 	GENERATED_BODY()
 };
 
-class EVOSIM_API IManagerInterface
+class EVOSIM_API IEvoSimLifetime
 {
 	GENERATED_BODY()
 

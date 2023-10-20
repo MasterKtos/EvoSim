@@ -3,23 +3,23 @@
 
 #include "SimManager.h"
 
-#include "ManagerInterface.h"
+#include "EvoSimLifetimeInterface.h"
 
 
 void USimManager::Tick()
 {
-	for (IManagerInterface* Manager : Managers)
+	for (IEvoSimLifetime* Manager : Managers)
 	{
 		Manager->Update();
 	}
 }
 
-void USimManager::AddToUpdate(IManagerInterface* Manager)
+void USimManager::AddToUpdate(IEvoSimLifetime* Manager)
 {
 	Managers.Add(Manager);
 }
 
-void USimManager::RemoveFromUpdate(IManagerInterface* Manager)
+void USimManager::RemoveFromUpdate(IEvoSimLifetime* Manager)
 {
 	Managers.Remove(Manager);
 }

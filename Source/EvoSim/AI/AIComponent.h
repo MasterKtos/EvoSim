@@ -4,16 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "EvoSim/Manager/ManagerInterface.h"
+#include "..\Manager\EvoSimLifetimeInterface.h"
 #include "AIComponent.generated.h"
 
 
+class UCreatureState;
+enum class ECreatureStateName;
 enum class EDirection : uint8;
 class ACreature;
 class AAIManager;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class EVOSIM_API UAIComponent : public UActorComponent, public IManagerInterface
+class EVOSIM_API UAIComponent : public UActorComponent, public IEvoSimLifetime
 {
 	GENERATED_BODY()
 
@@ -25,6 +27,9 @@ public:
 	UFUNCTION()
 	virtual void Update() override;
 
+	UFUNCTION()
+	bool ChangeCurrentState(ECreatureStateName NewStateName);
+	
 private:
 	UFUNCTION()
 	void FindNewPath();
@@ -34,4 +39,10 @@ private:
 
 	UPROPERTY()
 	TArray<EDirection> MovesToDo;
+
+	UPROPERTY()
+	TMap<ECreatureStateName, UCreatureState*> CreatureStateMap;
+
+	UPROPERTY()
+	UCreatureState* CurrentCreatureState;
 };

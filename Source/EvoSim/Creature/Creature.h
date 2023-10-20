@@ -20,8 +20,7 @@ class EVOSIM_API ACreature : public AActor
 	
 public:	
 	ACreature();
-
-public:
+	
 	UPROPERTY(BlueprintReadWrite)
 	AMapManager* MapManager;
 
@@ -36,22 +35,29 @@ public:
 	int Hunger = 0;	
 	UPROPERTY(BlueprintReadWrite)
 	int Thirst = 0;
+	UPROPERTY()
+	int Randy = 0;
+	
+	UPROPERTY()
+	int DrinkPerUpdate = 10;
+	UPROPERTY()
+	int EatPerUpdate = 30;
+
+	UPROPERTY()
+	int TurnsToReproduce = 3;
 	
 	UPROPERTY(BlueprintReadWrite)
 	ATile* CurrentTile = nullptr;
 	
-protected:
-	virtual void BeginPlay() override;
-
-public:
 	bool Move(EDirection Direction);
 
 	UPROPERTY()
 	UFovComponent* FovComponent;
 	UPROPERTY()
 	UCreatureMovementComponent* MovementComponent;
-	
-private:
 	UPROPERTY()
 	UAIComponent* AIComponent;
+	
+protected:
+	virtual void BeginPlay() override;
 };
