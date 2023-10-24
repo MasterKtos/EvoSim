@@ -10,7 +10,7 @@
 class ACreature;
 
 UENUM()
-enum class ECreatureStateName
+enum class ECreatureStateName : uint8
 {
 	Rest, Eat,
 	Drink, Travel,
@@ -31,7 +31,7 @@ public:
 
 	virtual void Update() override { TryExitState(); }
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	ECreatureStateName StateName = ECreatureStateName::Rest;
 
 	UPROPERTY()

@@ -9,7 +9,7 @@
 
 
 class UCreatureState;
-enum class ECreatureStateName;
+enum class ECreatureStateName : uint8;
 enum class EDirection : uint8;
 class ACreature;
 class AAIManager;
