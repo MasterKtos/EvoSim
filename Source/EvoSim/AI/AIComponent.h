@@ -29,6 +29,9 @@ public:
 
 	UFUNCTION()
 	bool ChangeCurrentState(ECreatureStateName NewStateName);
+
+	UPROPERTY(BlueprintReadOnly)
+	UCreatureState* CurrentCreatureState;
 	
 private:
 	UFUNCTION()
@@ -42,7 +45,4 @@ private:
 
 	UPROPERTY()
 	TMap<ECreatureStateName, UCreatureState*> CreatureStateMap;
-
-	UPROPERTY()
-	UCreatureState* CurrentCreatureState;
 };

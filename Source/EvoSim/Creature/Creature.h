@@ -35,7 +35,7 @@ public:
 	int Hunger = 0;	
 	UPROPERTY(BlueprintReadWrite)
 	int Thirst = 0;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	int Randy = 0;
 	
 	UPROPERTY()
@@ -55,7 +55,7 @@ public:
 	UFovComponent* FovComponent;
 	UPROPERTY()
 	UCreatureMovementComponent* MovementComponent;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	UAIComponent* AIComponent;
 	
 protected:
