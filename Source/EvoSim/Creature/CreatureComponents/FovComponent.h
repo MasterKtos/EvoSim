@@ -40,4 +40,7 @@ protected:
 	TArray<ATile*> PlantTiles;
 	UPROPERTY(BlueprintReadWrite)
 	TArray<ATile*> MeatTiles;
+
+private:
+	TArray<TEnumAsByte<EObjectTypeQuery>> TraceObjectTypes;
 };

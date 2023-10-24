@@ -3,6 +3,7 @@
 
 #include "Creature.h"
 
+#include "Components/SphereComponent.h"
 #include "CreatureComponents/CreatureMovementComponent.h"
 #include "CreatureComponents/FovComponent.h"
 #include "EvoSim/AI/AIComponent.h"
@@ -15,6 +16,7 @@ ACreature::ACreature()
 	FovComponent = CreateDefaultSubobject<UFovComponent>(TEXT("FovComponent"));
 	MovementComponent = CreateDefaultSubobject<UCreatureMovementComponent>(TEXT("MovementComponent"));
 	AIComponent = CreateDefaultSubobject<UAIComponent>(TEXT("AIComponent"));
+	FovSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 }
 
 void ACreature::BeginPlay()
@@ -26,6 +28,8 @@ void ACreature::BeginPlay()
 	ViewDistance = 7;
 	Hunger = 45;	
 	Thirst = 40;
+
+	FovSphereComponent->SetSphereRadius(ViewDistance * 100);
 }
 
 bool ACreature::Move(const EDirection Direction)

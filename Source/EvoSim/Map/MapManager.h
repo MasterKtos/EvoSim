@@ -53,4 +53,6 @@ protected:
 	TSubclassOf<ATile> TilePrefab;
 	UPROPERTY(BlueprintReadWrite)
 	TSubclassOf<ATilePlant> TilePlantPrefab;
+	UPROPERTY(BlueprintReadWrite)
+	TSubclassOf<ATilePlant> TileObstaclePrefab;
 };
