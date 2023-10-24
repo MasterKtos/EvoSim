@@ -5,6 +5,11 @@
 
 #include "EvoSim/Creature/Creature.h"
 
+UCreatureStateRest::UCreatureStateRest()
+{
+	StateName = ECreatureStateName::Rest;
+}
+
 bool UCreatureStateRest::TryEnterState(const ECreatureStateName FromState)
 {
 	return true;

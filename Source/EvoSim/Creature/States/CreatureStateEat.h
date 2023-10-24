@@ -15,12 +15,9 @@ class EVOSIM_API UCreatureStateEat : public UCreatureState
 	GENERATED_BODY()
 
 public:
+	UCreatureStateEat();
+
 	virtual bool TryEnterState(const ECreatureStateName FromState) override;
-
 	virtual bool TryExitState() override;
-
 	virtual void Update() override;
-	
-	static constexpr ECreatureStateName StateName = ECreatureStateName::Eat;
-
 };

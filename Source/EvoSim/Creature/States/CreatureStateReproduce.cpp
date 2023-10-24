@@ -5,6 +5,11 @@
 
 #include "EvoSim/Creature/Creature.h"
 
+UCreatureStateReproduce::UCreatureStateReproduce()
+{
+	StateName = ECreatureStateName::Reproduce;
+}
+
 bool UCreatureStateReproduce::TryEnterState(const ECreatureStateName FromState)
 {
 	if(FromState != ECreatureStateName::Travel)

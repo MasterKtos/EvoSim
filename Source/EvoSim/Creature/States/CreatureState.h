@@ -30,8 +30,9 @@ public:
 	virtual bool TryExitState() { return false; }
 
 	virtual void Update() override { TryExitState(); }
-	
-	static constexpr ECreatureStateName StateName = ECreatureStateName::Rest;
+
+	UPROPERTY()
+	ECreatureStateName StateName = ECreatureStateName::Rest;
 
 	UPROPERTY()
 	ACreature* Owner;

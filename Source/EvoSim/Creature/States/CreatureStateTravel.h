@@ -16,11 +16,11 @@ class EVOSIM_API UCreatureStateTravel : public UCreatureState
 	GENERATED_BODY()
 
 public:
+	UCreatureStateTravel();
+
 	virtual bool TryEnterState(const ECreatureStateName FromState) override;
 	virtual bool TryExitState() override;
 	virtual void Update() override;
-
-	static constexpr ECreatureStateName StateName = ECreatureStateName::Travel;
 	
 	UPROPERTY()
 	TArray<EDirection> MovesToDo;

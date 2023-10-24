@@ -8,7 +8,11 @@
 #include "EvoSim/Creature/CreatureComponents/CreatureMovementComponent.h"
 #include "EvoSim/Creature/CreatureComponents/FovComponent.h"
 #include "EvoSim/Map/Tile.h"
-#include "EvoSim/Map/TilePlant.h"
+
+UCreatureStateTravel::UCreatureStateTravel()
+{
+	StateName = ECreatureStateName::Travel;
+}
 
 bool UCreatureStateTravel::TryEnterState(const ECreatureStateName FromState)
 {
@@ -43,13 +47,11 @@ bool UCreatureStateTravel::TryExitState()
 
 	if(Owner->CurrentTile->Type == ETileType::Plant)
 	{
-		Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Eat);
-		return true;
+		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Eat);
 	}
 	if(Owner->CurrentTile->Type == ETileType::Water)
 	{
-		Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Drink);
-		return true;
+		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Drink);
 	}
 
 	ensureMsgf(false, TEXT("this here should literally never happen"));

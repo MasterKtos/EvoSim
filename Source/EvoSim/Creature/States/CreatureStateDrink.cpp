@@ -5,6 +5,11 @@
 
 #include "EvoSim/Creature/Creature.h"
 
+UCreatureStateDrink::UCreatureStateDrink()
+{
+	StateName = ECreatureStateName::Drink;
+}
+
 bool UCreatureStateDrink::TryEnterState(const ECreatureStateName FromState)
 {
 	return FromState == ECreatureStateName::Travel;

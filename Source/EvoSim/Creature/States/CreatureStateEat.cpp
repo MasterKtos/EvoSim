@@ -4,6 +4,12 @@
 #include "CreatureStateEat.h"
 
 #include "EvoSim/Creature/Creature.h"
+#include "EvoSim/Map/TilePlant.h"
+
+UCreatureStateEat::UCreatureStateEat()
+{
+	StateName = ECreatureStateName::Eat;
+}
 
 bool UCreatureStateEat::TryEnterState(const ECreatureStateName FromState)
 {
@@ -30,4 +36,8 @@ void UCreatureStateEat::Update()
 		return;
 	}
 	Owner->Hunger -= Owner->EatPerUpdate;
+	// if(const auto TilePlant = Cast<ATilePlant>(Owner->CurrentTile))
+	// {
+	// 	TilePlant->Eat();
+	// }
 }

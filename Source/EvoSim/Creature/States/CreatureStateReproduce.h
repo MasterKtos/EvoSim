@@ -15,14 +15,12 @@ class EVOSIM_API UCreatureStateReproduce : public UCreatureState
 	GENERATED_BODY()
 
 public:
+	UCreatureStateReproduce();
+
 	virtual bool TryEnterState(const ECreatureStateName FromState) override;
-
 	virtual bool TryExitState() override;
-
 	virtual void Update() override;
 	
-	static constexpr ECreatureStateName StateName = ECreatureStateName::Reproduce;
-
 private:
 	int CurrentTurn = 0;
 };
