@@ -41,6 +41,10 @@ void UAIComponent::BeginPlay()
 		{ECreatureStateName::Travel, NewObject<UCreatureStateTravel>()},
 		{ECreatureStateName::Reproduce, NewObject<UCreatureStateReproduce>()},
 	 };
+	for (const auto CreatureState : CreatureStateMap)
+	{
+		CreatureState.Value->Owner = Owner;
+	}
 
 	CurrentCreatureState = CreatureStateMap[ECreatureStateName::Rest];
 }

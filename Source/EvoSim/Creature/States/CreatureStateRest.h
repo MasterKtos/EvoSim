@@ -16,11 +16,9 @@ class EVOSIM_API UCreatureStateRest : public UCreatureState
 
 public:
 	virtual bool TryEnterState(const ECreatureStateName FromState) override;
-
 	virtual bool TryExitState() override;
-
 	virtual void Update() override;
 
 	static constexpr ECreatureStateName StateName = ECreatureStateName::Rest;
-
+	
 };

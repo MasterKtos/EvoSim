@@ -12,19 +12,8 @@ bool UCreatureStateRest::TryEnterState(const ECreatureStateName FromState)
 
 bool UCreatureStateRest::TryExitState()
 {
-	if(Owner->Thirst > 40)
+	if(Owner->Thirst > 40 || Owner->Hunger > 40 || Owner->Randy >= 100)
 	{
-		// TODO: Set AI target to water
-		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Travel);
-	}
-	if(Owner->Hunger > 40)
-	{
-		// TODO: Set AI target to food
-		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Travel);
-	}
-	if(Owner->Randy >= 100)
-	{
-		// TODO: Set AI target to s3x
 		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Travel);
 	}
 	return false;
@@ -34,5 +23,4 @@ void UCreatureStateRest::Update()
 {
 	Super::Update();
 	// TODO: Move to random tile
-	
 }

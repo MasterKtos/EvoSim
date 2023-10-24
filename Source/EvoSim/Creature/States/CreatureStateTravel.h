@@ -6,6 +6,7 @@
 #include "CreatureState.h"
 #include "CreatureStateTravel.generated.h"
 
+enum class EDirection : uint8;
 /**
  * 
  */
@@ -16,11 +17,11 @@ class EVOSIM_API UCreatureStateTravel : public UCreatureState
 
 public:
 	virtual bool TryEnterState(const ECreatureStateName FromState) override;
-
 	virtual bool TryExitState() override;
-
 	virtual void Update() override;
 
 	static constexpr ECreatureStateName StateName = ECreatureStateName::Travel;
-
+	
+	UPROPERTY()
+	TArray<EDirection> MovesToDo;
 };
