@@ -39,6 +39,12 @@ void UCreatureMovementComponent::SetNewTarget(const FVector& NewTarget)
 {
 	Owner->SetActorLocation(Target);
 	Target = NewTarget;
+	
+	const FVector2D OwnerLocation2D = FVector2D(Owner->GetActorLocation().X, Owner->GetActorLocation().Y);
+	const FVector2D Target2D = FVector2D(Target.X, Target.Y);
+	const FVector2D VectorBetweenPoints = OwnerLocation2D - Target2D;
+	const float NewYaw = FMath::Atan2(VectorBetweenPoints.Y, VectorBetweenPoints.X) * 180.0f / PI;
+	Owner->SetActorRotation(FRotator(0, NewYaw, 0));
 }
 
 bool UCreatureMovementComponent::IsAtTarget() const

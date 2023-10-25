@@ -24,7 +24,7 @@ void ACreature::BeginPlay()
 	Super::BeginPlay();
 
 	Speed = 100.f;
-	FieldOfView = 360;
+	FieldOfView = 200;
 	ViewDistance = 7;
 	Hunger = 45;	
 	Thirst = 40;

@@ -63,31 +63,30 @@ void UFovComponent::UpdateTilesInSight()
 			continue;
 		
 		// Is obstacle in the line of sight?
-		static const FVector TileLocation = Tile->GetActorLocation();
+		const FVector TileLocation = Tile->GetActorLocation();
 		
 		FHitResult HitResult;
-		static FVector End = TileLocation - FVector(0,0,30);
-		static FVector Start = OwnerLocation;
+		FVector End = TileLocation - FVector(0,0,30);
+		FVector Start = OwnerLocation;
 		Start.Z = End.Z;
 		
 		if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_WorldStatic, FCollisionQueryParams()))
 			continue;
-
-		DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1.0f, 0, 5);
 		
 		// Is in field of view?
-		static FVector CreatureTileVector = (OwnerLocation - TileLocation).GetSafeNormal();
-		static FVector CreatureForwardVector = Owner->GetActorForwardVector();
+		FVector CreatureTileVector = (OwnerLocation - TileLocation).GetSafeNormal();
+		FVector CreatureForwardVector = Owner->GetActorForwardVector();
 
-		static float DotProduct = FVector::DotProduct(CreatureTileVector, CreatureForwardVector);
-		static float CrossProductMagnitude = FVector::CrossProduct(CreatureTileVector, CreatureForwardVector).Size();
+		float DotProduct = FVector::DotProduct(CreatureTileVector, CreatureForwardVector);
+		float CrossProductMagnitude = FVector::CrossProduct(CreatureTileVector, CreatureForwardVector).Size();
 
-		static float AngleInDegrees = FMath::RadiansToDegrees(FMath::Atan2(CrossProductMagnitude, DotProduct));
+		float AngleInDegrees = FMath::RadiansToDegrees(FMath::Atan2(CrossProductMagnitude, DotProduct));
 
 		if(AngleInDegrees * 2 > Owner->FieldOfView)
 		{
 			// Check if on any of the Tiles that are removed from the pool, 
 			// were any creatures since it's less than 50% of all
+			if(CreaturesInSight.Num() != 0)
 			for(ACreature* Creature : CreaturesInSight)
 			{
 				if(Creature->CurrentTile == Tile)
@@ -96,6 +95,8 @@ void UFovComponent::UpdateTilesInSight()
 			continue;
 		}
 
+		DrawDebugLine(GetWorld(), Start + FVector(0,0,100), End + FVector(0,0,100), FColor::Red, false, 1.0f, 0, 5);
+		
 		// Tile is in field of view. Check it's type.
 		if(Tile->Type == ETileType::Land)
 			continue;
