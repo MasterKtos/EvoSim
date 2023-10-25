@@ -22,6 +22,6 @@ public:
 	virtual bool TryExitState() override;
 	virtual void Update() override;
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	TArray<EDirection> MovesToDo;
 };

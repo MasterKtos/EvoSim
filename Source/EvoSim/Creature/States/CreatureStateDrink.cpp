@@ -12,7 +12,7 @@ UCreatureStateDrink::UCreatureStateDrink()
 
 bool UCreatureStateDrink::TryEnterState(const ECreatureStateName FromState)
 {
-	return FromState == ECreatureStateName::Travel;
+	return (FromState == ECreatureStateName::Travel || FromState == ECreatureStateName::Rest);
 }
 
 bool UCreatureStateDrink::TryExitState()

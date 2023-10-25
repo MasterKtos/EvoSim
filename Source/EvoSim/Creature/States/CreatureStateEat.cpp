@@ -13,7 +13,7 @@ UCreatureStateEat::UCreatureStateEat()
 
 bool UCreatureStateEat::TryEnterState(const ECreatureStateName FromState)
 {
-	return FromState == ECreatureStateName::Travel;
+	return (FromState == ECreatureStateName::Travel || FromState == ECreatureStateName::Rest);
 }
 
 bool UCreatureStateEat::TryExitState()

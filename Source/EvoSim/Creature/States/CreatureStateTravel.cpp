@@ -16,6 +16,10 @@ UCreatureStateTravel::UCreatureStateTravel()
 
 bool UCreatureStateTravel::TryEnterState(const ECreatureStateName FromState)
 {
+	// Creature might already be on the target
+	if(TryExitState())
+		return false;
+	
 	const int Hunger = Owner->Hunger;
 	const int Thirst = Owner->Thirst;
 	
@@ -33,46 +37,40 @@ bool UCreatureStateTravel::TryEnterState(const ECreatureStateName FromState)
 		CurrentTargets = Water;
 
 	MovesToDo = AAIManager::FindPathToTile(Owner->CurrentTile, CurrentTargets);
-	// Creature might already be on the target
-	if(MovesToDo.IsEmpty())
-	{
-		TryExitState();
-		return false;
-	}
-	return true;
+	
+	return !MovesToDo.IsEmpty();
 }
 
 bool UCreatureStateTravel::TryExitState()
 {
-	if(!MovesToDo.IsEmpty())
-		return false;
-
-	// TODO: check based on the currently set need to satisfy
-
-	if(Owner->CurrentTile->Type == ETileType::Plant)
+	if(Owner->Thirst > Owner->Hunger)
+	{
+		for(const auto Direction : TEnumRange<EDirection>())
+		{
+			if(const auto Neighbour = Owner->CurrentTile->GetNeighbour(Direction); IsValid(Neighbour) && Neighbour->Type == ETileType::Water)
+				return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Drink);
+		}
+	}
+	else if(Owner->CurrentTile->Type == ETileType::Plant)
 	{
 		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Eat);
 	}
-	for(const auto Direction : TEnumRange<EDirection>())
-	{
-		if(const auto Neighbour = Owner->CurrentTile->GetNeighbour(Direction); IsValid(Neighbour) && Neighbour->Type == ETileType::Water)
-			return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Drink);
-	}
-
-	ensureMsgf(false, TEXT("this here should literally never happen"));
+	
 	return false;
 }
 
 void UCreatureStateTravel::Update()
 {
-	Super::Update();
+	if(TryExitState())
+		return;
 	
 	// TODO: Check if creature needs to change target 
 	// TODO: Check if there is better way to the target
 
-	// TODO: Travel to next tile in path
 	if(!Owner->MovementComponent->IsAtTarget())
 		return;
+	
+	// TODO: Travel to next tile in path
 	
 	if(!MovesToDo.IsEmpty() && Owner->Move(MovesToDo.Last()))
 	{
