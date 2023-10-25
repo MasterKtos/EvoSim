@@ -23,21 +23,23 @@ bool UCreatureStateTravel::TryEnterState(const ECreatureStateName FromState)
     
 	const TArray<ATile*> Plants = Owner->FovComponent->GetPlantTilesInSight();
 	const TArray<ATile*> Water = Owner->FovComponent->GetWaterTilesInSight();
-    
-	if(Hunger > Thirst && !Plants.IsEmpty())
-	{
-		MovesToDo = AAIManager::FindPathToTile(Owner->CurrentTile, Plants);
-		if(!MovesToDo.IsEmpty())
-			return true;
-	}
-	if(!Water.IsEmpty())
-	{
-		MovesToDo = AAIManager::FindPathToTile(Owner->CurrentTile, Water);
-		if(!MovesToDo.IsEmpty())
-			return true;
-	}
 	
-	return false;
+	TArray<ATile*> CurrentTargets;
+	// Check conditions for travelling to Plants
+	if (Hunger > Thirst && !Plants.IsEmpty())
+		CurrentTargets = Plants;
+	// Check conditions for travelling to Water
+	else if (!Water.IsEmpty())
+		CurrentTargets = Water;
+
+	MovesToDo = AAIManager::FindPathToTile(Owner->CurrentTile, CurrentTargets);
+	// Creature might already be on the target
+	if(MovesToDo.IsEmpty())
+	{
+		TryExitState();
+		return false;
+	}
+	return true;
 }
 
 bool UCreatureStateTravel::TryExitState()
@@ -45,13 +47,16 @@ bool UCreatureStateTravel::TryExitState()
 	if(!MovesToDo.IsEmpty())
 		return false;
 
+	// TODO: check based on the currently set need to satisfy
+
 	if(Owner->CurrentTile->Type == ETileType::Plant)
 	{
 		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Eat);
 	}
-	if(Owner->CurrentTile->Type == ETileType::Water)
+	for(const auto Direction : TEnumRange<EDirection>())
 	{
-		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Drink);
+		if(const auto Neighbour = Owner->CurrentTile->GetNeighbour(Direction); IsValid(Neighbour) && Neighbour->Type == ETileType::Water)
+			return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Drink);
 	}
 
 	ensureMsgf(false, TEXT("this here should literally never happen"));

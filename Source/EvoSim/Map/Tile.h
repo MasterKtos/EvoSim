@@ -19,7 +19,7 @@ enum class EDirection : uint8
 	N, NE,
 	E, SE,
 	S, SW,
-	W, NW,
+	W, NW
 };
 
 ENUM_RANGE_BY_FIRST_AND_LAST(EDirection, EDirection::N, EDirection::NW);

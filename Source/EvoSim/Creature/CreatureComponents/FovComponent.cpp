@@ -74,13 +74,13 @@ void UFovComponent::UpdateTilesInSight()
 		DrawDebugLine(GetWorld(), Start + FVector(0,0,30), End + FVector(0,0,30), FColor::Red, false, 1.0f, 0, 5);
 
 		// Tile is in field of view.
-		if(Tile->Type == ETileType::Water)
+		switch(Tile->Type)
 		{
-			WaterTiles.Add(Tile);
-		}
-		else
-		{
-			PlantTiles.Add(Tile);
+			case ETileType::Water:		WaterTiles.Add(Tile); break;
+			case ETileType::Plant:		PlantTiles.Add(Tile); break;
+			case ETileType::Obstacle:	// falls through
+			case ETileType::Land:		// falls through
+			default: break;
 		}
 	}
 }

@@ -95,12 +95,12 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 TArray<EDirection> AAIManager::FindPathToTile(ATile* From, TArray<ATile*> To)
 {
 	int BestScore = 100;
-	TArray<EDirection> BestPath;
+	TArray<EDirection> BestPath = {};
 	
 	for (ATile* Tile : To)
 	{
 		if(From == Tile)
-			continue;
+			return {};
 		
 		TArray<EDirection> ThisPath = FindPathToTile(From, Tile);
 
