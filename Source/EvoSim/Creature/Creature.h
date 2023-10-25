@@ -8,6 +8,7 @@
 #include "Creature.generated.h"
 
 class UAIComponent;
+class USphereComponent;
 class UCreatureMovementComponent;
 class UFovComponent;
 class AMapManager;
@@ -37,6 +38,9 @@ public:
 	int Thirst = 0;
 	UPROPERTY(BlueprintReadWrite)
 	int Randy = 0;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool IsHerbivorous = true;
 	
 	UPROPERTY()
 	int DrinkPerUpdate = 10;
@@ -57,7 +61,8 @@ public:
 	UCreatureMovementComponent* MovementComponent;
 	UPROPERTY(BlueprintReadOnly)
 	UAIComponent* AIComponent;
-	
+	UPROPERTY(BlueprintReadWrite)
+	USphereComponent* FovSphereComponent;
 protected:
 	virtual void BeginPlay() override;
 };

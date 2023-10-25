@@ -20,13 +20,13 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void UpdateTilesInSight();
-	
+
 	UFUNCTION(BlueprintCallable)
 	const TArray<ATile*>& GetWaterTilesInSight() const;
 	UFUNCTION(BlueprintCallable)
 	const TArray<ATile*>& GetPlantTilesInSight() const;
 	UFUNCTION(BlueprintCallable)
-	const TArray<ATile*>& GetMeatInSight() const;
+	const TArray<ACreature*>& GetCreaturesInSight() const;
 
 protected:
 	virtual void BeginPlay() override;
@@ -39,5 +39,13 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	TArray<ATile*> PlantTiles;
 	UPROPERTY(BlueprintReadWrite)
-	TArray<ATile*> MeatTiles;
+	TArray<ACreature*> CreaturesInSight;
+
+private:
+	TArray<AActor*> GetOverlappingActors(UClass* ActorsOfClass) const;
+
+	UPROPERTY()
+	TArray<AActor*> IgnoredActors;
+	
+	TArray<TEnumAsByte<EObjectTypeQuery>> TraceObjectTypes;
 };

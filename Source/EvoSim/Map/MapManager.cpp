@@ -24,8 +24,8 @@ void AMapManager::GenerateMap(const FInitialParameters& Parameters)
 		switch(TileType)
 		{
 			case ETileType::Water: //falls through
-			case ETileType::Obstacle: //falls through
 			case ETileType::Land: ChosenTilePrefab = TilePrefab; break;
+			case ETileType::Obstacle: ChosenTilePrefab = TileObstaclePrefab; break;
 			case ETileType::Plant: ChosenTilePrefab = TilePlantPrefab; break;
 			
 			default: ChosenTilePrefab = TilePrefab;
