@@ -63,9 +63,6 @@ void UAIComponent::Update()
 	const int Hunger = Owner->Hunger;
 	const int Thirst = Owner->Thirst;
 	
-	if(!Owner->MovementComponent->IsAtTarget())
-		return;
-	
 	if(!MovesToDo.IsEmpty())
 	{
 		if(Owner->Move(MovesToDo.Last()))

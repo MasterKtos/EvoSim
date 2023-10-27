@@ -8,10 +8,17 @@
 
 void USimManager::Tick()
 {
+	if(IsTickOngoing)
+		return;
+
+	IsTickOngoing = true;
+
 	for (IEvoSimLifetime* Manager : Managers)
 	{
 		Manager->Update();
 	}
+	
+	IsTickOngoing = false;
 }
 
 void USimManager::AddToUpdate(IEvoSimLifetime* Manager)
@@ -26,7 +33,7 @@ void USimManager::RemoveFromUpdate(IEvoSimLifetime* Manager)
 
 void USimManager::StartSimulation()
 {
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &USimManager::Tick, 1.0f, true, 1.0f);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &USimManager::Tick, 0.6f, true, .1f);
 }
 
 void USimManager::PauseSimulation()

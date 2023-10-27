@@ -32,4 +32,7 @@ public:
 	void PauseSimulation();
 	UFUNCTION(BlueprintCallable)
 	void ContinueSimulation();
+
+private:
+	bool IsTickOngoing = false;
 };

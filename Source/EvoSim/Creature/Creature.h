@@ -50,7 +50,7 @@ public:
 	UPROPERTY()
 	int TurnsToReproduce = 3;
 	
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	ATile* CurrentTile = nullptr;
 	
 	bool Move(EDirection Direction);

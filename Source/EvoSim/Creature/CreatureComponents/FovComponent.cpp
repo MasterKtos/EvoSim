@@ -95,7 +95,7 @@ void UFovComponent::UpdateTilesInSight()
 			continue;
 		}
 
-		DrawDebugLine(GetWorld(), Start + FVector(0,0,100), End + FVector(0,0,100), FColor::Red, false, 1.0f, 0, 5);
+		// DrawDebugLine(GetWorld(), Start + FVector(0,0,100), End + FVector(0,0,100), FColor::Red, false, 1.0f, 0, 5);
 		
 		// Tile is in field of view.
 		switch(Tile->Type)

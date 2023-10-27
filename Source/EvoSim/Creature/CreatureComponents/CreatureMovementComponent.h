@@ -7,7 +7,6 @@
 #include "EvoSim/AI/AIComponent.h"
 #include "CreatureMovementComponent.generated.h"
 
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class EVOSIM_API UCreatureMovementComponent : public UActorComponent
 {
@@ -27,10 +26,10 @@ public:
 
 	UFUNCTION()
 	void SetNewTarget(const FVector& NewTarget);
-	UFUNCTION()
-	bool IsAtTarget() const;
 
 private:
+	bool IsAtTarget() const;
+
 	UPROPERTY()
 	ACreature* Owner;
 

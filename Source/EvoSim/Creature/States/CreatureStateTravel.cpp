@@ -67,11 +67,6 @@ void UCreatureStateTravel::Update()
 	// TODO: Check if creature needs to change target 
 	// TODO: Check if there is better way to the target
 
-	if(!Owner->MovementComponent->IsAtTarget())
-		return;
-	
-	// TODO: Travel to next tile in path
-	
 	if(!MovesToDo.IsEmpty() && Owner->Move(MovesToDo.Last()))
 	{
 		MovesToDo.Pop();
