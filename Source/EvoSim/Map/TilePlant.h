@@ -20,6 +20,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Eat();
 
+	UPROPERTY(BlueprintReadWrite)
+	int MaxDurability = 1;
+
+	UPROPERTY(VisibleAnywhere)
+	int Durability = 1;
+	
 protected:
 	UFUNCTION(BlueprintCallable)
 	void RegrowPlant();

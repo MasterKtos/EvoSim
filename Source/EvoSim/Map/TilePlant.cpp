@@ -15,11 +15,14 @@ void ATilePlant::Update()
 {
 	Super::Update();
 	
-	if(Type == ETileType::Land)
+	if(Durability < MaxDurability)
 	{
 		if(TimeToResetCounter >= TimeToReset)
 		{
-			RegrowPlant();
+			if(Durability == 0)
+				RegrowPlant();
+
+			Durability++;	
 			TimeToResetCounter = 0;
 		}
 		else TimeToResetCounter++;
@@ -28,8 +31,13 @@ void ATilePlant::Update()
 
 void ATilePlant::Eat()
 {
-	PlantMeshComponent->SetVisibility(false, true);
-	SetTileType(ETileType::Land);
+	TimeToResetCounter = 0;
+	Durability--;
+	if(Durability < 1)
+	{
+		PlantMeshComponent->SetVisibility(false, true);
+		SetTileType(ETileType::Land);
+	}
 }
 
 void ATilePlant::RegrowPlant()

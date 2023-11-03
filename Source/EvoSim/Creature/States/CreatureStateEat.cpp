@@ -30,14 +30,18 @@ void UCreatureStateEat::Update()
 {
 	Super::Update();
 
+	ATilePlant* TilePlant = Cast<ATilePlant>(Owner->CurrentTile);
+
+	if(TilePlant != nullptr && TilePlant->Durability > 0)
+	{
+		TilePlant->Eat();
+	}
+	
 	if(Owner->Hunger - Owner->EatPerUpdate < 0)
 	{
 		Owner->Hunger = 0;
 		return;
 	}
+	
 	Owner->Hunger -= Owner->EatPerUpdate;
-	// if(const auto TilePlant = Cast<ATilePlant>(Owner->CurrentTile))
-	// {
-	// 	TilePlant->Eat();
-	// }
 }
