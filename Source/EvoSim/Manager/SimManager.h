@@ -29,9 +29,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StartSimulation();
 	UFUNCTION(BlueprintCallable)
-	void PauseSimulation();
-	UFUNCTION(BlueprintCallable)
-	void ContinueSimulation();
+	void StopSimulation();
+
+	UPROPERTY(BlueprintReadWrite)
+	float TickRate = 1.f;
 
 private:
 	bool IsTickOngoing = false;
