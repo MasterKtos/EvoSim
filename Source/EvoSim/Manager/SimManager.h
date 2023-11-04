@@ -34,6 +34,23 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	float TickRate = 1.f;
 
+
+	// Values set in menu
+	UPROPERTY(BlueprintReadWrite)
+	int HerbCreaturesToSpawn = 100;
+	UPROPERTY(BlueprintReadWrite)
+	int MeatCreaturesToSpawn = 100;
+	UPROPERTY(BlueprintReadWrite)
+	float HerbSpeed = 1;
+	UPROPERTY(BlueprintReadWrite)
+	float MeatSpeed = 1;
+	UPROPERTY(BlueprintReadWrite)
+	int FOV = 270;
+	UPROPERTY(BlueprintReadWrite)
+	int ViewDistance = 20;
+	UPROPERTY(BlueprintReadWrite)
+	int PlantDurability = 1;
+
 private:
 	bool IsTickOngoing = false;
 };
