@@ -9,6 +9,7 @@
 #include "EvoSim/Creature/Herbivorous.h"
 #include "EvoSim/Map/Tile.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Math/UnitConversion.h"
 
 UFovComponent::UFovComponent()
 {
@@ -95,17 +96,34 @@ void UFovComponent::UpdateTilesInSight()
 			// Check if on any of the Tiles that are removed from the pool, 
 			// were any creatures since it's less than 50% of all
 			if(HerbCreaturesInSight.Num() != 0)
+			{
+				TArray<AHerbivorous*> Temp;
 				for(AHerbivorous* Creature : HerbCreaturesInSight)
 				{
 					if(Creature->CurrentTile == Tile)
-						HerbCreaturesInSight.Remove(Creature);
+						Temp.Add(Creature);
 				}
+				
+				if(Temp.Num() != 0)
+				for(AHerbivorous* Creature : Temp)
+				{
+					HerbCreaturesInSight.Remove(Creature);
+				}
+			}
 			if(MeatCreaturesInSight.Num() != 0)
+			{
+				TArray<ACarnivorous*> Temp;
 				for(ACarnivorous* Creature : MeatCreaturesInSight)
 				{
 					if(Creature->CurrentTile == Tile)
-						MeatCreaturesInSight.Remove(Creature);
+						Temp.Add(Creature);
 				}
+				if(Temp.Num() != 0)
+					for(ACarnivorous* Creature : Temp)
+					{
+						MeatCreaturesInSight.Remove(Creature);
+					}
+			}
 			continue;
 		}
 
