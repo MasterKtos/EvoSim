@@ -5,13 +5,14 @@
 
 #include "ComponentReregisterContext.h"
 #include "Components/SphereComponent.h"
-#include "EvoSim/Creature/Creature.h"
+#include "EvoSim/Creature/Carnivorous.h"
+#include "EvoSim/Creature/Herbivorous.h"
 #include "EvoSim/Map/Tile.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 UFovComponent::UFovComponent()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 void UFovComponent::BeginPlay()
@@ -37,7 +38,8 @@ void UFovComponent::UpdateTilesInSight()
 {
 	WaterTiles.Empty();
 	PlantTiles.Empty();
-	CreaturesInSight.Empty();
+	HerbCreaturesInSight.Empty();
+	MeatCreaturesInSight.Empty();
 	
 	const FVector OwnerLocation = Owner->GetActorLocation();
 
@@ -50,10 +52,16 @@ void UFovComponent::UpdateTilesInSight()
 			OverlappingTiles.Add(Cast<ATile>(TileActor));
 		}
 	
-		TArray<AActor*> OverlappingCreaturesActors = GetOverlappingActors(ACreature::StaticClass());
-		for(AActor* CreatureActor : OverlappingCreaturesActors)
+		TArray<AActor*> OverlappingHerbActors = GetOverlappingActors(AHerbivorous::StaticClass());
+		for(AActor* CreatureActor : OverlappingHerbActors)
 		{
-			CreaturesInSight.Add(Cast<ACreature>(CreatureActor));
+			HerbCreaturesInSight.Add(Cast<AHerbivorous>(CreatureActor));
+		}
+		
+		TArray<AActor*> OverlappingMeatActors = GetOverlappingActors(ACarnivorous::StaticClass());
+		for(AActor* CreatureActor : OverlappingMeatActors)
+		{
+			MeatCreaturesInSight.Add(Cast<ACarnivorous>(CreatureActor));
 		}
 	}
 	
@@ -86,11 +94,17 @@ void UFovComponent::UpdateTilesInSight()
 		{
 			// Check if on any of the Tiles that are removed from the pool, 
 			// were any creatures since it's less than 50% of all
-			if(CreaturesInSight.Num() != 0)
-				for(ACreature* Creature : CreaturesInSight)
+			if(HerbCreaturesInSight.Num() != 0)
+				for(AHerbivorous* Creature : HerbCreaturesInSight)
 				{
 					if(Creature->CurrentTile == Tile)
-						CreaturesInSight.Remove(Creature);
+						HerbCreaturesInSight.Remove(Creature);
+				}
+			if(MeatCreaturesInSight.Num() != 0)
+				for(ACarnivorous* Creature : MeatCreaturesInSight)
+				{
+					if(Creature->CurrentTile == Tile)
+						MeatCreaturesInSight.Remove(Creature);
 				}
 			continue;
 		}
@@ -118,8 +132,13 @@ const TArray<ATile*>& UFovComponent::GetPlantTilesInSight() const
 	return PlantTiles;
 }
 
-const TArray<ACreature*>& UFovComponent::GetCreaturesInSight() const
+const TArray<AHerbivorous*>& UFovComponent::GetHerbCreaturesInSight() const
 {
-	return CreaturesInSight;
+	return HerbCreaturesInSight;
+}
+
+const TArray<ACarnivorous*>& UFovComponent::GetMeatCreaturesInSight() const
+{
+	return MeatCreaturesInSight;
 }
 

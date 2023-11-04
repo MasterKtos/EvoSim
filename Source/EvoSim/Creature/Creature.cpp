@@ -6,12 +6,11 @@
 #include "Components/SphereComponent.h"
 #include "CreatureComponents/CreatureMovementComponent.h"
 #include "CreatureComponents/FovComponent.h"
-#include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Map/Tile.h"
 
 ACreature::ACreature()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	FovComponent = CreateDefaultSubobject<UFovComponent>(TEXT("FovComponent"));
 	MovementComponent = CreateDefaultSubobject<UCreatureMovementComponent>(TEXT("MovementComponent"));
@@ -19,19 +18,6 @@ ACreature::ACreature()
 	FovSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 
 	SetRootComponent(FovSphereComponent);
-}
-
-void ACreature::BeginPlay()
-{
-	Super::BeginPlay();
-
-	Speed = 100.f;
-	FieldOfView = 360;
-	ViewDistance = 7;
-	Hunger = 45;	
-	Thirst = 40;
-
-	FovSphereComponent->SetSphereRadius(ViewDistance * 100);
 }
 
 bool ACreature::Move(const EDirection Direction)

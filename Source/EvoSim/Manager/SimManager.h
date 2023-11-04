@@ -47,7 +47,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	int FOV = 270;
 	UPROPERTY(BlueprintReadWrite)
-	int ViewDistance = 20;
+	int ViewDistance = 7;
 	UPROPERTY(BlueprintReadWrite)
 	int PlantDurability = 1;
 

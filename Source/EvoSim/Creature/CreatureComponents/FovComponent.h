@@ -6,9 +6,11 @@
 #include "Components/ActorComponent.h"
 #include "FovComponent.generated.h"
 
+class ACreature;
+class ACarnivorous;
+class AHerbivorous;
 class AMapManager;
 class ATile;
-class ACreature;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class EVOSIM_API UFovComponent : public UActorComponent
@@ -26,7 +28,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	const TArray<ATile*>& GetPlantTilesInSight() const;
 	UFUNCTION(BlueprintCallable)
-	const TArray<ACreature*>& GetCreaturesInSight() const;
+	const TArray<AHerbivorous*>& GetHerbCreaturesInSight() const;
+	UFUNCTION(BlueprintCallable)
+	const TArray<ACarnivorous*>& GetMeatCreaturesInSight() const;
 
 protected:
 	virtual void BeginPlay() override;
@@ -34,12 +38,14 @@ protected:
 	UPROPERTY()
 	ACreature* Owner = nullptr;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY()
 	TArray<ATile*> WaterTiles;
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY()
 	TArray<ATile*> PlantTiles;
-	UPROPERTY(BlueprintReadWrite)
-	TArray<ACreature*> CreaturesInSight;
+	UPROPERTY()
+	TArray<AHerbivorous*> HerbCreaturesInSight;
+	UPROPERTY()
+	TArray<ACarnivorous*> MeatCreaturesInSight;
 
 private:
 	TArray<AActor*> GetOverlappingActors(UClass* ActorsOfClass) const;

@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EvoSim/AI/AIComponent.h"
 #include "GameFramework/Actor.h"
 #include "Creature.generated.h"
 
+enum class EDirection : uint8;
 class UAIComponent;
 class USphereComponent;
 class UCreatureMovementComponent;
@@ -39,8 +39,8 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	int Randy = 0;
 
-	UPROPERTY(BlueprintReadWrite)
-	bool IsHerbivorous = true;
+	UPROPERTY(BlueprintReadOnly)
+	bool bHerbivorous = true;
 	
 	UPROPERTY()
 	int DrinkPerUpdate = 10;
@@ -63,6 +63,4 @@ public:
 	UAIComponent* AIComponent;
 	UPROPERTY(BlueprintReadWrite)
 	USphereComponent* FovSphereComponent;
-protected:
-	virtual void BeginPlay() override;
 };
