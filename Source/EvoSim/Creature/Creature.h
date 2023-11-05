@@ -49,11 +49,17 @@ public:
 
 	UPROPERTY()
 	int TurnsToReproduce = 3;
-	
+
+	int HungerPerReproduction = 30;
+	int ThirstPerReproduction = 30;
+
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	ATile* CurrentTile = nullptr;
 	
 	bool Move(EDirection Direction);
+
+	UFUNCTION(BlueprintCallable)
+	virtual void Reproduce(bool bMother);
 
 	UPROPERTY()
 	UFovComponent* FovComponent;

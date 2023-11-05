@@ -12,6 +12,22 @@ ACarnivorous::ACarnivorous()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+void ACarnivorous::Reproduce(bool bMother)
+{
+	Super::Reproduce(bMother);
+	
+	if(!bMother)
+		return;
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+
+	if (ACarnivorous* Child = GetWorld()->SpawnActor<ACarnivorous>(GetClass(), this->GetActorLocation(), this->GetActorRotation(), SpawnParams))
+	{
+		Child->CurrentTile = CurrentTile;
+	}
+}
+
 void ACarnivorous::BeginPlay()
 {
 	Super::BeginPlay();

@@ -32,3 +32,9 @@ bool ACreature::Move(const EDirection Direction)
 	return true;
 }
 
+void ACreature::Reproduce(bool bMother)
+{
+	Hunger += HungerPerReproduction;
+	Thirst += ThirstPerReproduction;
+}
+

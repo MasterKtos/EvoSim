@@ -13,6 +13,22 @@ AHerbivorous::AHerbivorous()
 
 }
 
+void AHerbivorous::Reproduce(bool bMother)
+{
+	Super::Reproduce(bMother);
+
+	if(!bMother)
+		return;
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+
+	if (AHerbivorous* Child = GetWorld()->SpawnActor<AHerbivorous>(GetClass(), this->GetActorLocation(), this->GetActorRotation(), SpawnParams))
+	{
+		Child->CurrentTile = CurrentTile;
+	}
+}
+
 void AHerbivorous::BeginPlay()
 {
 	Super::BeginPlay();
