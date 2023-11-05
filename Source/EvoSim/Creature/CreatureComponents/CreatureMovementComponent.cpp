@@ -32,7 +32,7 @@ void UCreatureMovementComponent::TickComponent(float DeltaTime, ELevelTick TickT
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	if(!IsAtTarget())
-		Owner->SetActorLocation(FMath::VInterpConstantTo(Owner->GetActorLocation(), Target, DeltaTime, Owner->Speed));
+		Owner->SetActorLocation(FMath::VInterpConstantTo(Owner->GetActorLocation(), Target, DeltaTime, 60.f));
 }
 
 void UCreatureMovementComponent::SetNewTarget(const FVector& NewTarget)
