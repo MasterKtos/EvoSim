@@ -6,6 +6,7 @@
 #include "ComponentReregisterContext.h"
 #include "VectorTypes.h"
 #include "EvoSim/Creature/Creature.h"
+#include "EvoSim/Manager/SimManager.h"
 
 UCreatureMovementComponent::UCreatureMovementComponent()
 {
@@ -25,14 +26,18 @@ void UCreatureMovementComponent::BeginPlay()
 	}
 
 	Target = Owner->GetActorLocation();
+	SimManager = Cast<USimManager>(GetWorld()->GetGameInstance());
 }
 
 void UCreatureMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if(!IsAtTarget())
-		Owner->SetActorLocation(FMath::VInterpConstantTo(Owner->GetActorLocation(), Target, DeltaTime, 60.f));
+	if(IsAtTarget())
+		return;
+	
+	// Owner->SetActorLocation(FMath::VInterpConstantTo(Owner->GetActorLocation(), Target, DeltaTime, (2-SimManager->TickRate) * 120));
+	Owner->SetActorLocation(Target);
 }
 
 void UCreatureMovementComponent::SetNewTarget(const FVector& NewTarget)

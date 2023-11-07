@@ -22,6 +22,11 @@ class EVOSIM_API ACreature : public AActor
 public:	
 	ACreature();
 	
+	bool Move(EDirection Direction);
+
+	UFUNCTION(BlueprintCallable)
+	virtual void Reproduce(bool bMother);
+	
 	UPROPERTY(BlueprintReadWrite)
 	AMapManager* MapManager;
 
@@ -55,18 +60,13 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	ATile* CurrentTile = nullptr;
-	
-	bool Move(EDirection Direction);
-
-	UFUNCTION(BlueprintCallable)
-	virtual void Reproduce(bool bMother);
 
 	UPROPERTY()
 	UFovComponent* FovComponent;
 	UPROPERTY()
 	UCreatureMovementComponent* MovementComponent;
-	UPROPERTY(BlueprintReadOnly)
-	UAIComponent* AIComponent;
 	UPROPERTY(BlueprintReadWrite)
 	USphereComponent* FovSphereComponent;
+	UPROPERTY(BlueprintReadOnly)
+	UAIComponent* AIComponent;
 };

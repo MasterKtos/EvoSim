@@ -9,7 +9,6 @@
 #include "EvoSim/Creature/Herbivorous.h"
 #include "EvoSim/Map/Tile.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "Math/UnitConversion.h"
 
 UFovComponent::UFovComponent()
 {
@@ -39,8 +38,8 @@ void UFovComponent::UpdateTilesInSight()
 {
 	WaterTiles.Empty();
 	PlantTiles.Empty();
-	HerbCreaturesInSight.Empty();
-	MeatCreaturesInSight.Empty();
+	HerbCreaturesTilesInSight.Empty();
+	MeatCreaturesTilesInSight.Empty();
 	
 	const FVector OwnerLocation = Owner->GetActorLocation();
 
@@ -56,13 +55,13 @@ void UFovComponent::UpdateTilesInSight()
 		TArray<AActor*> OverlappingHerbActors = GetOverlappingActors(AHerbivorous::StaticClass());
 		for(AActor* CreatureActor : OverlappingHerbActors)
 		{
-			HerbCreaturesInSight.Add(Cast<AHerbivorous>(CreatureActor));
+			HerbCreaturesTilesInSight.Add(Cast<AHerbivorous>(CreatureActor)->CurrentTile);
 		}
 		
 		TArray<AActor*> OverlappingMeatActors = GetOverlappingActors(ACarnivorous::StaticClass());
 		for(AActor* CreatureActor : OverlappingMeatActors)
 		{
-			MeatCreaturesInSight.Add(Cast<ACarnivorous>(CreatureActor));
+			MeatCreaturesTilesInSight.Add(Cast<ACarnivorous>(CreatureActor)->CurrentTile);
 		}
 	}
 	
@@ -95,33 +94,33 @@ void UFovComponent::UpdateTilesInSight()
 		{
 			// Check if on any of the Tiles that are removed from the pool, 
 			// were any creatures since it's less than 50% of all
-			if(HerbCreaturesInSight.Num() != 0)
+			if(HerbCreaturesTilesInSight.Num() != 0)
 			{
-				TArray<AHerbivorous*> Temp;
-				for(AHerbivorous* Creature : HerbCreaturesInSight)
+				TArray<ATile*> Temp;
+				for(ATile* CreatureTile : HerbCreaturesTilesInSight)
 				{
-					if(Creature->CurrentTile == Tile)
-						Temp.Add(Creature);
+					if(CreatureTile == Tile)
+						Temp.Add(CreatureTile);
 				}
 				
 				if(Temp.Num() != 0)
-				for(AHerbivorous* Creature : Temp)
+				for(ATile* CreatureTile : Temp)
 				{
-					HerbCreaturesInSight.Remove(Creature);
+					HerbCreaturesTilesInSight.Remove(CreatureTile);
 				}
 			}
-			if(MeatCreaturesInSight.Num() != 0)
+			if(MeatCreaturesTilesInSight.Num() != 0)
 			{
-				TArray<ACarnivorous*> Temp;
-				for(ACarnivorous* Creature : MeatCreaturesInSight)
+				TArray<ATile*> Temp;
+				for(ATile* CreatureTile : MeatCreaturesTilesInSight)
 				{
-					if(Creature->CurrentTile == Tile)
-						Temp.Add(Creature);
+					if(CreatureTile == Tile)
+						Temp.Add(CreatureTile);
 				}
 				if(Temp.Num() != 0)
-					for(ACarnivorous* Creature : Temp)
+					for(ATile* CreatureTile : Temp)
 					{
-						MeatCreaturesInSight.Remove(Creature);
+						MeatCreaturesTilesInSight.Remove(CreatureTile);
 					}
 			}
 			continue;
@@ -150,13 +149,13 @@ const TArray<ATile*>& UFovComponent::GetPlantTilesInSight() const
 	return PlantTiles;
 }
 
-const TArray<AHerbivorous*>& UFovComponent::GetHerbCreaturesInSight() const
+const TArray<ATile*>& UFovComponent::GetHerbCreaturesTilesInSight() const
 {
-	return HerbCreaturesInSight;
+	return HerbCreaturesTilesInSight;
 }
 
-const TArray<ACarnivorous*>& UFovComponent::GetMeatCreaturesInSight() const
+const TArray<ATile*>& UFovComponent::GetMeatCreaturesTilesInSight() const
 {
-	return MeatCreaturesInSight;
+	return MeatCreaturesTilesInSight;
 }
 

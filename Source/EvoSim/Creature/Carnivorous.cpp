@@ -4,7 +4,13 @@
 #include "Carnivorous.h"
 
 #include "Components/SphereComponent.h"
+#include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Manager/SimManager.h"
+#include "States/CarnivoreStateEat.h"
+#include "States/CarnivoreStateTravel.h"
+#include "States/CreatureStateDrink.h"
+#include "States/CreatureStateReproduce.h"
+#include "States/CreatureStateRest.h"
 
 
 ACarnivorous::ACarnivorous()
@@ -49,4 +55,11 @@ void ACarnivorous::BeginPlay()
 	Thirst = 40;
 
 	FovSphereComponent->SetSphereRadius(ViewDistance * 100);
+	AIComponent->InitializeStateMap({
+		{ECreatureStateName::Rest, NewObject<UCreatureStateRest>()},
+		{ECreatureStateName::Eat, NewObject<UCarnivoreStateEat>()},
+		{ECreatureStateName::Drink, NewObject<UCreatureStateDrink>()},
+		{ECreatureStateName::Travel, NewObject<UCarnivoreStateTravel>()},
+		{ECreatureStateName::Reproduce, NewObject<UCreatureStateReproduce>()},
+	 });
 }

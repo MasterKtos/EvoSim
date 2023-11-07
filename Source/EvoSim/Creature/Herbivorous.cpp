@@ -4,13 +4,19 @@
 #include "Herbivorous.h"
 
 #include "Components/SphereComponent.h"
+#include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Manager/SimManager.h"
+#include "States/CreatureState.h"
+#include "States/CreatureStateDrink.h"
+#include "States/CreatureStateEat.h"
+#include "States/CreatureStateReproduce.h"
+#include "States/CreatureStateRest.h"
+#include "States/CreatureStateTravel.h"
 
 
 AHerbivorous::AHerbivorous()
-{
+{	
 	PrimaryActorTick.bCanEverTick = false;
-
 }
 
 void AHerbivorous::Reproduce(bool bMother)
@@ -50,5 +56,12 @@ void AHerbivorous::BeginPlay()
 	Thirst = 40;
 
 	FovSphereComponent->SetSphereRadius(ViewDistance * 100);
+	AIComponent->InitializeStateMap({
+		{ECreatureStateName::Rest, NewObject<UCreatureStateRest>()},
+		{ECreatureStateName::Eat, NewObject<UCreatureStateEat>()},
+		{ECreatureStateName::Drink, NewObject<UCreatureStateDrink>()},
+		{ECreatureStateName::Travel, NewObject<UCreatureStateTravel>()},
+		{ECreatureStateName::Reproduce, NewObject<UCreatureStateReproduce>()},
+	 });
 }
 

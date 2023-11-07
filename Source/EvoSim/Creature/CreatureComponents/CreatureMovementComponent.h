@@ -7,6 +7,8 @@
 #include "EvoSim/AI/AIComponent.h"
 #include "CreatureMovementComponent.generated.h"
 
+class USimManager;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class EVOSIM_API UCreatureMovementComponent : public UActorComponent
 {
@@ -32,6 +34,8 @@ private:
 
 	UPROPERTY()
 	ACreature* Owner;
+	UPROPERTY()
+	USimManager* SimManager;
 
 	UPROPERTY()
 	bool bSliding = false;

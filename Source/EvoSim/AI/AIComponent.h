@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "..\Manager\EvoSimLifetimeInterface.h"
+#include "../Manager/EvoSimLifetimeInterface.h"
+#include "EvoSim/Creature/States/CreatureState.h"
 #include "AIComponent.generated.h"
 
 
 class UCreatureState;
-enum class ECreatureStateName : uint8;
 enum class EDirection : uint8;
 class ACreature;
 class AAIManager;
@@ -28,15 +28,14 @@ public:
 	virtual void Update() override;
 
 	UFUNCTION()
+	void InitializeStateMap(const TMap<ECreatureStateName, UCreatureState*>& StateMap, ECreatureStateName InitialStateName = ECreatureStateName::Rest);
+	UFUNCTION()
 	bool ChangeCurrentState(ECreatureStateName NewStateName);
 
 	UPROPERTY(BlueprintReadOnly)
 	UCreatureState* CurrentCreatureState;
 	
-private:
-	UFUNCTION()
-	void FindNewPath();
-	
+protected:	
 	UPROPERTY()
 	ACreature* Owner;
 

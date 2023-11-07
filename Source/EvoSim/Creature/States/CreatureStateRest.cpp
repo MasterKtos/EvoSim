@@ -3,6 +3,7 @@
 
 #include "CreatureStateRest.h"
 
+#include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Creature/Creature.h"
 
 UCreatureStateRest::UCreatureStateRest()

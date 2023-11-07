@@ -6,6 +6,8 @@
 #include "Creature.h"
 #include "Herbivorous.generated.h"
 
+class UAIComponentHerbivore;
+
 UCLASS()
 class EVOSIM_API AHerbivorous : public ACreature
 {
@@ -18,5 +20,4 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
-
 };

@@ -28,9 +28,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	const TArray<ATile*>& GetPlantTilesInSight() const;
 	UFUNCTION(BlueprintCallable)
-	const TArray<AHerbivorous*>& GetHerbCreaturesInSight() const;
+	const TArray<ATile*>& GetHerbCreaturesTilesInSight() const;
 	UFUNCTION(BlueprintCallable)
-	const TArray<ACarnivorous*>& GetMeatCreaturesInSight() const;
+	const TArray<ATile*>& GetMeatCreaturesTilesInSight() const;
 
 protected:
 	virtual void BeginPlay() override;
@@ -43,9 +43,9 @@ protected:
 	UPROPERTY()
 	TArray<ATile*> PlantTiles;
 	UPROPERTY()
-	TArray<AHerbivorous*> HerbCreaturesInSight;
+	TArray<ATile*> HerbCreaturesTilesInSight;
 	UPROPERTY()
-	TArray<ACarnivorous*> MeatCreaturesInSight;
+	TArray<ATile*> MeatCreaturesTilesInSight;
 
 private:
 	TArray<AActor*> GetOverlappingActors(UClass* ActorsOfClass) const;

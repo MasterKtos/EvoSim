@@ -3,6 +3,7 @@
 
 #include "CreatureStateReproduce.h"
 
+#include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Creature/Creature.h"
 
 UCreatureStateReproduce::UCreatureStateReproduce()
@@ -28,6 +29,7 @@ bool UCreatureStateReproduce::TryExitState()
 	if(CurrentTurn >= Owner->TurnsToReproduce)
 	{
 		// TODO: Create new creature
+		// Owner->Reproduce(true);
 		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Rest);
 	}
 

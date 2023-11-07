@@ -3,6 +3,7 @@
 
 #include "CreatureStateEat.h"
 
+#include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Creature/Creature.h"
 #include "EvoSim/Map/TilePlant.h"
 

@@ -1,20 +1,20 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CreatureStateTravel.h"
+#include "CarnivoreStateTravel.h"
 
+#include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/AI/Pathfinding/AIManager.h"
 #include "EvoSim/Creature/Creature.h"
-#include "EvoSim/Creature/CreatureComponents/CreatureMovementComponent.h"
 #include "EvoSim/Creature/CreatureComponents/FovComponent.h"
 #include "EvoSim/Map/Tile.h"
 
-UCreatureStateTravel::UCreatureStateTravel()
+UCarnivoreStateTravel::UCarnivoreStateTravel()
 {
 	StateName = ECreatureStateName::Travel;
 }
 
-bool UCreatureStateTravel::TryEnterState(const ECreatureStateName FromState)
+bool UCarnivoreStateTravel::TryEnterState(const ECreatureStateName FromState)
 {
 	// Creature might already be on the target
 	if(TryExitState())
@@ -25,13 +25,13 @@ bool UCreatureStateTravel::TryEnterState(const ECreatureStateName FromState)
 	
 	Owner->FovComponent->UpdateTilesInSight();
     
-	const TArray<ATile*> Plants = Owner->FovComponent->GetPlantTilesInSight();
+	const TArray<ATile*> Meat = Owner->FovComponent->GetHerbCreaturesTilesInSight();
 	const TArray<ATile*> Water = Owner->FovComponent->GetWaterTilesInSight();
 	
 	TArray<ATile*> CurrentTargets;
-	// Check conditions for travelling to Plants
-	if (Hunger > Thirst && !Plants.IsEmpty())
-		CurrentTargets = Plants;
+	// Check conditions for hunting
+	if (Hunger > Thirst && !Meat.IsEmpty())
+		CurrentTargets = Meat;
 	// Check conditions for travelling to Water
 	else if (!Water.IsEmpty())
 		CurrentTargets = Water;
@@ -41,7 +41,7 @@ bool UCreatureStateTravel::TryEnterState(const ECreatureStateName FromState)
 	return !MovesToDo.IsEmpty();
 }
 
-bool UCreatureStateTravel::TryExitState()
+bool UCarnivoreStateTravel::TryExitState()
 {
 	if(Owner->Thirst > Owner->Hunger)
 	{
@@ -59,16 +59,7 @@ bool UCreatureStateTravel::TryExitState()
 	return false;
 }
 
-void UCreatureStateTravel::Update()
+void UCarnivoreStateTravel::Update()
 {
-	if(TryExitState())
-		return;
-	
-	// TODO: Check if creature needs to change target 
-	// TODO: Check if there is better way to the target
-
-	if(!MovesToDo.IsEmpty() && Owner->Move(MovesToDo.Last()))
-	{
-		MovesToDo.Pop();
-	}
+	Super::Update();
 }

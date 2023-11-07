@@ -3,6 +3,7 @@
 
 #include "CreatureStateDrink.h"
 
+#include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Creature/Creature.h"
 
 UCreatureStateDrink::UCreatureStateDrink()
