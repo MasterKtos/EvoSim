@@ -20,8 +20,7 @@ bool UCreatureStateEat::TryEnterState(const ECreatureStateName FromState)
 bool UCreatureStateEat::TryExitState()
 {
 	// TODO: Start searching for water if hunger is not critical
-
-	if(Owner->Hunger <= 40)
+	if(Owner->CurrentTile->Type != ETileType::Plant || Owner->Hunger <= 40)
 		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Rest);
 
 	return false;
@@ -30,19 +29,17 @@ bool UCreatureStateEat::TryExitState()
 void UCreatureStateEat::Update()
 {
 	Super::Update();
-
+	
 	ATilePlant* TilePlant = Cast<ATilePlant>(Owner->CurrentTile);
 
-	if(TilePlant != nullptr && TilePlant->Durability > 0)
-	{
-		TilePlant->Eat();
-	}
-	
-	if(Owner->Hunger - Owner->EatPerUpdate < 0)
-	{
-		Owner->Hunger = 0;
+	if(TilePlant == nullptr)
 		return;
-	}
-	
+
+	if(!TilePlant->Eat())
+		return;
+		
 	Owner->Hunger -= Owner->EatPerUpdate;
+	if(Owner->Hunger < 0)
+		Owner->Hunger = 0;
+	
 }

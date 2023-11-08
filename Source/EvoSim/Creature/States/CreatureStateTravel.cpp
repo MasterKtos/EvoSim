@@ -17,9 +17,61 @@ UCreatureStateTravel::UCreatureStateTravel()
 bool UCreatureStateTravel::TryEnterState(const ECreatureStateName FromState)
 {
 	// Creature might already be on the target
-	if(TryExitState())
+	// returns false because TryToSatisfyNeeds()
+	// already triggers state change
+	if(TryToSatisfyNeeds())
 		return false;
+
+	GetPathForCurrentNeed();
 	
+	return !MovesToDo.IsEmpty();
+}
+
+bool UCreatureStateTravel::TryExitState()
+{
+	if(TryToSatisfyNeeds())
+		return true;
+	
+	// Recalculate path if there's a creature on the way
+	if(MovesToDo.IsEmpty() ||
+		!MovesToDo.IsEmpty() && Owner->CurrentTile->GetNeighbour(MovesToDo.Last())->CreaturesPresent.Num() > 0)
+	{
+		GetPathForCurrentNeed();
+
+		// Cannot find path to any need
+        if(MovesToDo.IsEmpty())
+        {
+        	Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Rest);
+        	return false;
+        }
+			
+		if(Owner->CurrentTile->GetNeighbour(MovesToDo.Last())->CreaturesPresent.Num() > 0 && Owner->Move(MovesToDo.Last()))
+		{
+			MovesToDo.Pop();
+			return true;
+		}
+	}
+
+	
+	
+	return false;
+}
+
+void UCreatureStateTravel::Update()
+{
+	if(TryExitState())
+		return;
+	
+	// TODO: Check if there is better way to the target
+	
+	if(!MovesToDo.IsEmpty() && Owner->Move(MovesToDo.Last()))
+	{
+		MovesToDo.Pop();
+	}
+}
+
+void UCreatureStateTravel::GetPathForCurrentNeed()
+{
 	const int Hunger = Owner->Hunger;
 	const int Thirst = Owner->Thirst;
 	
@@ -30,20 +82,18 @@ bool UCreatureStateTravel::TryEnterState(const ECreatureStateName FromState)
 	
 	TArray<ATile*> CurrentTargets;
 	// Check conditions for travelling to Plants
-	if (Hunger > Thirst && !Plants.IsEmpty())
+	if (Hunger >= Thirst && !Plants.IsEmpty())
 		CurrentTargets = Plants;
 	// Check conditions for travelling to Water
-	else if (!Water.IsEmpty())
+	else if (Hunger < Thirst &&!Water.IsEmpty())
 		CurrentTargets = Water;
 
 	MovesToDo = AAIManager::FindPathToTile(Owner->CurrentTile, CurrentTargets);
-	
-	return !MovesToDo.IsEmpty();
 }
 
-bool UCreatureStateTravel::TryExitState()
+bool UCreatureStateTravel::TryToSatisfyNeeds() const
 {
-	if(Owner->Thirst > Owner->Hunger)
+	if(Owner->Thirst >= Owner->Hunger || Owner->Thirst > 80)
 	{
 		for(const auto Direction : TEnumRange<EDirection>())
 		{
@@ -55,20 +105,5 @@ bool UCreatureStateTravel::TryExitState()
 	{
 		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Eat);
 	}
-	
 	return false;
-}
-
-void UCreatureStateTravel::Update()
-{
-	if(TryExitState())
-		return;
-	
-	// TODO: Check if creature needs to change target 
-	// TODO: Check if there is better way to the target
-
-	if(!MovesToDo.IsEmpty() && Owner->Move(MovesToDo.Last()))
-	{
-		MovesToDo.Pop();
-	}
 }

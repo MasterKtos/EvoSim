@@ -45,6 +45,7 @@ void UCreatureMovementComponent::SetNewTarget(const FVector& NewTarget)
 	Owner->SetActorLocation(Target);
 	Target = NewTarget;
 	
+	// TODO: move this one to tick and lerp
 	const FVector2D OwnerLocation2D = FVector2D(Owner->GetActorLocation().X, Owner->GetActorLocation().Y);
 	const FVector2D Target2D = FVector2D(Target.X, Target.Y);
 	const FVector2D VectorBetweenPoints = OwnerLocation2D - Target2D;

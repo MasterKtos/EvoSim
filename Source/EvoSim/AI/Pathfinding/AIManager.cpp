@@ -4,6 +4,7 @@
 #include "AIManager.h"
 
 #include "AINode.h"
+#include "AINodeHeap.h"
 #include "EvoSim/Map/Tile.h"
 
 // Sets default values
@@ -21,28 +22,21 @@ void AAIManager::BeginPlay()
 
 TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 {
-	TArray<UAINode*> OpenedNodes = {};
+	UAINodeHeap* OpenedNodes = NewObject<UAINodeHeap>();
+	OpenedNodes->Init(50*50);
 	TSet<ATile*> ClosedNodes = {};
 
 	UAINode* FirstNode = NewObject<UAINode>();
 	FirstNode->Tile = From;
-	OpenedNodes.Add(FirstNode);
+	OpenedNodes->Add(FirstNode);
 
 	UAINode* LastNode = NewObject<UAINode>();
 	LastNode->Tile = To;
 	
-	while(OpenedNodes.Num() > 0)
+	while(OpenedNodes->Num() > 0)
 	{
 		// Find node with lowest cost
-		UAINode* CurrentNode = OpenedNodes[0];
-		for (auto* Node : OpenedNodes)
-		{
-			if(Node->GetCost() < CurrentNode->GetCost() ||
-				Node->GetCost() == CurrentNode->GetCost() && Node->DestinationCost < CurrentNode->DestinationCost)
-				CurrentNode = Node;
-		}
-		
-		OpenedNodes.Remove(CurrentNode);
+		UAINode* CurrentNode = Cast<UAINode>(OpenedNodes->RemoveFirst());
 		ClosedNodes.Add(CurrentNode->Tile);
 
 		// Found node!
@@ -72,20 +66,20 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 			}
 		}
 
-		for (auto& Neighbour : CurrentNode->Neighbours)
+		for (const auto& Neighbour : CurrentNode->Neighbours)
 		{
 			auto* NeighbourNode = Neighbour.Key;
 			if(!NeighbourNode->IsWalkable() || ClosedNodes.Contains(NeighbourNode->Tile))
 				continue;
 
 			const uint8 NewNeighbourSourceCost = CurrentNode->SourceCost + GetDistance(CurrentNode, NeighbourNode);
-			if(NewNeighbourSourceCost < NeighbourNode->SourceCost || !OpenedNodes.Contains(NeighbourNode))
+			if(NewNeighbourSourceCost < NeighbourNode->SourceCost || !OpenedNodes->Contains(NeighbourNode))
 			{
 				NeighbourNode->SourceCost = NewNeighbourSourceCost;
 				NeighbourNode->DestinationCost = GetDistance(NeighbourNode, LastNode);
 
-				if(!OpenedNodes.Contains(NeighbourNode))
-					OpenedNodes.Add(NeighbourNode);
+				if(!OpenedNodes->Contains(NeighbourNode))
+					OpenedNodes->Add(NeighbourNode);
 			}
 		}
 	}
@@ -96,11 +90,19 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, TArray<ATile*> To)
 {
 	int BestScore = 100;
 	TArray<EDirection> BestPath = {};
+	TArray<ATile*> SecondaryPriorityTiles = {};
 	
 	for (ATile* Tile : To)
 	{
 		if(From == Tile)
 			return {};
+
+		// Try to avoid going to a tile that already has a creature on it
+		if(Tile->CreaturesPresent.Num() > 0)
+		{
+			SecondaryPriorityTiles.Add(Tile);
+			continue;
+		}
 		
 		TArray<EDirection> ThisPath = FindPathToTile(From, Tile);
 
@@ -108,6 +110,19 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, TArray<ATile*> To)
 		{
 			BestScore = ThisPath.Num();
 			BestPath = ThisPath;
+		}
+	}
+	if(BestPath.IsEmpty())
+	{
+		for (ATile* Tile : SecondaryPriorityTiles)
+		{
+			TArray<EDirection> ThisPath = FindPathToTile(From, Tile);
+
+			if(!ThisPath.IsEmpty() && ThisPath.Num() < BestScore)
+			{
+				BestScore = ThisPath.Num();
+				BestPath = ThisPath;
+			}
 		}
 	}
 	return BestPath;

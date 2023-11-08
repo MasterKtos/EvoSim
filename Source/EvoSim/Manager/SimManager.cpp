@@ -13,6 +13,15 @@ void USimManager::Tick()
 		Manager->Update();
 	}
 	
+	for (int i = 0; i < ManagersToRemove.Num(); ++i)
+	{
+		if(!Managers.Find(ManagersToRemove[i]))
+			continue;
+
+		Managers.Remove(ManagersToRemove[i]);
+		ManagersToRemove.RemoveAt(i);
+	}
+	
 	StartSimulation();
 }
 
@@ -23,7 +32,7 @@ void USimManager::AddToUpdate(IEvoSimLifetime* Manager)
 
 void USimManager::RemoveFromUpdate(IEvoSimLifetime* Manager)
 {
-	Managers.Remove(Manager);
+	ManagersToRemove.Add(Manager);
 }
 
 void USimManager::StartSimulation()

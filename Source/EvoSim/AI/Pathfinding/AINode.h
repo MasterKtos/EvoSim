@@ -13,7 +13,22 @@ class EVOSIM_API UAINode : public UObject
 {
 	GENERATED_BODY()
 
-public:	
+public:
+	FORCEINLINE int GetCost() const { return SourceCost+DestinationCost; }
+	FORCEINLINE int IsWalkable() const
+	{
+		// Perform mask check on type
+		return IsValid(Tile) && (static_cast<uint8>(Tile->Type) &
+			(static_cast<uint8>(ETileType::Water) |
+			static_cast<uint8>(ETileType::Obstacle))) == 0;
+	}
+
+	// UAINodeHeap
+	int HeapIndex = 0;
+	int CompareTo(UAINode* Other);
+	bool Equals(UAINode* Other);
+	// ~UAINodeHeap
+	
 	UPROPERTY()
 	UAINode* Parent;
 	UPROPERTY()
@@ -27,13 +42,4 @@ public:
 	uint32 SourceCost;
 	UPROPERTY()
 	uint32 DestinationCost;
-	
-	FORCEINLINE int GetCost() const { return SourceCost+DestinationCost; }
-	FORCEINLINE int IsWalkable() const
-	{
-		// Perform mask check on type
-		return IsValid(Tile) && (static_cast<uint8>(Tile->Type) &
-			(static_cast<uint8>(ETileType::Water) |
-			static_cast<uint8>(ETileType::Obstacle))) == 0;
-	}
 };

@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Tile.generated.h"
 
+class ACreature;
+
 UENUM(Blueprintable)
 enum class ETileType : uint8
 {
@@ -37,6 +39,8 @@ public:
     ETileType Type = ETileType::Water;
 	UPROPERTY(BlueprintReadWrite)
     FVector2D Coords = {0, 0};
+	UPROPERTY(BlueprintReadOnly)
+	TArray<ACreature*> CreaturesPresent = {};
 	UFUNCTION(BlueprintCallable)
     ATile* GetNeighbour(EDirection Direction) const;
 	UFUNCTION(BlueprintCallable)

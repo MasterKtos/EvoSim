@@ -18,7 +18,7 @@ public:
 	virtual void Update() override;
 
 	UFUNCTION(BlueprintCallable)
-	void Eat();
+	bool Eat();
 
 	UPROPERTY(BlueprintReadWrite)
 	int MaxDurability = 1;

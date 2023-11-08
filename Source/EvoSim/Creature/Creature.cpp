@@ -25,8 +25,13 @@ bool ACreature::Move(const EDirection Direction)
 	ATile* NeighbourTile = CurrentTile->GetNeighbour(Direction); 
 	if(!IsValid(NeighbourTile))
 		return false;
-		
+
+	if(NeighbourTile->Type == ETileType::Water || NeighbourTile->Type == ETileType::Obstacle)
+		return false;
+
+	CurrentTile->CreaturesPresent.Remove(this);
 	CurrentTile = NeighbourTile;
+	CurrentTile->CreaturesPresent.Add(this);
 	
 	MovementComponent->SetNewTarget(CurrentTile->GetActorLocation());
 	return true;

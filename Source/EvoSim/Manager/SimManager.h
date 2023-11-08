@@ -14,8 +14,11 @@ class EVOSIM_API USimManager : public UGameInstance
 	GENERATED_BODY()
 
 	FTSTicker::FDelegateHandle TickDelegateHandle;
-	
+
+	UPROPERTY()
 	TArray<IEvoSimLifetime*> Managers;
+	UPROPERTY()
+	TArray<IEvoSimLifetime*> ManagersToRemove;
 	
 	FTimerHandle TimerHandle;
 

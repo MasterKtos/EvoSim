@@ -29,8 +29,10 @@ void ATilePlant::Update()
 	}
 }
 
-void ATilePlant::Eat()
+bool ATilePlant::Eat()
 {
+	if(Type == ETileType::Land)
+		return false;
 	TimeToResetCounter = 0;
 	Durability--;
 	if(Durability < 1)
@@ -38,6 +40,7 @@ void ATilePlant::Eat()
 		PlantMeshComponent->SetVisibility(false, true);
 		SetTileType(ETileType::Land);
 	}
+	return true;
 }
 
 void ATilePlant::RegrowPlant()

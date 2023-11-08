@@ -36,6 +36,13 @@ void UAIComponent::Update()
 	Owner->Thirst++;
 	Owner->Randy++;
 	CurrentCreatureState->Update();
+
+	if(Owner->Hunger > 100 || Owner->Thirst > 100)
+	{
+		if(USimManager* SimManager = Cast<USimManager>(GetWorld()->GetGameInstance()))
+			SimManager->RemoveFromUpdate(this);
+		Owner->Destroy();
+	}
 }
 
 void UAIComponent::InitializeStateMap(const TMap<ECreatureStateName, UCreatureState*>& StateMap, ECreatureStateName InitialStateName)

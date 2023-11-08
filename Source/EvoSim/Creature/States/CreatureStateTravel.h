@@ -24,4 +24,8 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly)
 	TArray<EDirection> MovesToDo;
+
+private:
+	void GetPathForCurrentNeed();
+	bool TryToSatisfyNeeds() const;
 };
