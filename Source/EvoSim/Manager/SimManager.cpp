@@ -46,8 +46,9 @@ void USimManager::AddMapManager(AMapManager* NewMapManager)
 
 void USimManager::AddToUpdate(IEvoSimLifetime* Manager)
 {
-	Managers.SetNum(20);
-	for(int Index = 0; Index <= 20; Index++)
+	constexpr int POWER = 300;
+	Managers.SetNum(POWER);
+	for(int Index = 0; Index < POWER; Index++)
 	{
 		if(Managers[Index] != nullptr)
 			continue;
@@ -55,7 +56,7 @@ void USimManager::AddToUpdate(IEvoSimLifetime* Manager)
 		Managers[Index] = Manager;
 		return;
 	}
-	Managers.Add(Manager);
+	ensureMsgf(false, TEXT("Intentional crash. I need more POWER!"));
 }
 
 void USimManager::RemoveFromUpdate(IEvoSimLifetime* Manager)
