@@ -26,6 +26,8 @@ public:
 	TArray<EDirection> MovesToDo;
 
 private:
+	UFUNCTION()
 	void GetPathForCurrentNeed();
+	UFUNCTION()
 	bool TryToSatisfyNeeds() const;
 };

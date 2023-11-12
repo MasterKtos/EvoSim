@@ -16,7 +16,7 @@ ACreature::ACreature()
 	MovementComponent = CreateDefaultSubobject<UCreatureMovementComponent>(TEXT("MovementComponent"));
 	AIComponent = CreateDefaultSubobject<UAIComponent>(TEXT("AIComponent"));
 	FovSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
-
+	this->SetFlags(RF_Standalone);
 	SetRootComponent(FovSphereComponent);
 }
 
@@ -42,4 +42,3 @@ void ACreature::Reproduce(bool bMother)
 	Hunger += HungerPerReproduction;
 	Thirst += ThirstPerReproduction;
 }
-

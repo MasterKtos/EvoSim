@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "SimManager.generated.h"
 
+class AMapManager;
 class IEvoSimLifetime;
 
 UCLASS()
@@ -13,20 +14,23 @@ class EVOSIM_API USimManager : public UGameInstance
 {
 	GENERATED_BODY()
 
-	FTSTicker::FDelegateHandle TickDelegateHandle;
-
 	UPROPERTY()
 	TArray<IEvoSimLifetime*> Managers;
 	UPROPERTY()
 	TArray<IEvoSimLifetime*> ManagersToRemove;
-	
+
+	UPROPERTY()
 	FTimerHandle TimerHandle;
 
 	void Tick();
 
-public:
-	void AddToUpdate(IEvoSimLifetime* Manager);
+	UPROPERTY()
+	AMapManager* MapManager = nullptr;
 
+public:
+	UFUNCTION()
+	void AddMapManager(AMapManager* NewMapManager);
+	void AddToUpdate(IEvoSimLifetime* Manager);
 	void RemoveFromUpdate(IEvoSimLifetime* Manager);
 
 	UFUNCTION(BlueprintCallable)
@@ -55,5 +59,6 @@ public:
 	int PlantDurability = 1;
 
 private:
+	UPROPERTY()
 	bool IsTickOngoing = false;
 };

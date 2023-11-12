@@ -3,6 +3,7 @@
 #include "MapManager.h"
 #include "Tile.h"
 #include "TilePlant.h"
+#include "EvoSim/Manager/SimManager.h"
 
 // Sets default values
 AMapManager::AMapManager()
@@ -18,6 +19,8 @@ ATile* AMapManager::SetNewTarget_Implementation(ATile* From)
 
 void AMapManager::GenerateMap(const FInitialParameters& Parameters)
 {
+	Cast<USimManager>(GetGameInstance())->AddMapManager(this);
+	
 	for (const auto TileType : Parameters.InitialMap)
 	{
 		TSubclassOf<ATile> ChosenTilePrefab;

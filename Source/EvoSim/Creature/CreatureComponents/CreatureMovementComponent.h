@@ -30,6 +30,7 @@ public:
 	void SetNewTarget(const FVector& NewTarget);
 
 private:
+	UFUNCTION()
 	bool IsAtTarget() const;
 
 	UPROPERTY()

@@ -22,5 +22,6 @@ public:
 	virtual void Update() override;
 	
 private:
+	UPROPERTY()
 	int CurrentTurn = 0;
 };

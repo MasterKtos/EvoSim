@@ -4,29 +4,57 @@
 #include "SimManager.h"
 
 #include "EvoSimLifetimeInterface.h"
+#include "EvoSim/AI/AIComponent.h"
+#include "EvoSim/Map/MapManager.h"
 
 
 void USimManager::Tick()
 {
-	for (IEvoSimLifetime* Manager : Managers)
+	MapManager->UpdateTiles();
+
+	if(!Managers.IsEmpty())
 	{
-		Manager->Update();
+		for (int i = 0; i < ManagersToRemove.Num(); i++)
+		{
+			if(Managers.Find(ManagersToRemove[i]) == INDEX_NONE)
+			{
+				Cast<UAIComponent>(ManagersToRemove[i])->GetOwner()->Destroy();
+				continue;
+			}
+
+			const auto Index = Managers.Find(ManagersToRemove[i]);
+			Cast<UAIComponent>(Managers[Index])->GetOwner()->Destroy();
+			Managers[Index] = nullptr;
+
+		}
+		ManagersToRemove.Empty();
 	}
 	
-	for (int i = 0; i < ManagersToRemove.Num(); ++i)
+	for (IEvoSimLifetime* Manager : Managers)
 	{
-		if(!Managers.Find(ManagersToRemove[i]))
-			continue;
-
-		Managers.Remove(ManagersToRemove[i]);
-		ManagersToRemove.RemoveAt(i);
+		if(Manager != nullptr && ensureAlways(Manager))
+			Manager->Update();
 	}
 	
 	StartSimulation();
 }
 
+void USimManager::AddMapManager(AMapManager* NewMapManager)
+{
+	MapManager = NewMapManager;
+}
+
 void USimManager::AddToUpdate(IEvoSimLifetime* Manager)
 {
+	Managers.SetNum(20);
+	for(int Index = 0; Index <= 20; Index++)
+	{
+		if(Managers[Index] != nullptr)
+			continue;
+
+		Managers[Index] = Manager;
+		return;
+	}
 	Managers.Add(Manager);
 }
 

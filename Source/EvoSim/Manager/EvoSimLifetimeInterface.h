@@ -18,5 +18,6 @@ class EVOSIM_API IEvoSimLifetime
 	GENERATED_BODY()
 
 	public:
+	UFUNCTION()
 	virtual void Update() = 0;
 };

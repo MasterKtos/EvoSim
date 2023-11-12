@@ -21,7 +21,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	static TArray<EDirection> FindPathToTile(ATile* From, ATile* To);
-	
+
 	static TArray<EDirection> FindPathToTile(ATile* From, TArray<ATile*> To);
 
 protected:

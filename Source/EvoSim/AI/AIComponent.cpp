@@ -6,11 +6,6 @@
 #include "ComponentReregisterContext.h"
 #include "EvoSim/Creature/Creature.h"
 #include "EvoSim/Creature/States/CreatureState.h"
-#include "EvoSim/Creature/States/CreatureStateDrink.h"
-#include "EvoSim/Creature/States/CreatureStateEat.h"
-#include "EvoSim/Creature/States/CreatureStateReproduce.h"
-#include "EvoSim/Creature/States/CreatureStateRest.h"
-#include "EvoSim/Creature/States/CreatureStateTravel.h"
 #include "EvoSim/Manager/SimManager.h"
 
 UAIComponent::UAIComponent()
@@ -26,8 +21,7 @@ void UAIComponent::BeginPlay()
 	if(!ensure(Owner))
 		UE_LOG(LogActorComponent, Log, TEXT("FovComponent | No Owner (or owner is not a Creature)."));
 
-	if(USimManager* SimManager = Cast<USimManager>(GetWorld()->GetGameInstance()))
-		SimManager->AddToUpdate(this);
+	Cast<USimManager>(GetWorld()->GetGameInstance())->AddToUpdate(this);
 }
 
 void UAIComponent::Update()
@@ -39,9 +33,7 @@ void UAIComponent::Update()
 
 	if(Owner->Hunger > 100 || Owner->Thirst > 100)
 	{
-		if(USimManager* SimManager = Cast<USimManager>(GetWorld()->GetGameInstance()))
-			SimManager->RemoveFromUpdate(this);
-		Owner->Destroy();
+		Cast<USimManager>(GetWorld()->GetGameInstance())->RemoveFromUpdate(this);
 	}
 }
 

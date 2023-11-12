@@ -18,6 +18,7 @@ AAIManager::AAIManager()
 void AAIManager::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
 TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)

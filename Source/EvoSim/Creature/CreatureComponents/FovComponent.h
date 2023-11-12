@@ -48,10 +48,12 @@ protected:
 	TArray<ATile*> MeatCreaturesTilesInSight;
 
 private:
+	UFUNCTION()
 	TArray<AActor*> GetOverlappingActors(UClass* ActorsOfClass) const;
 
 	UPROPERTY()
 	TArray<AActor*> IgnoredActors;
-	
+
+	UPROPERTY()
 	TArray<TEnumAsByte<EObjectTypeQuery>> TraceObjectTypes;
 };

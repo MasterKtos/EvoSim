@@ -21,12 +21,13 @@ class EVOSIM_API ACreature : public AActor
 	
 public:	
 	ACreature();
-	
+
+	UFUNCTION()
 	bool Move(EDirection Direction);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Reproduce(bool bMother);
-	
+
 	UPROPERTY(BlueprintReadWrite)
 	AMapManager* MapManager;
 
@@ -55,17 +56,19 @@ public:
 	UPROPERTY()
 	int TurnsToReproduce = 3;
 
+	UPROPERTY()
 	int HungerPerReproduction = 30;
+	UPROPERTY()
 	int ThirstPerReproduction = 30;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 	ATile* CurrentTile = nullptr;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	UFovComponent* FovComponent;
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	UCreatureMovementComponent* MovementComponent;
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadOnly)
 	USphereComponent* FovSphereComponent;
 	UPROPERTY(BlueprintReadOnly)
 	UAIComponent* AIComponent;
