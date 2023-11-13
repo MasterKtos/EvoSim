@@ -29,11 +29,17 @@ void UAIComponent::Update()
 	Owner->Hunger++;
 	Owner->Thirst++;
 	Owner->Randy++;
-	CurrentCreatureState->Update();
 
 	if(Owner->Hunger > 100 || Owner->Thirst > 100)
 	{
 		Cast<USimManager>(GetWorld()->GetGameInstance())->RemoveFromUpdate(this);
+	}
+	
+	CurrentSpeed += Owner->Speed;
+	if (CurrentSpeed >= 1)
+	{
+		CurrentSpeed--;
+		CurrentCreatureState->Update();
 	}
 }
 

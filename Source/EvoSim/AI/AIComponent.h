@@ -44,4 +44,7 @@ protected:
 
 	UPROPERTY()
 	TMap<ECreatureStateName, UCreatureState*> CreatureStateMap;
+
+private:
+	float CurrentSpeed = 0;
 };
