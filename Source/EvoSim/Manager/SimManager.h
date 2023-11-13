@@ -14,24 +14,13 @@ class EVOSIM_API USimManager : public UGameInstance
 {
 	GENERATED_BODY()
 
-	UPROPERTY()
-	TArray<IEvoSimLifetime*> Managers;
-	UPROPERTY()
-	TArray<IEvoSimLifetime*> ManagersToRemove;
-
-	UPROPERTY()
-	FTimerHandle TimerHandle;
-
-	void Tick();
-
-	UPROPERTY()
-	AMapManager* MapManager = nullptr;
-
 public:
 	UFUNCTION()
 	void AddMapManager(AMapManager* NewMapManager);
-	void AddToUpdate(IEvoSimLifetime* Manager);
-	void RemoveFromUpdate(IEvoSimLifetime* Manager);
+	UFUNCTION()
+	void AddToUpdate(TScriptInterface<IEvoSimLifetime> Manager);
+	UFUNCTION()
+	void RemoveFromUpdate(TScriptInterface<IEvoSimLifetime> Manager);
 
 	UFUNCTION(BlueprintCallable)
 	void StartSimulation();
@@ -59,6 +48,18 @@ public:
 	int PlantDurability = 1;
 
 private:
+	UPROPERTY()
+	TArray<TScriptInterface<IEvoSimLifetime>> Managers;
+	UPROPERTY()
+	TArray<TScriptInterface<IEvoSimLifetime>> ManagersToRemove;
+
+	UPROPERTY()
+	FTimerHandle TimerHandle;
+
+	void Tick();
+
+	UPROPERTY()
+	AMapManager* MapManager = nullptr;
 	UPROPERTY()
 	bool IsTickOngoing = false;
 };

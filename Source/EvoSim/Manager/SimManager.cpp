@@ -16,21 +16,17 @@ void USimManager::Tick()
 	{
 		for (int i = 0; i < ManagersToRemove.Num(); i++)
 		{
-			if(Managers.Find(ManagersToRemove[i]) == INDEX_NONE)
-			{
-				Cast<UAIComponent>(ManagersToRemove[i])->GetOwner()->Destroy();
+			if(!Managers.Find(ManagersToRemove[i]))
 				continue;
-			}
 
-			const auto Index = Managers.Find(ManagersToRemove[i]);
-			Cast<UAIComponent>(Managers[Index])->GetOwner()->Destroy();
-			Managers[Index] = nullptr;
+			Managers.Remove(ManagersToRemove[i]);
+			ManagersToRemove.RemoveAt(i);
 
 		}
 		ManagersToRemove.Empty();
 	}
 	
-	for (IEvoSimLifetime* Manager : Managers)
+	for (TScriptInterface<IEvoSimLifetime> Manager : Managers)
 	{
 		if(Manager != nullptr && ensureAlways(Manager))
 			Manager->Update();
@@ -44,22 +40,12 @@ void USimManager::AddMapManager(AMapManager* NewMapManager)
 	MapManager = NewMapManager;
 }
 
-void USimManager::AddToUpdate(IEvoSimLifetime* Manager)
+void USimManager::AddToUpdate(TScriptInterface<IEvoSimLifetime> Manager)
 {
-	constexpr int POWER = 300;
-	Managers.SetNum(POWER);
-	for(int Index = 0; Index < POWER; Index++)
-	{
-		if(Managers[Index] != nullptr)
-			continue;
-
-		Managers[Index] = Manager;
-		return;
-	}
-	ensureMsgf(false, TEXT("Intentional crash. I need more POWER!"));
+	Managers.Add(Manager);
 }
 
-void USimManager::RemoveFromUpdate(IEvoSimLifetime* Manager)
+void USimManager::RemoveFromUpdate(TScriptInterface<IEvoSimLifetime> Manager)
 {
 	ManagersToRemove.Add(Manager);
 }

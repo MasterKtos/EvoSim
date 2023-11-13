@@ -30,7 +30,8 @@ private:
 	void SortUp(UAINode* Item);
 	void SortDown(UAINode* Item);
 	void SwapItems(UAINode* First, UAINode* Second);
-	
+
+	UPROPERTY()
 	TArray<UAINode*> Items;
 	
 	uint8 CurrentItemCount = 0;
