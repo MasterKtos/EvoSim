@@ -33,6 +33,7 @@ void UAIComponent::Update()
 	if(Owner->Hunger > 100 || Owner->Thirst > 100)
 	{
 		Cast<USimManager>(GetWorld()->GetGameInstance())->RemoveFromUpdate(this);
+		Owner->Destroy();
 	}
 	
 	CurrentSpeed += Owner->Speed;
