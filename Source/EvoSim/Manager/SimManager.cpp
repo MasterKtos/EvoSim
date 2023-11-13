@@ -16,10 +16,11 @@ void USimManager::Tick()
 	{
 		for (int i = 0; i < ManagersToRemove.Num(); i++)
 		{
-			if(!Managers.Find(ManagersToRemove[i]))
+			int FoundIndex = INDEX_NONE;
+			if(!Managers.Find(ManagersToRemove[i], FoundIndex))
 				continue;
 
-			Managers.Remove(ManagersToRemove[i]);
+			Managers.RemoveAt(FoundIndex);
 			ManagersToRemove.RemoveAt(i);
 
 		}
