@@ -6,16 +6,6 @@
 #include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Creature/Creature.h"
 
-UCarnivoreStateEat::UCarnivoreStateEat()
-{
-	StateName = ECreatureStateName::Eat;
-}
-
-bool UCarnivoreStateEat::TryEnterState(const ECreatureStateName FromState)
-{
-	return (FromState == ECreatureStateName::Travel || FromState == ECreatureStateName::Rest);
-}
-
 bool UCarnivoreStateEat::TryExitState()
 {
 	// TODO: Start searching for water if hunger is not critical
@@ -30,7 +20,7 @@ void UCarnivoreStateEat::Update()
 {
 	Super::Update();
 	
-	Owner->Hunger = Owner->EatPerUpdate;
+	Owner->Hunger -= Owner->EatPerUpdate;
 	
 	if(Owner->Hunger < 0)
 		Owner->Hunger = 0;

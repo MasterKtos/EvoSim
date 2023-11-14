@@ -3,6 +3,7 @@
 
 #include "CreatureStateTravel.h"
 
+#include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/AI/Pathfinding/AIManager.h"
 #include "EvoSim/Creature/Creature.h"
 #include "EvoSim/Creature/CreatureComponents/CreatureMovementComponent.h"

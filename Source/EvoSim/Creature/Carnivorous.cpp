@@ -6,11 +6,11 @@
 #include "Components/SphereComponent.h"
 #include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Manager/SimManager.h"
-#include "States/CarnivoreStateEat.h"
-#include "States/CarnivoreStateTravel.h"
 #include "States/CreatureStateDrink.h"
 #include "States/CreatureStateReproduce.h"
 #include "States/CreatureStateRest.h"
+#include "States/Carnivore/CarnivoreStateEat.h"
+#include "States/Carnivore/CarnivoreStateTravel.h"
 
 
 ACarnivorous::ACarnivorous()

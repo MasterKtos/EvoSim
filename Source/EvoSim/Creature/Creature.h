@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Creature.generated.h"
 
+class UNeedsEvaluatorComponent;
 enum class EDirection : uint8;
 class UAIComponent;
 class USphereComponent;
@@ -72,4 +73,6 @@ public:
 	USphereComponent* FovSphereComponent;
 	UPROPERTY(BlueprintReadOnly)
 	UAIComponent* AIComponent;
+	UPROPERTY(BlueprintReadOnly)
+	UNeedsEvaluatorComponent* NeedsEvaluator;
 };

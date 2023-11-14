@@ -6,6 +6,7 @@
 #include "Algo/RandomShuffle.h"
 #include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Creature/Creature.h"
+#include "EvoSim/Creature/CreatureComponents/NeedsEvaluatorComponent.h"
 #include "EvoSim/Map/Tile.h"
 
 UCreatureStateRest::UCreatureStateRest()
@@ -20,7 +21,8 @@ bool UCreatureStateRest::TryEnterState(const ECreatureStateName FromState)
 
 bool UCreatureStateRest::TryExitState()
 {
-	if(Owner->Thirst > 40 || Owner->Hunger > 40/* || Owner->Randy >= 100*/)
+	if(const auto CurrentNeed = Owner->NeedsEvaluator->GetCurrentNeed();
+		CurrentNeed != ECreatureNeed::Satisfied)
 	{
 		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Travel);
 	}

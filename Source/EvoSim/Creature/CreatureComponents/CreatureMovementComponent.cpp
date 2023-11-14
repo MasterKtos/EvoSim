@@ -16,11 +16,9 @@ UCreatureMovementComponent::UCreatureMovementComponent()
 void UCreatureMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Owner = Cast<ACreature>(GetOwner());
+	
 	if(!ensure(Owner))
 	{
-		UE_LOG(LogActorComponent, Log, TEXT("FovComponent | No Owner."));
 		SetComponentTickEnabled(false);
 		return;
 	}

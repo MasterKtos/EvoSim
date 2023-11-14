@@ -34,6 +34,7 @@ void UAIComponent::Update()
 	{
 		Cast<USimManager>(GetWorld()->GetGameInstance())->RemoveFromUpdate(this);
 		Owner->Destroy();
+		return;
 	}
 	
 	CurrentSpeed += Owner->Speed;

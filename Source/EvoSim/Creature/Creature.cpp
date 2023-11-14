@@ -6,6 +6,8 @@
 #include "Components/SphereComponent.h"
 #include "CreatureComponents/CreatureMovementComponent.h"
 #include "CreatureComponents/FovComponent.h"
+#include "CreatureComponents/NeedsEvaluatorComponent.h"
+#include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Map/Tile.h"
 
 ACreature::ACreature()
@@ -16,6 +18,7 @@ ACreature::ACreature()
 	MovementComponent = CreateDefaultSubobject<UCreatureMovementComponent>(TEXT("MovementComponent"));
 	AIComponent = CreateDefaultSubobject<UAIComponent>(TEXT("AIComponent"));
 	FovSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
+	NeedsEvaluator = CreateDefaultSubobject<UNeedsEvaluatorComponent>(TEXT("NeedsEvaluatorComponent"));
 	this->SetFlags(RF_Standalone);
 	SetRootComponent(FovSphereComponent);
 }

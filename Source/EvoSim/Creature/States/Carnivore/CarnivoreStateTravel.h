@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CreatureState.h"
+#include "EvoSim/Creature/States/CreatureStateTravel.h"
 #include "CarnivoreStateTravel.generated.h"
 
 enum class EDirection : uint8;
@@ -11,16 +11,12 @@ enum class EDirection : uint8;
  * 
  */
 UCLASS()
-class EVOSIM_API UCarnivoreStateTravel : public UCreatureState
+class EVOSIM_API UCarnivoreStateTravel : public UCreatureStateTravel
 {
 	GENERATED_BODY()
+	
 public:
-	UCarnivoreStateTravel();
-
 	virtual bool TryEnterState(const ECreatureStateName FromState) override;
 	virtual bool TryExitState() override;
 	virtual void Update() override;
-	
-	UPROPERTY(BlueprintReadOnly)
-	TArray<EDirection> MovesToDo;
 };

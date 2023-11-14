@@ -3,14 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
-#include "EvoSim/AI/AIComponent.h"
+#include "CreatureComponent.h"
 #include "CreatureMovementComponent.generated.h"
 
 class USimManager;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class EVOSIM_API UCreatureMovementComponent : public UActorComponent
+class EVOSIM_API UCreatureMovementComponent : public UCreatureComponent
 {
 	GENERATED_BODY()
 
@@ -32,9 +31,7 @@ public:
 private:
 	UFUNCTION()
 	bool IsAtTarget() const;
-
-	UPROPERTY()
-	ACreature* Owner;
+	
 	UPROPERTY()
 	USimManager* SimManager;
 

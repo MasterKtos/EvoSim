@@ -3,7 +3,6 @@
 
 #include "FovComponent.h"
 
-#include "ComponentReregisterContext.h"
 #include "Components/SphereComponent.h"
 #include "EvoSim/Creature/Carnivorous.h"
 #include "EvoSim/Creature/Herbivorous.h"
@@ -18,11 +17,7 @@ UFovComponent::UFovComponent()
 void UFovComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Owner = Cast<ACreature>(GetOwner());
-	if(!ensure(Owner))
-		UE_LOG(LogActorComponent, Log, TEXT("FovComponent | No Owner (or owner is not a Creature)."));
-
+	
 	IgnoredActors.Add(Owner);
 }
 

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
+#include "CreatureComponent.h"
 #include "FovComponent.generated.h"
 
 class ACreature;
@@ -13,7 +13,7 @@ class AMapManager;
 class ATile;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class EVOSIM_API UFovComponent : public UActorComponent
+class EVOSIM_API UFovComponent : public UCreatureComponent
 {
 	GENERATED_BODY()
 
@@ -34,9 +34,6 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	
-	UPROPERTY()
-	ACreature* Owner = nullptr;
 
 	UPROPERTY()
 	TArray<ATile*> WaterTiles;
