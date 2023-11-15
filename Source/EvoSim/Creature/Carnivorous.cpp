@@ -18,7 +18,7 @@ ACarnivorous::ACarnivorous()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void ACarnivorous::Reproduce(bool bMother)
+void ACarnivorous::Reproduce(const bool bMother, ACreature* Partner)
 {
 	Super::Reproduce(bMother);
 	
@@ -31,6 +31,7 @@ void ACarnivorous::Reproduce(bool bMother)
 	if (ACarnivorous* Child = GetWorld()->SpawnActor<ACarnivorous>(GetClass(), this->GetActorLocation(), this->GetActorRotation(), SpawnParams))
 	{
 		Child->CurrentTile = CurrentTile;
+		Child->MapManager = MapManager;
 	}
 }
 
@@ -50,7 +51,6 @@ void ACarnivorous::BeginPlay()
 		Destroy();
 	}
 	
-	bHerbivorous = false;
 	Hunger = 45;	
 	Thirst = 40;
 

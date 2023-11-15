@@ -12,7 +12,7 @@ void USimManager::Tick()
 {
 	MapManager->UpdateTiles();
 
-	if(!Managers.IsEmpty())
+	if(!ManagersToRemove.IsEmpty())
 	{
 		for (int i = 0; i < ManagersToRemove.Num(); i++)
 		{
@@ -21,10 +21,17 @@ void USimManager::Tick()
 				continue;
 
 			Managers.RemoveAt(FoundIndex);
-			ManagersToRemove.RemoveAt(i);
-
 		}
 		ManagersToRemove.Empty();
+	}
+
+	if(!ManagersToAdd.IsEmpty())
+	{
+		for (int i = 0; i < ManagersToAdd.Num(); i++)
+		{
+			Managers.Add(ManagersToAdd[i]);
+		}
+		ManagersToAdd.Empty();
 	}
 	
 	for (TScriptInterface<IEvoSimLifetime> Manager : Managers)
@@ -43,7 +50,7 @@ void USimManager::AddMapManager(AMapManager* NewMapManager)
 
 void USimManager::AddToUpdate(TScriptInterface<IEvoSimLifetime> Manager)
 {
-	Managers.Add(Manager);
+	ManagersToAdd.Add(Manager);
 }
 
 void USimManager::RemoveFromUpdate(TScriptInterface<IEvoSimLifetime> Manager)

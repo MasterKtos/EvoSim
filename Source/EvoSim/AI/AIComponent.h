@@ -31,6 +31,8 @@ public:
 	void InitializeStateMap(const TMap<ECreatureStateName, UCreatureState*>& StateMap, ECreatureStateName InitialStateName = ECreatureStateName::Rest);
 	UFUNCTION()
 	bool ChangeCurrentState(ECreatureStateName NewStateName);
+	UFUNCTION()
+	bool ForceCurrentState(ECreatureStateName NewStateName, ACreature* ForcedBy);
 
 	UPROPERTY(BlueprintReadOnly)
 	UCreatureState* CurrentCreatureState;

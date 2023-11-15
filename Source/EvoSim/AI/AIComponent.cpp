@@ -65,3 +65,13 @@ bool UAIComponent::ChangeCurrentState(const ECreatureStateName NewStateName)
 	}
 	return false;
 }
+
+bool UAIComponent::ForceCurrentState(const ECreatureStateName NewStateName, ACreature* ForcedBy)
+{
+	if(CurrentCreatureState == CreatureStateMap[NewStateName])
+		return false;
+
+	CreatureStateMap[NewStateName]->ForceEnterState(ForcedBy);
+	CurrentCreatureState = CreatureStateMap[NewStateName];
+	return true;
+}

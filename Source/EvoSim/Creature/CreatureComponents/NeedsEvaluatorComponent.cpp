@@ -3,9 +3,7 @@
 
 #include "NeedsEvaluatorComponent.h"
 
-#include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Creature/Creature.h"
-#include "EvoSim/Map/Tile.h"
 
 
 // Sets default values for this component's properties
@@ -16,16 +14,18 @@ UNeedsEvaluatorComponent::UNeedsEvaluatorComponent()
 
 ECreatureNeed UNeedsEvaluatorComponent::GetCurrentNeed() const
 {
-	if(Owner->Thirst >= Owner->Hunger || Owner->Thirst > 80)
+	if(Owner->Thirst >= Owner->Hunger || Owner->Thirst > 60)
 	{
 		return ECreatureNeed::Drink;
 	}
-	if(Owner->Thirst < Owner->Hunger || Owner->Hunger > 80)
+	if(Owner->Thirst < Owner->Hunger || Owner->Hunger > 60)
 	{
 		return ECreatureNeed::Eat;
 	}
-	if(Owner->Randy > 80)
+	if(Owner->Randy == 100)
+	{
 		return ECreatureNeed::Reproduce;
+	}
 	
 	return ECreatureNeed::Satisfied;
 }

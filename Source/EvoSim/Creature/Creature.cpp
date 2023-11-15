@@ -19,7 +19,6 @@ ACreature::ACreature()
 	AIComponent = CreateDefaultSubobject<UAIComponent>(TEXT("AIComponent"));
 	FovSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	NeedsEvaluator = CreateDefaultSubobject<UNeedsEvaluatorComponent>(TEXT("NeedsEvaluatorComponent"));
-	this->SetFlags(RF_Standalone);
 	SetRootComponent(FovSphereComponent);
 }
 
@@ -40,7 +39,7 @@ bool ACreature::Move(const EDirection Direction)
 	return true;
 }
 
-void ACreature::Reproduce(bool bMother)
+void ACreature::Reproduce(bool bMother, ACreature* Partner)
 {
 	Hunger += HungerPerReproduction;
 	Thirst += ThirstPerReproduction;

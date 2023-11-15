@@ -16,7 +16,7 @@ class EVOSIM_API AHerbivorous : public ACreature
 public:
 	AHerbivorous();
 
-	virtual void Reproduce(bool bMother) override;
+	virtual void Reproduce(bool bMother, ACreature* Partner) override;
 	
 protected:
 	virtual void BeginPlay() override;

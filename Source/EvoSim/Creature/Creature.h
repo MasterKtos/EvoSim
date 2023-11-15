@@ -27,8 +27,8 @@ public:
 	bool Move(EDirection Direction);
 
 	UFUNCTION(BlueprintCallable)
-	virtual void Reproduce(bool bMother);
-
+	virtual void Reproduce(bool bMother, ACreature* Partner = nullptr);
+	
 	UPROPERTY(BlueprintReadWrite)
 	AMapManager* MapManager;
 
@@ -45,9 +45,6 @@ public:
 	int Thirst = 0;
 	UPROPERTY(BlueprintReadWrite)
 	int Randy = 0;
-
-	UPROPERTY(BlueprintReadOnly)
-	bool bHerbivorous = true;
 	
 	UPROPERTY()
 	int DrinkPerUpdate = 10;

@@ -27,6 +27,9 @@ public:
 	virtual bool TryEnterState(const ECreatureStateName FromState) { return false; }
 
 	UFUNCTION()
+	virtual void ForceEnterState(ACreature* ForcedBy = nullptr) { }
+
+	UFUNCTION()
 	virtual bool TryExitState() { return false; }
 
 	virtual void Update() override { TryExitState(); }

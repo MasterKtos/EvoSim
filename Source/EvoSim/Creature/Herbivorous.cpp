@@ -19,7 +19,7 @@ AHerbivorous::AHerbivorous()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void AHerbivorous::Reproduce(bool bMother)
+void AHerbivorous::Reproduce(const bool bMother, ACreature* Partner)
 {
 	Super::Reproduce(bMother);
 
@@ -32,6 +32,7 @@ void AHerbivorous::Reproduce(bool bMother)
 	if (AHerbivorous* Child = GetWorld()->SpawnActor<AHerbivorous>(GetClass(), this->GetActorLocation(), this->GetActorRotation(), SpawnParams))
 	{
 		Child->CurrentTile = CurrentTile;
+		Child->MapManager = MapManager;
 	}
 }
 
@@ -51,7 +52,6 @@ void AHerbivorous::BeginPlay()
 		Destroy();
 	}
 	
-	bHerbivorous = true;
 	Hunger = 45;	
 	Thirst = 40;
 

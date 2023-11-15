@@ -5,6 +5,7 @@
 
 #include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Creature/Creature.h"
+#include "EvoSim/Map/Tile.h"
 
 UCreatureStateReproduce::UCreatureStateReproduce()
 {
@@ -15,30 +16,46 @@ bool UCreatureStateReproduce::TryEnterState(const ECreatureStateName FromState)
 {
 	if(FromState != ECreatureStateName::Travel)
 		return false;
-	
-	// TODO: Check if can reproduce
-	
+
+	for(ACreature* Creature : Owner->CurrentTile->CreaturesPresent)
+	{
+		if(	Creature == Owner ||
+			//Creature->Randy != 100 ||
+			Creature->StaticClass() != Owner->StaticClass() ||
+			!Creature->AIComponent->ForceCurrentState(StateName, Owner))
+			continue;
+
+		Partner = Creature;
+		bMother = false;
+		CurrentTurn = 0;
+		return true;
+	}
+	return false;
+}
+
+void UCreatureStateReproduce::ForceEnterState(ACreature* ForcedBy)
+{
+	Partner = ForcedBy;
+	bMother = true;
 	CurrentTurn = 0;
-	return true;
 }
 
 bool UCreatureStateReproduce::TryExitState()
 {
-	// TODO: Exit if there is danger
-	
 	if(CurrentTurn >= Owner->TurnsToReproduce)
 	{
-		// TODO: Create new creature
-		// Owner->Reproduce(true);
+		Owner->Reproduce(bMother, Partner);
 		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Rest);
 	}
-
 	return false;
 }
 
 void UCreatureStateReproduce::Update()
 {
 	Super::Update();
+
+	// TODO: Force Exit if there is danger and tell about it to Partner
+	// ForceCurrentState(Travel or RunAway or smth)
 
 	CurrentTurn++;
 }

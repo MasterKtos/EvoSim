@@ -52,6 +52,8 @@ private:
 	TArray<TScriptInterface<IEvoSimLifetime>> Managers;
 	UPROPERTY()
 	TArray<TScriptInterface<IEvoSimLifetime>> ManagersToRemove;
+	UPROPERTY()
+	TArray<TScriptInterface<IEvoSimLifetime>> ManagersToAdd;
 
 	UPROPERTY()
 	FTimerHandle TimerHandle;
