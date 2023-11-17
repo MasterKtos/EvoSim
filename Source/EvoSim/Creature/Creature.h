@@ -32,6 +32,8 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	AMapManager* MapManager;
 
+
+	// Those 3 can mutate and change
 	UPROPERTY(BlueprintReadWrite)
 	float FieldOfView = 0;
 	UPROPERTY(BlueprintReadWrite)
@@ -72,4 +74,20 @@ public:
 	UAIComponent* AIComponent;
 	UPROPERTY(BlueprintReadOnly)
 	UNeedsEvaluatorComponent* NeedsEvaluator;
+
+protected:
+	template< class T >
+	static FORCEINLINE T MutateFeature(T Value1, T Value2, T MinValue, T MaxValue, T MaxMutationRange)
+	{
+		T Range = 1;
+		const float MutationRate = FMath::RandRange(-Range, Range) * MaxMutationRange;
+		const float FinalValue = (Value1 + Value2) * 0.5f + MutationRate;
+
+		if(FinalValue < MinValue)
+			return MinValue;
+		if(FinalValue > MaxValue)
+			return MaxValue;
+	
+		return FinalValue;
+	}
 };

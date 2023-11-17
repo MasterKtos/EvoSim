@@ -33,6 +33,10 @@ void AHerbivorous::Reproduce(const bool bMother, ACreature* Partner)
 	{
 		Child->CurrentTile = CurrentTile;
 		Child->MapManager = MapManager;
+
+		Child->Speed = MutateFeature(Speed, Partner->Speed, 0.1f, 1.f, 0.1f);
+		Child->ViewDistance = static_cast<float>(MutateFeature(static_cast<int>(ViewDistance), static_cast<int>(Partner->ViewDistance), 1, 20, 2));
+		Child->FieldOfView = static_cast<float>(MutateFeature(static_cast<int>(FieldOfView), static_cast<int>(Partner->FieldOfView), 90, 360, 36));
 	}
 }
 
