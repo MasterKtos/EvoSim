@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Creature.generated.h"
 
+class UMemoryComponent;
 class UNeedsEvaluatorComponent;
 enum class EDirection : uint8;
 class UAIComponent;
@@ -74,6 +75,8 @@ public:
 	UAIComponent* AIComponent;
 	UPROPERTY(BlueprintReadOnly)
 	UNeedsEvaluatorComponent* NeedsEvaluator;
+	UPROPERTY(BlueprintReadOnly)
+	UMemoryComponent* MemoryComponent;
 
 protected:
 	template< class T >

@@ -8,6 +8,7 @@
 #include "EvoSim/Creature/Creature.h"
 #include "EvoSim/Creature/CreatureComponents/CreatureMovementComponent.h"
 #include "EvoSim/Creature/CreatureComponents/FovComponent.h"
+#include "EvoSim/Creature/CreatureComponents/MemoryComponent.h"
 #include "EvoSim/Map/Tile.h"
 
 UCreatureStateTravel::UCreatureStateTravel()
@@ -83,11 +84,21 @@ void UCreatureStateTravel::GetPathForCurrentNeed()
 	
 	TArray<ATile*> CurrentTargets;
 	// Check conditions for travelling to Plants
-	if (Hunger >= Thirst && !Plants.IsEmpty())
-		CurrentTargets = Plants;
+	if (Hunger >= Thirst)
+	{
+		if(Plants.IsEmpty())
+			CurrentTargets = Owner->MemoryComponent->GetRememberedTiles(ETileType::Land, ETileType::Plant);
+		else
+			CurrentTargets = Plants;
+	}
 	// Check conditions for travelling to Water
-	else if (Hunger < Thirst &&!Water.IsEmpty())
-		CurrentTargets = Water;
+	else if (Hunger < Thirst)
+	{
+		if(Plants.IsEmpty())
+			CurrentTargets = Owner->MemoryComponent->GetRememberedTiles(ETileType::Water);
+		else
+			CurrentTargets = Water;
+	}
 
 	MovesToDo = AAIManager::FindPathToTile(Owner->CurrentTile, CurrentTargets);
 }
