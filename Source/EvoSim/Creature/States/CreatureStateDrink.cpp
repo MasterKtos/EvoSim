@@ -5,6 +5,8 @@
 
 #include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Creature/Creature.h"
+#include "EvoSim/Creature/CreatureComponents/NeedsEvaluatorComponent.h"
+#include "EvoSim/Map/Tile.h"
 
 UCreatureStateDrink::UCreatureStateDrink()
 {
@@ -13,14 +15,28 @@ UCreatureStateDrink::UCreatureStateDrink()
 
 bool UCreatureStateDrink::TryEnterState(const ECreatureStateName FromState)
 {
-	return (FromState == ECreatureStateName::Travel || FromState == ECreatureStateName::Rest);
+	if (FromState != ECreatureStateName::Travel &&
+		FromState != ECreatureStateName::Rest)
+			return false;
+	
+	for(const auto Direction : TEnumRange<EDirection>())
+	{
+		const auto Neighbour = Owner->CurrentTile->GetNeighbour(Direction);
+
+		if(!IsValid(Neighbour))
+			continue;
+		if(Neighbour->Type != ETileType::Water)
+			continue;
+		
+		return true;
+	}
+	
+	return false;
 }
 
 bool UCreatureStateDrink::TryExitState()
-{
-	// TODO: Start searching for food if thirst is not critical
-
-	if(Owner->Thirst <= 40)
+{ 
+	if(!Owner->NeedsEvaluator->IsCurrentNeed(ECreatureNeed::Drink))
 		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Rest);
 	
 	return false;

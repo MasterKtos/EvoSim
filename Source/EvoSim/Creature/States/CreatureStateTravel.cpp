@@ -6,9 +6,9 @@
 #include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/AI/Pathfinding/AIManager.h"
 #include "EvoSim/Creature/Creature.h"
-#include "EvoSim/Creature/CreatureComponents/CreatureMovementComponent.h"
 #include "EvoSim/Creature/CreatureComponents/FovComponent.h"
 #include "EvoSim/Creature/CreatureComponents/MemoryComponent.h"
+#include "EvoSim/Creature/CreatureComponents/NeedsEvaluatorComponent.h"
 #include "EvoSim/Map/Tile.h"
 
 UCreatureStateTravel::UCreatureStateTravel()
@@ -53,8 +53,6 @@ bool UCreatureStateTravel::TryExitState()
 			return true;
 		}
 	}
-
-	
 	
 	return false;
 }
@@ -74,30 +72,37 @@ void UCreatureStateTravel::Update()
 
 void UCreatureStateTravel::GetPathForCurrentNeed()
 {
-	const int Hunger = Owner->Hunger;
-	const int Thirst = Owner->Thirst;
-	
 	Owner->FovComponent->UpdateTilesInSight();
     
 	const TArray<ATile*> Plants = Owner->FovComponent->GetPlantTilesInSight();
 	const TArray<ATile*> Water = Owner->FovComponent->GetWaterTilesInSight();
+	const TArray<ATile*> Bros = Owner->FovComponent->GetHerbCreaturesTilesInSight();
 	
 	TArray<ATile*> CurrentTargets;
-	// Check conditions for travelling to Plants
-	if (Hunger >= Thirst)
+	switch(Owner->NeedsEvaluator->GetCurrentNeed())
 	{
-		if(Plants.IsEmpty())
+	case ECreatureNeed::Eat:
+		CurrentTargets = !Plants.IsEmpty() ? Plants : Owner->MemoryComponent->GetRememberedTiles(ETileType::Land, ETileType::Plant);
+		break;
+		
+	case ECreatureNeed::Drink:
+		CurrentTargets = !Water.IsEmpty() ? Water : Owner->MemoryComponent->GetRememberedTiles(ETileType::Water);
+		break;
+		
+	case ECreatureNeed::DrinkOrEat:
+		if(!Water.IsEmpty()) { CurrentTargets = Water; break; }
+		if(!Plants.IsEmpty()) { CurrentTargets = Plants; break; }
+		
+		CurrentTargets = Owner->MemoryComponent->GetRememberedTiles(ETileType::Water);
+		if(CurrentTargets.IsEmpty())
 			CurrentTargets = Owner->MemoryComponent->GetRememberedTiles(ETileType::Land, ETileType::Plant);
-		else
-			CurrentTargets = Plants;
-	}
-	// Check conditions for travelling to Water
-	else if (Hunger < Thirst)
-	{
-		if(Plants.IsEmpty())
-			CurrentTargets = Owner->MemoryComponent->GetRememberedTiles(ETileType::Water);
-		else
-			CurrentTargets = Water;
+		break;
+		
+	case ECreatureNeed::Reproduce:
+		CurrentTargets = Bros; break;
+		
+	case ECreatureNeed::Satisfied:
+	default: ;
 	}
 
 	MovesToDo = AAIManager::FindPathToTile(Owner->CurrentTile, CurrentTargets);
@@ -105,17 +110,28 @@ void UCreatureStateTravel::GetPathForCurrentNeed()
 
 bool UCreatureStateTravel::TryToSatisfyNeeds() const
 {
-	if(Owner->Thirst >= Owner->Hunger || Owner->Thirst > 80)
+	ECreatureStateName ToState = StateName;
+	switch(Owner->NeedsEvaluator->GetCurrentNeed())
 	{
-		for(const auto Direction : TEnumRange<EDirection>())
-		{
-			if(const auto Neighbour = Owner->CurrentTile->GetNeighbour(Direction); IsValid(Neighbour) && Neighbour->Type == ETileType::Water)
-				return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Drink);
-		}
-	}
-	else if(Owner->CurrentTile->Type == ETileType::Plant)
-	{
+	case ECreatureNeed::Drink:
+		ToState = ECreatureStateName::Drink; break;
+		
+	case ECreatureNeed::Eat:
+		ToState = ECreatureStateName::Eat; break;
+				
+	case ECreatureNeed::Reproduce:
+		ToState = ECreatureStateName::Reproduce; break;
+
+	case ECreatureNeed::Satisfied:
+		ToState = ECreatureStateName::Rest; break;
+		
+	case ECreatureNeed::DrinkOrEat:
+		if(Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Drink))
+			return true;
 		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Eat);
+	
+	default: break;
 	}
-	return false;
+	
+	return Owner->AIComponent->ChangeCurrentState(ToState);
 }

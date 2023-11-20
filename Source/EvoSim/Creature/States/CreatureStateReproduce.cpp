@@ -4,6 +4,7 @@
 #include "CreatureStateReproduce.h"
 
 #include "EvoSim/AI/AIComponent.h"
+#include "EvoSim/Creature/Carnivorous.h"
 #include "EvoSim/Creature/Creature.h"
 #include "EvoSim/Map/Tile.h"
 
@@ -17,11 +18,17 @@ bool UCreatureStateReproduce::TryEnterState(const ECreatureStateName FromState)
 	if(FromState != ECreatureStateName::Travel)
 		return false;
 
+	if(Owner->Randy < 100)
+		return false;
+	
+	if(Owner->CurrentTile->CreaturesPresent.Num() > 0 &&
+	  !Owner->CurrentTile->CreaturesPresent.FindItemByClass<ACarnivorous>())
+		return false;
+
 	for(ACreature* Creature : Owner->CurrentTile->CreaturesPresent)
 	{
 		if(	Creature == Owner ||
-			//Creature->Randy != 100 ||
-			Creature->StaticClass() != Owner->StaticClass() ||
+			!Creature->IsA(Owner->StaticClass()) ||
 			!Creature->AIComponent->ForceCurrentState(StateName, Owner))
 			continue;
 
@@ -42,6 +49,9 @@ void UCreatureStateReproduce::ForceEnterState(ACreature* ForcedBy)
 
 bool UCreatureStateReproduce::TryExitState()
 {
+	// TODO: Force Exit if there is danger and tell about it to Partner
+	// ForceCurrentState(Travel or RunAway or smth)
+	
 	if(CurrentTurn >= Owner->TurnsToReproduce)
 	{
 		Owner->Reproduce(bMother, Partner);
@@ -52,10 +62,7 @@ bool UCreatureStateReproduce::TryExitState()
 
 void UCreatureStateReproduce::Update()
 {
-	Super::Update();
-
-	// TODO: Force Exit if there is danger and tell about it to Partner
-	// ForceCurrentState(Travel or RunAway or smth)
-
 	CurrentTurn++;
+	
+	Super::Update();
 }

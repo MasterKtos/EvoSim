@@ -4,17 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "EvoSim/Creature/States/CreatureStateEat.h"
-#include "CarnivoreStateEat.generated.h"
+#include "HerbivoreStateEat.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class EVOSIM_API UCarnivoreStateEat : public UCreatureStateEat
+class EVOSIM_API UHerbivoreStateEat : public UCreatureStateEat
 {
 	GENERATED_BODY()
 public:
 	virtual bool TryEnterState(const ECreatureStateName FromState) override;
-	virtual bool TryExitState() override;
 	virtual void Update() override;
 };

@@ -152,6 +152,6 @@ TArray<EDirection> AAIManager::GetPath(const UAINode* FromNode)
 		Path.Add(DirectionFromParentToNode);
 		CurrentNode = CurrentNode->Parent;
 	}
-	Algo::Reverse(Path);
+	// Algo::Reverse(Path);
 	return Path;
 }

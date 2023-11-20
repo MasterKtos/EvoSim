@@ -35,6 +35,7 @@ bool UCarnivoreStateTravel::TryEnterState(const ECreatureStateName FromState)
 	case ECreatureNeed::Eat: CurrentTargets = Meat; break;
 	case ECreatureNeed::Drink: CurrentTargets = Water; break;
 	case ECreatureNeed::Reproduce: CurrentTargets = Bros; break;
+	case ECreatureNeed::DrinkOrEat: CurrentTargets = !Water.IsEmpty() ? Water:Meat; break;
 	case ECreatureNeed::Satisfied: //falls through
 	default: break;
 	}
@@ -46,40 +47,30 @@ bool UCarnivoreStateTravel::TryEnterState(const ECreatureStateName FromState)
 
 bool UCarnivoreStateTravel::TryExitState()
 {
-	const auto CurrentNeed = Owner->NeedsEvaluator->GetCurrentNeed();
-	for(const auto Direction : TEnumRange<EDirection>())
+	ECreatureStateName ToState = StateName;
+	switch(Owner->NeedsEvaluator->GetCurrentNeed())
 	{
-		const auto Neighbour = Owner->CurrentTile->GetNeighbour(Direction);
-		if(!IsValid(Neighbour))
-			continue;
+	case ECreatureNeed::Drink:
+		ToState = ECreatureStateName::Drink; break;
+		
+	case ECreatureNeed::Eat:
+		ToState = ECreatureStateName::Eat; break;
+				
+	case ECreatureNeed::Reproduce:
+		ToState = ECreatureStateName::Reproduce; break;
 
-		switch(CurrentNeed)
-		{
-		case ECreatureNeed::Eat:
-			if(!(Neighbour->CreaturesPresent.Num() > 0 &&
-			   Neighbour->CreaturesPresent.FindItemByClass<AHerbivorous>()))
-				break;
-			return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Eat);
-		case ECreatureNeed::Drink:
-			if(Neighbour->Type != ETileType::Water)
-				break;
-			return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Drink);
-		case ECreatureNeed::Reproduce:
-			if(!(Neighbour->CreaturesPresent.Num() > 0 &&
-			Neighbour->CreaturesPresent.FindItemByClass<ACarnivorous>()))
-				break;
-			return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Reproduce);
-		case ECreatureNeed::Satisfied:
-			if(Neighbour->Type == ETileType::Water)
-				return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Drink);
-			if(Neighbour->CreaturesPresent.Num() > 0 &&
-			   Neighbour->CreaturesPresent.FindItemByClass<AHerbivorous>())
-				return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Eat);
-		default: break;
-		}
+	case ECreatureNeed::Satisfied:
+		ToState = ECreatureStateName::Rest; break;
+		
+	case ECreatureNeed::DrinkOrEat:
+		if(Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Drink))
+			return true;
+		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Eat);
+	
+	default: break;
 	}
 	
-	return false;
+	return Owner->AIComponent->ChangeCurrentState(ToState);
 }
 
 void UCarnivoreStateTravel::Update()

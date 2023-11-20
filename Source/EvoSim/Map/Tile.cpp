@@ -15,13 +15,13 @@ ATile* ATile::GetNeighbour(const EDirection Direction) const
 	switch(Direction)
 	{
 		case EDirection::N:  return Up;
-		case EDirection::NE: return IsValid(Up) ? Up->Left : nullptr;
-		case EDirection::E:  return Left;
-		case EDirection::SE: return IsValid(Down) ? Down->Left : nullptr;
+		case EDirection::NE: return IsValid(Up) ? Up->Right : IsValid(Right) ? Right->Up : nullptr;
+		case EDirection::E:  return Right;
+		case EDirection::SE: return IsValid(Down) ? Down->Right : IsValid(Right) ? Right->Down : nullptr;
 		case EDirection::S:  return Down;
-		case EDirection::SW: return IsValid(Down) ? Down->Right : nullptr;
-		case EDirection::W:  return Right;
-		case EDirection::NW: return IsValid(Up) ? Up->Right : nullptr;
+		case EDirection::SW: return IsValid(Down) ? Down->Left : IsValid(Left) ? Left->Down : nullptr;
+		case EDirection::W:  return Left;
+		case EDirection::NW: return IsValid(Up) ? Up->Left : IsValid(Left) ? Left->Up : nullptr;
 		default: return nullptr;
 	}
 }

@@ -8,10 +8,10 @@
 #include "EvoSim/Manager/SimManager.h"
 #include "States/CreatureState.h"
 #include "States/CreatureStateDrink.h"
-#include "States/CreatureStateEat.h"
 #include "States/CreatureStateReproduce.h"
 #include "States/CreatureStateRest.h"
 #include "States/CreatureStateTravel.h"
+#include "States/Herbivore/HerbivoreStateEat.h"
 
 
 AHerbivorous::AHerbivorous()
@@ -62,7 +62,7 @@ void AHerbivorous::BeginPlay()
 	FovSphereComponent->SetSphereRadius(ViewDistance * 100);
 	AIComponent->InitializeStateMap({
 		{ECreatureStateName::Rest, NewObject<UCreatureStateRest>()},
-		{ECreatureStateName::Eat, NewObject<UCreatureStateEat>()},
+		{ECreatureStateName::Eat, NewObject<UHerbivoreStateEat>()},
 		{ECreatureStateName::Drink, NewObject<UCreatureStateDrink>()},
 		{ECreatureStateName::Travel, NewObject<UCreatureStateTravel>()},
 		{ECreatureStateName::Reproduce, NewObject<UCreatureStateReproduce>()},

@@ -21,8 +21,7 @@ bool UCreatureStateRest::TryEnterState(const ECreatureStateName FromState)
 
 bool UCreatureStateRest::TryExitState()
 {
-	if(const auto CurrentNeed = Owner->NeedsEvaluator->GetCurrentNeed();
-		CurrentNeed != ECreatureNeed::Satisfied)
+	if(!Owner->NeedsEvaluator->IsCurrentNeed(ECreatureNeed::Satisfied))
 	{
 		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Travel);
 	}

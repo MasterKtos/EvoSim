@@ -27,6 +27,9 @@ public:
 	UFUNCTION()
 	bool Move(EDirection Direction);
 
+	UFUNCTION()
+	void Die();
+
 	UFUNCTION(BlueprintCallable)
 	virtual void Reproduce(bool bMother, ACreature* Partner = nullptr);
 	

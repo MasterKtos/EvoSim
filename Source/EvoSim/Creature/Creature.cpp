@@ -9,6 +9,7 @@
 #include "CreatureComponents/MemoryComponent.h"
 #include "CreatureComponents/NeedsEvaluatorComponent.h"
 #include "EvoSim/AI/AIComponent.h"
+#include "EvoSim/Manager/SimManager.h"
 #include "EvoSim/Map/Tile.h"
 
 ACreature::ACreature()
@@ -39,6 +40,13 @@ bool ACreature::Move(const EDirection Direction)
 	
 	MovementComponent->SetNewTarget(CurrentTile->GetActorLocation());
 	return true;
+}
+
+void ACreature::Die()
+{
+	Cast<USimManager>(GetWorld()->GetGameInstance())->RemoveFromUpdate(this);
+	CurrentTile->CreaturesPresent.Remove(this);
+	Destroy();
 }
 
 void ACreature::Reproduce(bool bMother, ACreature* Partner)

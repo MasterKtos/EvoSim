@@ -14,18 +14,27 @@ UNeedsEvaluatorComponent::UNeedsEvaluatorComponent()
 
 ECreatureNeed UNeedsEvaluatorComponent::GetCurrentNeed() const
 {
-	if(Owner->Thirst >= Owner->Hunger || Owner->Thirst > 60)
+	const int Thirst = Owner->Thirst;
+	const int Hunger = Owner->Hunger;
+	const int Randy = Owner->Randy;
+	const int MaxNeed = Owner->Thirst > Owner->Hunger ? Owner->Thirst : Owner->Hunger;
+
+	if(MaxNeed < 30)
 	{
-		return ECreatureNeed::Drink;
+		return (Randy>=100 ? ECreatureNeed::Reproduce : ECreatureNeed::Satisfied);
 	}
-	if(Owner->Thirst < Owner->Hunger || Owner->Hunger > 60)
+	if(MaxNeed < 50)
 	{
-		return ECreatureNeed::Eat;
+		// if(Randy >= 100)
+		// 	return ECreatureNeed::Reproduce;
+		return ECreatureNeed::DrinkOrEat;
 	}
-	if(Owner->Randy == 100)
-	{
-		return ECreatureNeed::Reproduce;
-	}
-	
-	return ECreatureNeed::Satisfied;
+	return Thirst > Hunger ? ECreatureNeed::Drink : ECreatureNeed::Eat;
+}
+
+bool UNeedsEvaluatorComponent::IsCurrentNeed(ECreatureNeed Need) const
+{
+	if(Need == ECreatureNeed::Satisfied)
+		return GetCurrentNeed() == ECreatureNeed::Satisfied;
+	return (static_cast<uint8>(GetCurrentNeed()) & static_cast<uint8>(Need)) != 0;
 }

@@ -33,7 +33,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	USceneComponent* PlantMeshComponent;
 	UPROPERTY(BlueprintReadWrite)
-	int TimeToReset = 3;
+	int TimeToReset = 5;
 	UPROPERTY()
 	int TimeToResetCounter = 0;
 };

@@ -9,7 +9,11 @@
 UENUM()
 enum class ECreatureNeed
 {
-	Satisfied, Eat, Drink, Reproduce
+	Satisfied = 0x0,
+	Eat = 0x1,
+	Drink = 0x2,
+	DrinkOrEat = (Eat | Drink),
+	Reproduce = 0x4
 };
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -22,4 +26,5 @@ public:
 	UNeedsEvaluatorComponent();
 
 	ECreatureNeed GetCurrentNeed() const;
+	bool IsCurrentNeed(ECreatureNeed Need) const;
 };
