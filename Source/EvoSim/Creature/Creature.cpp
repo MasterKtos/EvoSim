@@ -53,4 +53,5 @@ void ACreature::Reproduce(bool bMother, ACreature* Partner)
 {
 	Hunger += HungerPerReproduction;
 	Thirst += ThirstPerReproduction;
+	Randy = 0;
 }

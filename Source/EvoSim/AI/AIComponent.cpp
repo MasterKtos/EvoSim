@@ -33,8 +33,7 @@ void UAIComponent::Update()
 
 	if(Owner->Hunger > 100 || Owner->Thirst > 100)
 	{
-		Cast<USimManager>(GetWorld()->GetGameInstance())->RemoveFromUpdate(this);
-		Owner->Destroy();
+		Owner->Die();
 		return;
 	}
 	
@@ -64,59 +63,18 @@ bool UAIComponent::ChangeCurrentState(const ECreatureStateName NewStateName)
 	{
 		CurrentCreatureState = CreatureStateMap[NewStateName];
 
-		ATile* NeighboringTile;
 		switch(CurrentCreatureState->StateName)
 		{
 		case ECreatureStateName::Drink:
-			NeighboringTile = Owner->CurrentTile->GetNeighbour(EDirection::E);
-			if(NeighboringTile->Type == ETileType::Water)
+			for (const EDirection Direction : TEnumRange<EDirection>())
 			{
-				Owner->MemoryComponent->RememberTile(NeighboringTile);
-				break;
+				ATile* NeighboringTile = Owner->CurrentTile->GetNeighbour(Direction);
+				if(NeighboringTile->Type == ETileType::Water)
+				{
+					Owner->MemoryComponent->RememberTile(NeighboringTile);
+					break;
+				}
 			}
-			NeighboringTile = Owner->CurrentTile->GetNeighbour(EDirection::N);
-			if(NeighboringTile->Type == ETileType::Water)
-			{
-				Owner->MemoryComponent->RememberTile(NeighboringTile);
-				break;
-			}
-			NeighboringTile = Owner->CurrentTile->GetNeighbour(EDirection::S);
-			if(NeighboringTile->Type == ETileType::Water)
-			{
-				Owner->MemoryComponent->RememberTile(NeighboringTile);
-				break;
-			}
-			NeighboringTile = Owner->CurrentTile->GetNeighbour(EDirection::W);
-			if(NeighboringTile->Type == ETileType::Water)
-			{
-				Owner->MemoryComponent->RememberTile(NeighboringTile);
-				break;
-			}
-			NeighboringTile = Owner->CurrentTile->GetNeighbour(EDirection::NE);
-			if(NeighboringTile->Type == ETileType::Water)
-			{
-				Owner->MemoryComponent->RememberTile(NeighboringTile);
-				break;
-			}
-			NeighboringTile = Owner->CurrentTile->GetNeighbour(EDirection::NW);
-			if(NeighboringTile->Type == ETileType::Water)
-			{
-				Owner->MemoryComponent->RememberTile(NeighboringTile);
-				break;
-			}
-			NeighboringTile = Owner->CurrentTile->GetNeighbour(EDirection::SE);
-			if(NeighboringTile->Type == ETileType::Water)
-			{
-				Owner->MemoryComponent->RememberTile(NeighboringTile);
-				break;
-			}
-			NeighboringTile = Owner->CurrentTile->GetNeighbour(EDirection::SW);
-			if(NeighboringTile->Type == ETileType::Water)
-			{
-				Owner->MemoryComponent->RememberTile(NeighboringTile);
-				break;
-			}
-			break;
 		case ECreatureStateName::Eat:
 			Owner->MemoryComponent->RememberTile(Owner->CurrentTile);
 		default: break;

@@ -19,10 +19,12 @@ bool UCarnivoreStateEat::TryEnterState(const ECreatureStateName FromState)
 		const auto Neighbour = Owner->CurrentTile->GetNeighbour(Direction);
 		if(!IsValid(Neighbour))
 			continue;
-		
+
+		AHerbivorous* Meat = nullptr;
 		if(!(Neighbour->CreaturesPresent.Num() > 0 &&
-		   Neighbour->CreaturesPresent.FindItemByClass<AHerbivorous>()))
+		   Neighbour->CreaturesPresent.FindItemByClass<AHerbivorous>(&Meat)))
 	   		continue;
+		// Meat->Die();
 		
 		return true;
 	}
@@ -31,7 +33,7 @@ bool UCarnivoreStateEat::TryEnterState(const ECreatureStateName FromState)
 
 bool UCarnivoreStateEat::TryExitState()
 { 
-	if(Owner->NeedsEvaluator->IsCurrentNeed(ECreatureNeed::Eat))
+	if(!Owner->NeedsEvaluator->IsCurrentNeed(ECreatureNeed::Eat))
 		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Rest);
 
 	return false;

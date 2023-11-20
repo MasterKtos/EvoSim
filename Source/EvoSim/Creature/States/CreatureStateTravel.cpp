@@ -46,12 +46,14 @@ bool UCreatureStateTravel::TryExitState()
         	Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Rest);
         	return false;
         }
-			
-		if(Owner->CurrentTile->GetNeighbour(MovesToDo.Last())->CreaturesPresent.Num() > 0 && Owner->Move(MovesToDo.Last()))
-		{
-			MovesToDo.Pop();
-			return true;
-		}
+
+		// If, even after recalculating path, Owner is still blocked by other creatures,
+		// just go on a tile with other creature
+		// if(Owner->CurrentTile->GetNeighbour(MovesToDo.Last())->CreaturesPresent.Num() > 0 && Owner->Move(MovesToDo.Last()))
+		// {
+		// 	MovesToDo.Pop();
+		// 	return true;
+		// }
 	}
 	
 	return false;
@@ -63,6 +65,9 @@ void UCreatureStateTravel::Update()
 		return;
 	
 	// TODO: Check if there is better way to the target
+
+	if(TargetedNeed != Owner->NeedsEvaluator->GetCurrentNeed())
+		GetPathForCurrentNeed();
 	
 	if(!MovesToDo.IsEmpty() && Owner->Move(MovesToDo.Last()))
 	{
@@ -79,7 +84,8 @@ void UCreatureStateTravel::GetPathForCurrentNeed()
 	const TArray<ATile*> Bros = Owner->FovComponent->GetHerbCreaturesTilesInSight();
 	
 	TArray<ATile*> CurrentTargets;
-	switch(Owner->NeedsEvaluator->GetCurrentNeed())
+	TargetedNeed = Owner->NeedsEvaluator->GetCurrentNeed();
+	switch(TargetedNeed)
 	{
 	case ECreatureNeed::Eat:
 		CurrentTargets = !Plants.IsEmpty() ? Plants : Owner->MemoryComponent->GetRememberedTiles(ETileType::Land, ETileType::Plant);

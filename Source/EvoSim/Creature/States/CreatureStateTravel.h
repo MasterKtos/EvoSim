@@ -6,6 +6,7 @@
 #include "CreatureState.h"
 #include "CreatureStateTravel.generated.h"
 
+enum class ECreatureNeed;
 enum class EDirection : uint8;
 /**
  * 
@@ -24,10 +25,12 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly)
 	TArray<EDirection> MovesToDo;
+	UPROPERTY()
+	ECreatureNeed TargetedNeed;
 
-private:
+protected:
 	UFUNCTION()
-	void GetPathForCurrentNeed();
+	virtual void GetPathForCurrentNeed();
 	UFUNCTION()
 	bool TryToSatisfyNeeds() const;
 };

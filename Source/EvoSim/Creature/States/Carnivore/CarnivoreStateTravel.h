@@ -14,9 +14,7 @@ UCLASS()
 class EVOSIM_API UCarnivoreStateTravel : public UCreatureStateTravel
 {
 	GENERATED_BODY()
-	
-public:
-	virtual bool TryEnterState(const ECreatureStateName FromState) override;
-	virtual bool TryExitState() override;
-	virtual void Update() override;
+
+protected:
+	virtual void GetPathForCurrentNeed() override;
 };

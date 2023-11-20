@@ -46,10 +46,7 @@ void UCreatureStateDrink::Update()
 {
 	Super::Update();
 
-	if(Owner->Thirst - Owner->DrinkPerUpdate < 0)
-	{
-		Owner->Thirst = 0;
-		return;
-	}
 	Owner->Thirst -= Owner->DrinkPerUpdate;
+	if(Owner->Thirst < 0)
+		Owner->Thirst = 0;
 }
