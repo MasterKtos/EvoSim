@@ -26,7 +26,7 @@ bool UCreatureStateReproduce::TryEnterState(const ECreatureStateName FromState)
 
 	for(ACreature* Creature : Owner->CurrentTile->CreaturesPresent)
 	{
-		if(	Creature == Owner ||
+		if(	Creature == Owner || ensure(Creature) ||
 			!Creature->IsA(Owner->StaticClass()) ||
 			!Creature->AIComponent->ForceCurrentState(StateName, Owner))
 			continue;

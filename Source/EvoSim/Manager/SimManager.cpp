@@ -4,7 +4,7 @@
 #include "SimManager.h"
 
 #include "EvoSimLifetimeInterface.h"
-#include "EvoSim/AI/AIComponent.h"
+#include "LandscapePhysicalMaterial.h"
 #include "EvoSim/AI/Pathfinding/AIManager.h"
 #include "EvoSim/Map/MapManager.h"
 
@@ -47,8 +47,9 @@ void USimManager::Tick()
 		if(Manager != nullptr && ensureAlways(Manager))
 			Manager->Update();
 	}
-	
+
 	StartSimulation();
+	CollectGarbage(RF_Standalone);
 }
 
 void USimManager::AddMapManager(AMapManager* NewMapManager)
