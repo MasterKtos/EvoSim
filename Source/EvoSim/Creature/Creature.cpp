@@ -45,7 +45,7 @@ bool ACreature::Move(const EDirection Direction)
 
 void ACreature::Die()
 {
-	Cast<USimManager>(GetWorld()->GetGameInstance())->RemoveFromUpdate(this);
+	Cast<USimManager>(GetWorld()->GetGameInstance())->RemoveFromUpdate(this->AIComponent);
 	CurrentTile->CreaturesPresent.Remove(this);
 	Destroy();
 }

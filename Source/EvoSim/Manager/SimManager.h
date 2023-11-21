@@ -49,7 +49,8 @@ public:
 	int ViewDistance = 7;
 	UPROPERTY(BlueprintReadWrite)
 	int PlantDurability = 1;
-
+	UPROPERTY(BlueprintReadWrite)
+	int CorpseDurability = 1;
 	
 	UPROPERTY()
 	AAIManager* AIManager = nullptr;

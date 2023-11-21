@@ -17,6 +17,8 @@ public:
 	AHerbivorous();
 
 	virtual void Reproduce(bool bMother, ACreature* Partner) override;
+
+	virtual void Die() override;
 	
 protected:
 	virtual void BeginPlay() override;
