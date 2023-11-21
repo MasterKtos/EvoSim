@@ -50,7 +50,7 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 		{
 			for (const auto Direction : TEnumRange<EDirection>())
 			{
-				UAINode* Neighbour = NewObject<UAINode>(CurrentNode->GetOuter(), TEXT("AINode"));
+				UAINode* Neighbour = NewObject<UAINode>(CurrentNode->GetOuter());
 				Neighbour->Tile = CurrentNode->Tile->GetNeighbour(Direction);
 
 				if(!IsValid(Neighbour->Tile))
