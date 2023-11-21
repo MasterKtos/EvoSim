@@ -31,6 +31,8 @@ public:
 	const TArray<ATile*>& GetHerbCreaturesTilesInSight() const;
 	UFUNCTION(BlueprintCallable)
 	const TArray<ATile*>& GetMeatCreaturesTilesInSight() const;
+	UFUNCTION(BlueprintCallable)
+	const TArray<ATile*>& GetCorpseTilesInSight() const;
 
 protected:
 	virtual void BeginPlay() override;
@@ -43,6 +45,8 @@ protected:
 	TArray<ATile*> HerbCreaturesTilesInSight;
 	UPROPERTY()
 	TArray<ATile*> MeatCreaturesTilesInSight;
+	UPROPERTY()
+	TArray<ATile*> CorpseTilesInSight;
 
 private:
 	UFUNCTION()
