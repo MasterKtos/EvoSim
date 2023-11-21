@@ -27,5 +27,4 @@ void UHerbivoreStateEat::Update()
 			return;
 
 	Super::Update();
-	
 }

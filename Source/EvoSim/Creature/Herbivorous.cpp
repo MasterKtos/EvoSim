@@ -7,6 +7,7 @@
 #include "Components/SphereComponent.h"
 #include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Manager/SimManager.h"
+#include "EvoSim/Map/Tile.h"
 #include "States/CreatureState.h"
 #include "States/CreatureStateDrink.h"
 #include "States/CreatureStateReproduce.h"
@@ -41,11 +42,12 @@ void AHerbivorous::Reproduce(const bool bMother, ACreature* Partner)
 	}
 }
 
-void AHerbivorous::Die()
+void AHerbivorous::GetHuntedDown(ACorpse* &Remains)
 {
-	GetWorld()->SpawnActor<ACorpse>(ACorpse::StaticClass(), this->GetActorLocation(), this->GetActorRotation(), FActorSpawnParameters());
-	
-	Super::Die();
+	Remains = GetWorld()->SpawnActor<ACorpse>(ACorpse::StaticClass(), this->GetActorLocation(), this->GetActorRotation(), FActorSpawnParameters());
+	Remains->CurrentTile = CurrentTile;
+	CurrentTile->PreyPresent.Add(Remains);
+	Die();
 }
 
 void AHerbivorous::BeginPlay()

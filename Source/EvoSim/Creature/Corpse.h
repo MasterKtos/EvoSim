@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "Corpse.generated.h"
 
+class ATile;
 class USimManager;
 
 UCLASS()
@@ -19,15 +20,16 @@ public:
 
 	virtual void Update() override;
 
-	void BeEaten();
+	bool Eat();
 
 	UPROPERTY()
 	UStaticMeshComponent* SphereMesh;
+	UPROPERTY()
+	ATile* CurrentTile;
 	
 protected:
 	virtual void BeginPlay() override;
 
-private:
 	int Lifetime = 30;
 	int Durability = 1;
 

@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Tile.generated.h"
 
+class ACorpse;
 class ACreature;
 
 UENUM(Blueprintable)
@@ -42,6 +43,8 @@ public:
     FVector2D Coords = {0, 0};
 	UPROPERTY(BlueprintReadOnly)
 	TArray<ACreature*> CreaturesPresent = {};
+	UPROPERTY(BlueprintReadOnly)
+	TArray<ACorpse*> PreyPresent = {};
 	UFUNCTION(BlueprintCallable)
     ATile* GetNeighbour(EDirection Direction) const;
 	UFUNCTION(BlueprintCallable)

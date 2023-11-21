@@ -4,6 +4,7 @@
 #include "Corpse.h"
 
 #include "EvoSim/Manager/SimManager.h"
+#include "EvoSim/Map/Tile.h"
 
 
 ACorpse::ACorpse()
@@ -27,13 +28,16 @@ void ACorpse::Update()
 	}
 }
 
-void ACorpse::BeEaten()
+bool ACorpse::Eat()
 {
 	if(Durability-- == 0)
 	{
 		GameInstance->RemoveFromUpdate(this);
+		CurrentTile->PreyPresent.Remove(this);
 		Destroy();
+		return false;
 	}
+	return true;
 }
 
 void ACorpse::BeginPlay()

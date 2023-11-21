@@ -6,6 +6,7 @@
 #include "Creature.h"
 #include "Herbivorous.generated.h"
 
+class ACorpse;
 class UAIComponentHerbivore;
 
 UCLASS()
@@ -17,8 +18,7 @@ public:
 	AHerbivorous();
 
 	virtual void Reproduce(bool bMother, ACreature* Partner) override;
-
-	virtual void Die() override;
+	void GetHuntedDown(ACorpse* &Remains);
 	
 protected:
 	virtual void BeginPlay() override;

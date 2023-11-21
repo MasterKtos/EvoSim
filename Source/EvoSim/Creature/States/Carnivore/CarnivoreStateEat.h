@@ -6,6 +6,7 @@
 #include "EvoSim/Creature/States/CreatureStateEat.h"
 #include "CarnivoreStateEat.generated.h"
 
+class ACorpse;
 /**
  * 
  */
@@ -17,4 +18,8 @@ public:
 	virtual bool TryEnterState(const ECreatureStateName FromState) override;
 	virtual bool TryExitState() override;
 	virtual void Update() override;
+
+private:
+	UPROPERTY()
+	ACorpse* Prey;
 };
