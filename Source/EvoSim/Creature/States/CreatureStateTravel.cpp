@@ -119,11 +119,12 @@ void UCreatureStateTravel::GetPathForCurrentNeed()
 	default: break;
 	}
 
-	auto Swiat = GetWorld();
-	auto GameInstance = Swiat->GetGameInstance();
-	auto SimManager = Cast<USimManager>(GameInstance);
-
-	MovesToDo = SimManager->AIManager->FindPathToTile(Owner->CurrentTile, CurrentTargets);
+	if(CurrentTargets.IsEmpty())
+	{
+		Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Rest);
+		return;
+	}
+	MovesToDo = Cast<USimManager>(GetWorld()->GetGameInstance())->AIManager->FindPathToTile(Owner->CurrentTile, CurrentTargets);
 }
 
 void UCreatureStateTravel::GetTargetsInView()

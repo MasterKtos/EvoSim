@@ -62,7 +62,6 @@ bool UAIComponent::ChangeCurrentState(const ECreatureStateName NewStateName)
 	if(CreatureStateMap[NewStateName]->TryEnterState(CurrentCreatureState->StateName))
 	{
 		CurrentCreatureState = CreatureStateMap[NewStateName];
-
 		switch(CurrentCreatureState->StateName)
 		{
 		case ECreatureStateName::Drink:
@@ -79,6 +78,7 @@ bool UAIComponent::ChangeCurrentState(const ECreatureStateName NewStateName)
 			Owner->MemoryComponent->RememberTile(Owner->CurrentTile);
 		default: break;
 		}
+		
 		return true;
 	}
 	return false;
