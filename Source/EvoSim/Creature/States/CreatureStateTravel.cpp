@@ -89,7 +89,7 @@ void UCreatureStateTravel::GetPathForCurrentNeed()
 		Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Rest);
 		return;
 	}
-
+	
 	GetTargetsInView();
 	
 	TArray<ATile*> CurrentTargets;
@@ -127,7 +127,6 @@ void UCreatureStateTravel::GetTargetsInView()
 	Owner->FovComponent->UpdateTilesInSight();
 	
 	Water = Owner->FovComponent->GetWaterTilesInSight();
-	// Populate Food and Bros arrays in child classes
 }
 
 bool UCreatureStateTravel::TryToSatisfyNeeds() const

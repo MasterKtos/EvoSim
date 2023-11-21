@@ -55,8 +55,6 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 
 				if(!IsValid(Neighbour->Tile))
 					continue;
-				if(!Neighbour->IsWalkable() || ClosedNodes.Contains(Neighbour->Tile))
-					continue;
 				
 				Neighbour->Parent = CurrentNode;
 				Neighbour->ParentDirection = Direction;
@@ -65,6 +63,8 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 				{
 					return GetPath(Neighbour);
 				}
+				if(!Neighbour->IsWalkable() || ClosedNodes.Contains(Neighbour->Tile))
+					continue;
 				CurrentNode->Neighbours.Add(Neighbour, Direction);
 			}
 		}

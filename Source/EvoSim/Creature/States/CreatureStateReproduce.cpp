@@ -21,8 +21,7 @@ bool UCreatureStateReproduce::TryEnterState(const ECreatureStateName FromState)
 	if(Owner->Randy < 100)
 		return false;
 	
-	if(Owner->CurrentTile->CreaturesPresent.Num() > 0 &&
-	  !Owner->CurrentTile->CreaturesPresent.FindItemByClass<ACarnivorous>())
+	if(Owner->CurrentTile->CreaturesPresent.IsEmpty())
 		return false;
 
 	for(ACreature* Creature : Owner->CurrentTile->CreaturesPresent)

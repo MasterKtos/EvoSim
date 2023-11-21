@@ -38,7 +38,7 @@ protected:
 	
 	UFUNCTION()
 	bool TryToSatisfyNeeds() const;
-
+	
 	UPROPERTY()
 	TArray<ATile*> Food;
 	UPROPERTY()

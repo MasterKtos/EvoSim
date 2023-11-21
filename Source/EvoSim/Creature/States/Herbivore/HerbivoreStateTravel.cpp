@@ -9,7 +9,6 @@
 void UHerbivoreStateTravel::GetTargetsInView()
 {
 	Super::GetTargetsInView();
-	
 	Food = Owner->FovComponent->GetPlantTilesInSight();
 	Bros = Owner->FovComponent->GetHerbCreaturesTilesInSight();
 }

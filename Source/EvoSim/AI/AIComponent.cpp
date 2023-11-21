@@ -31,6 +31,9 @@ void UAIComponent::Update()
 	Owner->Thirst++;
 	Owner->Randy++;
 
+	if(Owner->Randy > 100)
+		Owner->Randy = 100;
+
 	if(Owner->Hunger > 100 || Owner->Thirst > 100)
 	{
 		Owner->Die();

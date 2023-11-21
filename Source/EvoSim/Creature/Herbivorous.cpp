@@ -10,8 +10,8 @@
 #include "States/CreatureStateDrink.h"
 #include "States/CreatureStateReproduce.h"
 #include "States/CreatureStateRest.h"
-#include "States/CreatureStateTravel.h"
 #include "States/Herbivore/HerbivoreStateEat.h"
+#include "States/Herbivore/HerbivoreStateTravel.h"
 
 
 AHerbivorous::AHerbivorous()
@@ -64,7 +64,7 @@ void AHerbivorous::BeginPlay()
 		{ECreatureStateName::Rest, NewObject<UCreatureStateRest>(AIComponent->GetOuter())},
 		{ECreatureStateName::Eat, NewObject<UHerbivoreStateEat>(AIComponent->GetOuter())},
 		{ECreatureStateName::Drink, NewObject<UCreatureStateDrink>(AIComponent->GetOuter())},
-		{ECreatureStateName::Travel, NewObject<UCreatureStateTravel>(AIComponent->GetOuter())},
+		{ECreatureStateName::Travel, NewObject<UHerbivoreStateTravel>(AIComponent->GetOuter())},
 		{ECreatureStateName::Reproduce, NewObject<UCreatureStateReproduce>(AIComponent->GetOuter())},
 	 });
 }
