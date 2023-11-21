@@ -74,6 +74,7 @@ bool UAIComponent::ChangeCurrentState(const ECreatureStateName NewStateName)
 					break;
 				}
 			}
+			break;
 		case ECreatureStateName::Eat:
 			Owner->MemoryComponent->RememberTile(Owner->CurrentTile);
 		default: break;
