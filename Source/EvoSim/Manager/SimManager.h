@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "SimManager.generated.h"
 
+class AAIManager;
 class AMapManager;
 class IEvoSimLifetime;
 
@@ -15,6 +16,8 @@ class EVOSIM_API USimManager : public UGameInstance
 	GENERATED_BODY()
 
 public:
+	virtual void Init() override;
+
 	UFUNCTION()
 	void AddMapManager(AMapManager* NewMapManager);
 	UFUNCTION()
@@ -47,6 +50,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	int PlantDurability = 1;
 
+	
+	UPROPERTY()
+	AAIManager* AIManager = nullptr;
 private:
 	UPROPERTY()
 	TArray<TScriptInterface<IEvoSimLifetime>> Managers;

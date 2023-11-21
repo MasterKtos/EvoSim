@@ -11,8 +11,9 @@ class ACreature;
 UENUM(Blueprintable)
 enum class ETileType : uint8
 {
-	Water, Obstacle,
-    Land, Plant
+	None = 0x0,
+	Water = 0x1, Obstacle = 0x3,
+    Land = 0x4, Plant = 0x8
 };
 
 UENUM(Blueprintable)

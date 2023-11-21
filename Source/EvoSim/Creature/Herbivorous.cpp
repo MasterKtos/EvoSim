@@ -61,11 +61,11 @@ void AHerbivorous::BeginPlay()
 
 	FovSphereComponent->SetSphereRadius(ViewDistance * 100);
 	AIComponent->InitializeStateMap({
-		{ECreatureStateName::Rest, NewObject<UCreatureStateRest>()},
-		{ECreatureStateName::Eat, NewObject<UHerbivoreStateEat>()},
-		{ECreatureStateName::Drink, NewObject<UCreatureStateDrink>()},
-		{ECreatureStateName::Travel, NewObject<UCreatureStateTravel>()},
-		{ECreatureStateName::Reproduce, NewObject<UCreatureStateReproduce>()},
+		{ECreatureStateName::Rest, NewObject<UCreatureStateRest>(AIComponent->GetOuter())},
+		{ECreatureStateName::Eat, NewObject<UHerbivoreStateEat>(AIComponent->GetOuter())},
+		{ECreatureStateName::Drink, NewObject<UCreatureStateDrink>(AIComponent->GetOuter())},
+		{ECreatureStateName::Travel, NewObject<UCreatureStateTravel>(AIComponent->GetOuter())},
+		{ECreatureStateName::Reproduce, NewObject<UCreatureStateReproduce>(AIComponent->GetOuter())},
 	 });
 }
 

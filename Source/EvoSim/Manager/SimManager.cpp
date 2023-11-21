@@ -5,8 +5,16 @@
 
 #include "EvoSimLifetimeInterface.h"
 #include "EvoSim/AI/AIComponent.h"
+#include "EvoSim/AI/Pathfinding/AIManager.h"
 #include "EvoSim/Map/MapManager.h"
 
+
+void USimManager::Init()
+{
+	Super::Init();
+	AIManager = NewObject<AAIManager>(GetOuter(), TEXT("AIManager"));
+	AIManager->AddToRoot();
+}
 
 void USimManager::Tick()
 {

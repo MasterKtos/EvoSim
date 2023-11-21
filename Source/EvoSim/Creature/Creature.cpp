@@ -22,6 +22,7 @@ ACreature::ACreature()
 	FovSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	NeedsEvaluator = CreateDefaultSubobject<UNeedsEvaluatorComponent>(TEXT("NeedsEvaluatorComponent"));
 	MemoryComponent = CreateDefaultSubobject<UMemoryComponent>(TEXT("MemoryComponent"));
+	
 	SetRootComponent(FovSphereComponent);
 }
 

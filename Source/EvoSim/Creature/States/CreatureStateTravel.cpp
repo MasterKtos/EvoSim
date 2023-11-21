@@ -9,6 +9,7 @@
 #include "EvoSim/Creature/CreatureComponents/FovComponent.h"
 #include "EvoSim/Creature/CreatureComponents/MemoryComponent.h"
 #include "EvoSim/Creature/CreatureComponents/NeedsEvaluatorComponent.h"
+#include "EvoSim/Manager/SimManager.h"
 #include "EvoSim/Map/Tile.h"
 
 UCreatureStateTravel::UCreatureStateTravel()
@@ -69,26 +70,33 @@ void UCreatureStateTravel::Update()
 	if(TargetedNeed != Owner->NeedsEvaluator->GetCurrentNeed())
 		GetPathForCurrentNeed();
 	
-	if(!MovesToDo.IsEmpty() && Owner->Move(MovesToDo.Last()))
+	if(!MovesToDo.IsEmpty())
 	{
-		MovesToDo.Pop();
+		if(Owner->Move(MovesToDo.Last()))
+			MovesToDo.Pop();
+		// workaround for an issue where creature might completely
+		// ignore obstacles for some reason
+		else
+			GetPathForCurrentNeed();
 	}
 }
 
 void UCreatureStateTravel::GetPathForCurrentNeed()
 {
-	Owner->FovComponent->UpdateTilesInSight();
-    
-	const TArray<ATile*> Plants = Owner->FovComponent->GetPlantTilesInSight();
-	const TArray<ATile*> Water = Owner->FovComponent->GetWaterTilesInSight();
-	const TArray<ATile*> Bros = Owner->FovComponent->GetHerbCreaturesTilesInSight();
+	TargetedNeed = Owner->NeedsEvaluator->GetCurrentNeed();
+	if(TargetedNeed == ECreatureNeed::Satisfied)
+	{
+		Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Rest);
+		return;
+	}
+
+	GetTargetsInView();
 	
 	TArray<ATile*> CurrentTargets;
-	TargetedNeed = Owner->NeedsEvaluator->GetCurrentNeed();
 	switch(TargetedNeed)
 	{
 	case ECreatureNeed::Eat:
-		CurrentTargets = !Plants.IsEmpty() ? Plants : Owner->MemoryComponent->GetRememberedTiles(ETileType::Land, ETileType::Plant);
+		CurrentTargets = !Food.IsEmpty() ? Food : Owner->MemoryComponent->GetRememberedTiles(ETileType::Land, ETileType::Plant);
 		break;
 		
 	case ECreatureNeed::Drink:
@@ -97,7 +105,7 @@ void UCreatureStateTravel::GetPathForCurrentNeed()
 		
 	case ECreatureNeed::DrinkOrEat:
 		if(!Water.IsEmpty()) { CurrentTargets = Water; break; }
-		if(!Plants.IsEmpty()) { CurrentTargets = Plants; break; }
+		if(!Food.IsEmpty()) { CurrentTargets = Food; break; }
 		
 		CurrentTargets = Owner->MemoryComponent->GetRememberedTiles(ETileType::Water);
 		if(CurrentTargets.IsEmpty())
@@ -107,11 +115,23 @@ void UCreatureStateTravel::GetPathForCurrentNeed()
 	case ECreatureNeed::Reproduce:
 		CurrentTargets = Bros; break;
 		
-	case ECreatureNeed::Satisfied:
-	default: ;
+	case ECreatureNeed::Satisfied: // handled above
+	default: break;
 	}
 
-	MovesToDo = AAIManager::FindPathToTile(Owner->CurrentTile, CurrentTargets);
+	auto Swiat = GetWorld();
+	auto GameInstance = Swiat->GetGameInstance();
+	auto SimManager = Cast<USimManager>(GameInstance);
+
+	MovesToDo = SimManager->AIManager->FindPathToTile(Owner->CurrentTile, CurrentTargets);
+}
+
+void UCreatureStateTravel::GetTargetsInView()
+{
+	Owner->FovComponent->UpdateTilesInSight();
+	
+	Water = Owner->FovComponent->GetWaterTilesInSight();
+	// Populate Food and Bros arrays in child classes
 }
 
 bool UCreatureStateTravel::TryToSatisfyNeeds() const

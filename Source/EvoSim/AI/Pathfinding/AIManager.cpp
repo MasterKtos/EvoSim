@@ -23,15 +23,15 @@ void AAIManager::BeginPlay()
 
 TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 {
-	UAINodeHeap* OpenedNodes = NewObject<UAINodeHeap>();
+	UAINodeHeap* OpenedNodes = NewObject<UAINodeHeap>(GetOuter(), TEXT("Heap"));
 	OpenedNodes->Init(50*50);
 	TSet<ATile*> ClosedNodes = {};
 
-	UAINode* FirstNode = NewObject<UAINode>();
+	UAINode* FirstNode = NewObject<UAINode>(OpenedNodes->GetOuter(), TEXT("AINodeFirst"));
 	FirstNode->Tile = From;
 	OpenedNodes->Add(FirstNode);
 
-	UAINode* LastNode = NewObject<UAINode>();
+	UAINode* LastNode = NewObject<UAINode>(OpenedNodes->GetOuter(), TEXT("AINodeLast"));
 	LastNode->Tile = To;
 	
 	while(OpenedNodes->Num() > 0)
@@ -50,7 +50,7 @@ TArray<EDirection> AAIManager::FindPathToTile(ATile* From, ATile* To)
 		{
 			for (const auto Direction : TEnumRange<EDirection>())
 			{
-				UAINode* Neighbour = NewObject<UAINode>();
+				UAINode* Neighbour = NewObject<UAINode>(CurrentNode->GetOuter(), TEXT("AINode"));
 				Neighbour->Tile = CurrentNode->Tile->GetNeighbour(Direction);
 
 				if(!IsValid(Neighbour->Tile))

@@ -4,14 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "EvoSim/Creature/States/CreatureStateTravel.h"
-#include "CarnivoreStateTravel.generated.h"
+#include "HerbivoreStateTravel.generated.h"
 
-enum class EDirection : uint8;
 /**
  * 
  */
 UCLASS()
-class EVOSIM_API UCarnivoreStateTravel : public UCreatureStateTravel
+class EVOSIM_API UHerbivoreStateTravel : public UCreatureStateTravel
 {
 	GENERATED_BODY()
 

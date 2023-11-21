@@ -6,6 +6,7 @@
 #include "CreatureState.h"
 #include "CreatureStateTravel.generated.h"
 
+class ATile;
 enum class ECreatureNeed;
 enum class EDirection : uint8;
 /**
@@ -31,6 +32,17 @@ public:
 protected:
 	UFUNCTION()
 	virtual void GetPathForCurrentNeed();
+	// Populates Food, Water and Bros arrays
+	UFUNCTION()
+	virtual void GetTargetsInView();
+	
 	UFUNCTION()
 	bool TryToSatisfyNeeds() const;
+
+	UPROPERTY()
+	TArray<ATile*> Food;
+	UPROPERTY()
+	TArray<ATile*> Water;
+	UPROPERTY()
+	TArray<ATile*> Bros;
 };
