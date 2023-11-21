@@ -118,12 +118,7 @@ void UCreatureStateTravel::GetPathForCurrentNeed()
 	case ECreatureNeed::Satisfied: // handled above
 	default: break;
 	}
-
-	if(CurrentTargets.IsEmpty())
-	{
-		Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Rest);
-		return;
-	}
+	
 	MovesToDo = Cast<USimManager>(GetWorld()->GetGameInstance())->AIManager->FindPathToTile(Owner->CurrentTile, CurrentTargets);
 }
 
