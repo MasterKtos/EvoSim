@@ -3,6 +3,7 @@
 
 #include "Herbivorous.h"
 
+#include "Corpse.h"
 #include "Components/SphereComponent.h"
 #include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Manager/SimManager.h"
@@ -38,6 +39,13 @@ void AHerbivorous::Reproduce(const bool bMother, ACreature* Partner)
 		Child->ViewDistance = static_cast<float>(MutateFeature(static_cast<int>(ViewDistance), static_cast<int>(Partner->ViewDistance), 1, 20, 2));
 		Child->FieldOfView = static_cast<float>(MutateFeature(static_cast<int>(FieldOfView), static_cast<int>(Partner->FieldOfView), 90, 360, 36));
 	}
+}
+
+void AHerbivorous::Die()
+{
+	GetWorld()->SpawnActor<ACorpse>(ACorpse::StaticClass(), this->GetActorLocation(), this->GetActorRotation(), FActorSpawnParameters());
+	
+	Super::Die();
 }
 
 void AHerbivorous::BeginPlay()
