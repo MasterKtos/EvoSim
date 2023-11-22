@@ -28,7 +28,8 @@ bool UCarnivoreStateEat::TryEnterState(const ECreatureStateName FromState)
 		if(!Neighbour->PreyPresent.IsEmpty())
 		{
 			Prey = Neighbour->PreyPresent.Last();
-			return true;
+			if(IsValid(Prey))
+				return true;
 		}
 
 		// Hunt down herbivore
@@ -44,7 +45,7 @@ bool UCarnivoreStateEat::TryEnterState(const ECreatureStateName FromState)
 
 bool UCarnivoreStateEat::TryExitState()
 { 
-	if(!Owner->NeedsEvaluator->IsCurrentNeed(ECreatureNeed::Eat) || !IsValid(Prey))
+	if(!IsValid(Prey) || !Prey->IsActorBeingDestroyed() || !Owner->NeedsEvaluator->IsCurrentNeed(ECreatureNeed::Eat))
 		return Owner->AIComponent->ChangeCurrentState(ECreatureStateName::Rest);
 
 	return false;
@@ -53,9 +54,15 @@ bool UCarnivoreStateEat::TryExitState()
 void UCarnivoreStateEat::Update()
 {
 	// it's ugly, but I have no better idea how to handle it better at the moment
-	if(IsValid(Prey) && !Prey->Eat())
+	if(IsValid(Prey) && !Prey->IsActorBeingDestroyed() && !Prey->Eat())
+	{
 		if(TryExitState())
 			return;
+	}
+	else
+	{
+		TryExitState();
+	}
 
 	
 	Super::Update();
