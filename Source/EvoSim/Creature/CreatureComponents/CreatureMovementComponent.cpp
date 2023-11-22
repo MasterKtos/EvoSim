@@ -9,7 +9,7 @@
 
 UCreatureMovementComponent::UCreatureMovementComponent()
 {
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 }
 
 void UCreatureMovementComponent::BeginPlay()
