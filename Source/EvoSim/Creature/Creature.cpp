@@ -64,3 +64,21 @@ void ACreature::Reproduce(bool bMother, ACreature* Partner)
 	Thirst += ThirstPerReproduction;
 	Randy = 0;
 }
+
+ERestStrategyName ACreature::MutateStrategy(const ERestStrategyName Parent1, const ERestStrategyName Parent2)
+{
+	switch (FMath::RandRange(0, 2))
+	{
+	case 0:		return Parent1;
+	case 1:		return Parent2;
+	case 2:
+		switch (FMath::RandRange(0, 2))
+		{
+			case 0:		return ERestStrategyName::Random;
+			case 1:		return ERestStrategyName::AwayFromBros;
+			case 2:		return ERestStrategyName::CloseToBros;
+			default:	return ERestStrategyName::None;
+		}
+	default:	return ERestStrategyName::None;
+	}
+}

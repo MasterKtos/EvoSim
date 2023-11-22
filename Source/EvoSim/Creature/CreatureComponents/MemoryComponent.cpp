@@ -68,7 +68,7 @@ TArray<ATile*> UMemoryComponent::GetRememberedTiles(const ETileType TileType1, c
 				Tiles.Add(Tile);
 	}
 	
-	return Tiles;
+	return TArray<ATile*>();
 }
 
 void UMemoryComponent::CheckTilesToForget()
