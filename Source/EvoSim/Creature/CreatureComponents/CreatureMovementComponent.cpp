@@ -3,14 +3,13 @@
 
 #include "CreatureMovementComponent.h"
 
-#include "ComponentReregisterContext.h"
 #include "VectorTypes.h"
 #include "EvoSim/Creature/Creature.h"
 #include "EvoSim/Manager/SimManager.h"
 
 UCreatureMovementComponent::UCreatureMovementComponent()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 void UCreatureMovementComponent::BeginPlay()

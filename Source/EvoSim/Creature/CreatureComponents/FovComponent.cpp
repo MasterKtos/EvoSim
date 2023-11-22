@@ -5,6 +5,7 @@
 
 #include "Components/SphereComponent.h"
 #include "EvoSim/Creature/Carnivorous.h"
+#include "EvoSim/Creature/Corpse.h"
 #include "EvoSim/Creature/Herbivorous.h"
 #include "EvoSim/Map/Tile.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -35,6 +36,7 @@ void UFovComponent::UpdateTilesInSight()
 	PlantTiles.Empty();
 	HerbCreaturesTilesInSight.Empty();
 	MeatCreaturesTilesInSight.Empty();
+	CorpseTilesInSight.Empty();
 	
 	const FVector OwnerLocation = Owner->GetActorLocation();
 
@@ -57,6 +59,12 @@ void UFovComponent::UpdateTilesInSight()
 		for(AActor* CreatureActor : OverlappingMeatActors)
 		{
 			MeatCreaturesTilesInSight.Add(Cast<ACarnivorous>(CreatureActor)->CurrentTile);
+		}
+		
+		TArray<AActor*> OverlappingCorpseActors = GetOverlappingActors(ACorpse::StaticClass());
+		for(AActor* CorpseActor : OverlappingCorpseActors)
+		{
+			CorpseTilesInSight.Add(Cast<ACorpse>(CorpseActor)->CurrentTile);
 		}
 	}
 	
@@ -118,6 +126,20 @@ void UFovComponent::UpdateTilesInSight()
 						MeatCreaturesTilesInSight.Remove(CreatureTile);
 					}
 			}
+			if(CorpseTilesInSight.Num() != 0)
+			{
+				TArray<ATile*> Temp;
+				for(ATile* CreatureTile : CorpseTilesInSight)
+				{
+					if(CreatureTile == Tile)
+						Temp.Add(CreatureTile);
+				}
+				if(Temp.Num() != 0)
+					for(ATile* CreatureTile : Temp)
+					{
+						CorpseTilesInSight.Remove(CreatureTile);
+					}
+			}
 			continue;
 		}
 
@@ -152,5 +174,10 @@ const TArray<ATile*>& UFovComponent::GetHerbCreaturesTilesInSight() const
 const TArray<ATile*>& UFovComponent::GetMeatCreaturesTilesInSight() const
 {
 	return MeatCreaturesTilesInSight;
+}
+
+const TArray<ATile*>& UFovComponent::GetCorpseTilesInSight() const
+{
+	return CorpseTilesInSight;
 }
 
