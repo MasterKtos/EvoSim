@@ -3,6 +3,7 @@
 
 #include "CarnivoreStateTravel.h"
 
+#include "Algo/RandomShuffle.h"
 #include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Creature/Carnivorous.h"
 #include "EvoSim/Creature/Creature.h"
@@ -23,10 +24,28 @@ void UCarnivoreStateTravel::GetPathForCurrentNeed()
 	Super::GetPathForCurrentNeed();
 
 	if(!Owner->NeedsEvaluator->IsCurrentNeed(ECreatureNeed::Eat) || MovesToDo.IsEmpty())
+	{
+		Cast<ACarnivorous>(Owner)->bIsHunting = false;
 		return;
+	}
 
 	Cast<ACarnivorous>(Owner)->bIsHunting = true;
 
+	//retrace path;
+	ATile* TempTile = Owner->CurrentTile;
+	for(int i=MovesToDo.Num()-1; i>=0; i--)
+	{
+		TempTile = TempTile->GetNeighbour(MovesToDo[i]);
+		if(!IsValid(TempTile))
+			return;
+	}
+	TArray AllDirections = {
+		EDirection::N, EDirection::NE, EDirection::E,
+		EDirection::SE, EDirection::S, EDirection::SW,
+		EDirection::W, EDirection::NW
+	};
+	Algo::RandomShuffle(AllDirections);
+	
 	for(const auto BroTile : Bros)
 	{
 		if(BroTile->CreaturesPresent.IsEmpty())
@@ -37,17 +56,30 @@ void UCarnivoreStateTravel::GetPathForCurrentNeed()
 		if(!IsValid(Bro))
 			continue;
 
+		if(Bro->bIsHunting)
+			continue;
+
 		if(!Bro->NeedsEvaluator->IsCurrentNeed(ECreatureNeed::Eat))
 			continue;
 
-		//retrace path;
-		ATile* TempTile = Owner->CurrentTile;
-		for(int i=MovesToDo.Num()-1; i>=0; i--)
+		for(const EDirection Direction : AllDirections)
 		{
-			TempTile = TempTile->GetNeighbour(MovesToDo[i]);
-			if(!IsValid(TempTile))
-				return;
+			const auto Neighbour = TempTile->GetNeighbour(Direction);
+			if(!IsValid(Neighbour) || Neighbour->Type==ETileType::Water || Neighbour->Type==ETileType::Obstacle)
+				continue;
+			Bro->AIComponent->ForcePathTo(Neighbour);
+			Bro->bIsHunting = true;
+			break;
 		}
-		Bro->AIComponent->ForcePathTo(TempTile);
 	}
+}
+
+bool UCarnivoreStateTravel::TryExitState()
+{
+	if(Super::TryExitState())
+	{
+		Cast<ACarnivorous>(Owner)->bIsHunting = false;
+		return true;
+	}
+	return false;
 }

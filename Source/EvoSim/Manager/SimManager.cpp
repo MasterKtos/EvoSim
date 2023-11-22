@@ -4,7 +4,6 @@
 #include "SimManager.h"
 
 #include "EvoSimLifetimeInterface.h"
-#include "LandscapePhysicalMaterial.h"
 #include "EvoSim/AI/Pathfinding/AIManager.h"
 #include "EvoSim/Map/MapManager.h"
 

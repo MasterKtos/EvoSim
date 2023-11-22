@@ -47,12 +47,11 @@ void UAIComponent::Update()
 	{
 		CurrentSpeed--;
 		Owner->MemoryComponent->CheckTilesToForget();
-
-		const ACreature* Foe = Owner->IsInDanger();
-		if(IsValid(Foe))
+		
+		if(Owner->IsInDanger())
 		{
 			CurrentCreatureState = CreatureStateMap[ECreatureStateName::Rest];
-			Owner->RunAway(Foe);
+			Owner->RunAway();
 		}
 		else
 			CurrentCreatureState->Update();

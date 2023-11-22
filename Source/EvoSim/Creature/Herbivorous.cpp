@@ -38,10 +38,21 @@ void AHerbivorous::Reproduce(const bool bMother, ACreature* Partner)
 		Child->CurrentTile = CurrentTile;
 		Child->MapManager = MapManager;
 
-		Child->Speed = MutateFeature(Speed, Partner->Speed, 0.1f, 1.f, 0.1f);
-		Child->ViewDistance = static_cast<float>(MutateFeature(static_cast<int>(ViewDistance), static_cast<int>(Partner->ViewDistance), 1, 20, 2));
-		Child->FieldOfView = static_cast<float>(MutateFeature(static_cast<int>(FieldOfView), static_cast<int>(Partner->FieldOfView), 90, 360, 36));
-		Child->RestStrategy->SetStrategy(MutateStrategy(this->RestStrategy->StrategyName, Partner->RestStrategy->StrategyName));
+		if(IsValid(Partner))
+		{
+			Child->Speed = MutateFeature(Speed, Partner->Speed, 0.1f, 1.f, 0.1f);
+			Child->ViewDistance = static_cast<float>(MutateFeature(static_cast<int>(ViewDistance), static_cast<int>(Partner->ViewDistance), 1, 20, 2));
+			Child->FieldOfView = static_cast<float>(MutateFeature(static_cast<int>(FieldOfView), static_cast<int>(Partner->FieldOfView), 90, 360, 36));
+			Child->RestStrategy->SetStrategy(MutateStrategy(this->RestStrategy->StrategyName, Partner->RestStrategy->StrategyName));
+		}
+		else
+		{
+			Child->Speed = MutateFeature(Speed, Speed, 0.1f, 1.f, 0.1f);
+			Child->ViewDistance = static_cast<float>(MutateFeature(static_cast<int>(ViewDistance), static_cast<int>(ViewDistance), 1, 20, 2));
+			Child->FieldOfView = static_cast<float>(MutateFeature(static_cast<int>(FieldOfView), static_cast<int>(FieldOfView), 90, 360, 36));
+			Child->RestStrategy->SetStrategy(MutateStrategy(this->RestStrategy->StrategyName, RestStrategy->StrategyName));
+		}
+		
 	}
 }
 
@@ -53,32 +64,40 @@ void AHerbivorous::GetHuntedDown(ACorpse* &Remains)
 	Die();
 }
 
-ACreature* AHerbivorous::IsInDanger()
+bool AHerbivorous::IsInDanger()
 {
+	if(DangerTime > 0)
+	{
+		DangerTime--;
+		return true;
+	}
+	
 	FovComponent->UpdateTilesInSight();
 
 	auto FoesInSight = FovComponent->GetMeatCreaturesTilesInSight();
 	if(FoesInSight.IsEmpty())
 	{
-		return nullptr;
+		return false;
 	}
 	
 	for(const ATile* Foe : FoesInSight)
 	{
-		if(!IsValid(Foe) || !IsValid(Owner))
-			return nullptr;
-		const float Dist = FVector::Dist(Foe->GetActorLocation(), Owner->GetActorLocation());
-		if(Dist < ViewDistance*100 && !Foe->CreaturesPresent.IsEmpty())
+		if(!IsValid(Foe))
+			return false;
+		const float Dist = FVector::Dist(Foe->GetActorLocation(), GetActorLocation());
+		if(Dist < ViewDistance*100)
 		{
-			return Foe->CreaturesPresent.Last();
+			DangerTime = 5;
+			DangerVector = Foe->GetActorLocation();
+			return true;
 		}
 	}
-	return nullptr;
+	return false;
 }
 
-void AHerbivorous::RunAway(const ACreature* Foe)
+void AHerbivorous::RunAway()
 {
-	FVector DirAwayFromBro = Owner->GetActorLocation() - Foe->GetActorLocation();
+	FVector DirAwayFromBro = GetActorLocation() - DangerVector;
 	DirAwayFromBro.Normalize();
 
 	const TMap<EDirection, FVector> DirectionToVector = {

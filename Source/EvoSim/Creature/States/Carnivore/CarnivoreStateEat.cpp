@@ -20,9 +20,6 @@ bool UCarnivoreStateEat::TryEnterState(const ECreatureStateName FromState)
 		const auto Neighbour = Owner->CurrentTile->GetNeighbour(Direction);
 		if(!IsValid(Neighbour))
 			continue;
-		
-		if(Neighbour->CreaturesPresent.IsEmpty())
-			continue;
 
 		// Previously hunted down prey
 		if(!Neighbour->PreyPresent.IsEmpty())
@@ -31,6 +28,9 @@ bool UCarnivoreStateEat::TryEnterState(const ECreatureStateName FromState)
 			if(IsValid(Prey))
 				return true;
 		}
+		
+		if(Neighbour->CreaturesPresent.IsEmpty())
+			continue;
 
 		// Hunt down herbivore
 		AHerbivorous* Meat = nullptr;

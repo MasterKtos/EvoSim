@@ -18,4 +18,7 @@ class EVOSIM_API UCarnivoreStateTravel : public UCreatureStateTravel
 protected:
 	virtual void GetTargetsInView() override;
 	virtual void GetPathForCurrentNeed() override;
+
+public:
+	virtual bool TryExitState() override;
 };

@@ -65,9 +65,9 @@ void ACreature::Reproduce(bool bMother, ACreature* Partner)
 	Randy = 0;
 }
 
-ACreature* ACreature::IsInDanger() { return nullptr; }
+bool ACreature::IsInDanger() { return false; }
 
-void ACreature::RunAway(const ACreature* Foe) {}
+void ACreature::RunAway() {}
 
 ERestStrategyName ACreature::MutateStrategy(const ERestStrategyName Parent1, const ERestStrategyName Parent2)
 {
