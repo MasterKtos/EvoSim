@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Creature.generated.h"
 
+class URestStrategy;
 class UMemoryComponent;
 class UNeedsEvaluatorComponent;
 enum class EDirection : uint8;
@@ -26,6 +27,9 @@ public:
 
 	UFUNCTION()
 	bool Move(EDirection Direction);
+	
+	UFUNCTION()
+	void ApplyRestMovement() const;
 
 	UFUNCTION()
 	virtual void Die();
@@ -35,8 +39,7 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite)
 	AMapManager* MapManager;
-
-
+	
 	// Those 3 can mutate and change
 	UPROPERTY(BlueprintReadWrite)
 	float FieldOfView = 0;
@@ -44,6 +47,9 @@ public:
 	float ViewDistance = 0;
 	UPROPERTY(BlueprintReadWrite)
 	float Speed = 0;
+	UPROPERTY()
+	URestStrategy* RestStrategy;
+	// -----------------------------
 
 	UPROPERTY(BlueprintReadWrite)
 	int Hunger = 0;	

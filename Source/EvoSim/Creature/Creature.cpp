@@ -11,6 +11,7 @@
 #include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Manager/SimManager.h"
 #include "EvoSim/Map/Tile.h"
+#include "States/RestStrategy/RestStrategy.h"
 
 ACreature::ACreature()
 {
@@ -22,6 +23,8 @@ ACreature::ACreature()
 	FovSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	NeedsEvaluator = CreateDefaultSubobject<UNeedsEvaluatorComponent>(TEXT("NeedsEvaluatorComponent"));
 	MemoryComponent = CreateDefaultSubobject<UMemoryComponent>(TEXT("MemoryComponent"));
+	RestStrategy = CreateDefaultSubobject<URestStrategy>(TEXT("RestStrategy"));
+	RestStrategy->SetStrategy(ERestStrategyName::Random);
 	
 	SetRootComponent(FovSphereComponent);
 }
@@ -41,6 +44,11 @@ bool ACreature::Move(const EDirection Direction)
 	
 	MovementComponent->SetNewTarget(CurrentTile->GetActorLocation());
 	return true;
+}
+
+void ACreature::ApplyRestMovement() const
+{
+	RestStrategy->ApplyMovement();
 }
 
 void ACreature::Die()
