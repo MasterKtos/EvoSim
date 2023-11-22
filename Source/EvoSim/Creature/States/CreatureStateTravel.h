@@ -28,6 +28,8 @@ public:
 	TArray<EDirection> MovesToDo;
 	UPROPERTY()
 	ECreatureNeed TargetedNeed;
+	UPROPERTY()
+	ACreature* TargetedCreature;
 
 protected:
 	UFUNCTION()

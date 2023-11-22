@@ -7,6 +7,7 @@
 #include "EvoSim/Creature/Creature.h"
 #include "EvoSim/Creature/CreatureComponents/MemoryComponent.h"
 #include "EvoSim/Creature/States/CreatureState.h"
+#include "EvoSim/Creature/States/CreatureStateTravel.h"
 #include "EvoSim/Manager/SimManager.h"
 
 UAIComponent::UAIComponent()
@@ -96,4 +97,9 @@ bool UAIComponent::ForceCurrentState(const ECreatureStateName NewStateName, ACre
 	CreatureStateMap[NewStateName]->ForceEnterState(ForcedBy);
 	CurrentCreatureState = CreatureStateMap[NewStateName];
 	return true;
+}
+
+void UAIComponent::ForcePath(const TArray<EDirection>& Array)
+{
+	Cast<UCreatureStateTravel>(CreatureStateMap[ECreatureStateName::Travel])->MovesToDo = Array;
 }

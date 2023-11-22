@@ -120,6 +120,25 @@ void UCreatureStateTravel::GetPathForCurrentNeed()
 	}
 	
 	MovesToDo = Cast<USimManager>(GetWorld()->GetGameInstance())->AIManager->FindPathToTile(Owner->CurrentTile, CurrentTargets);
+
+	// TODO: waits for better times...
+	//		 (some crash here)
+	// if(TargetedNeed == ECreatureNeed::Reproduce)
+	// {
+	// 	ATile* TempTile = Owner->CurrentTile;
+	// 	TArray<EDirection> RevMoves = {};
+	// 	for (int i = MovesToDo.Num()-1; i>=0; i--)
+	// 	{
+	// 		TempTile = TempTile->GetNeighbour(MovesToDo[i]);
+	// 		EDirection ReversedDir = static_cast<EDirection>((static_cast<uint8>(MovesToDo[i])+4)%8);
+	// 		RevMoves.Add(ReversedDir);
+	// 	}
+	// 	TargetedCreature = TempTile->CreaturesPresent.Last();
+	// 	if(TargetedCreature->NeedsEvaluator->IsCurrentNeed(ECreatureNeed::Reproduce))
+	// 	{
+	// 		TargetedCreature->AIComponent->ForcePath(RevMoves);			
+	// 	}
+	// }
 }
 
 void UCreatureStateTravel::GetTargetsInView()

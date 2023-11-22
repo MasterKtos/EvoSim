@@ -15,9 +15,6 @@ UCreatureStateReproduce::UCreatureStateReproduce()
 
 bool UCreatureStateReproduce::TryEnterState(const ECreatureStateName FromState)
 {
-	if(FromState != ECreatureStateName::Travel)
-		return false;
-
 	if(Owner->Randy < 100)
 		return false;
 	
@@ -26,7 +23,7 @@ bool UCreatureStateReproduce::TryEnterState(const ECreatureStateName FromState)
 
 	for(ACreature* Creature : Owner->CurrentTile->CreaturesPresent)
 	{
-		if(	Creature == Owner || ensure(Creature) ||
+		if(	Creature == Owner || !ensure(Creature) ||
 			!Creature->IsA(Owner->StaticClass()) ||
 			!Creature->AIComponent->ForceCurrentState(StateName, Owner))
 			continue;

@@ -33,6 +33,8 @@ public:
 	bool ChangeCurrentState(ECreatureStateName NewStateName);
 	UFUNCTION()
 	bool ForceCurrentState(ECreatureStateName NewStateName, ACreature* ForcedBy);
+	UFUNCTION()
+	void ForcePath(const TArray<EDirection>& Array);
 
 	UPROPERTY(BlueprintReadOnly)
 	UCreatureState* CurrentCreatureState;
@@ -40,9 +42,6 @@ public:
 protected:	
 	UPROPERTY()
 	ACreature* Owner;
-
-	UPROPERTY()
-	TArray<EDirection> MovesToDo;
 
 	UPROPERTY()
 	TMap<ECreatureStateName, UCreatureState*> CreatureStateMap;
