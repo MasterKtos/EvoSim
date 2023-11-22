@@ -15,6 +15,8 @@ public:
 	ACarnivorous();
 
 	virtual void Reproduce(bool bMother, ACreature* Partner) override;
+
+	bool bIsHunting = false;
 	
 protected:
 	virtual void BeginPlay() override;

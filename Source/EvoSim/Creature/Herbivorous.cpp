@@ -5,6 +5,7 @@
 
 #include "Corpse.h"
 #include "Components/SphereComponent.h"
+#include "CreatureComponents/FovComponent.h"
 #include "EvoSim/AI/AIComponent.h"
 #include "EvoSim/Manager/SimManager.h"
 #include "EvoSim/Map/Tile.h"
@@ -52,6 +53,61 @@ void AHerbivorous::GetHuntedDown(ACorpse* &Remains)
 	Die();
 }
 
+ACreature* AHerbivorous::IsInDanger()
+{
+	FovComponent->UpdateTilesInSight();
+
+	auto FoesInSight = FovComponent->GetMeatCreaturesTilesInSight();
+	if(FoesInSight.IsEmpty())
+	{
+		return nullptr;
+	}
+	
+	for(const ATile* Foe : FoesInSight)
+	{
+		if(!IsValid(Foe) || !IsValid(Owner))
+			return nullptr;
+		const float Dist = FVector::Dist(Foe->GetActorLocation(), Owner->GetActorLocation());
+		if(Dist < ViewDistance*100 && !Foe->CreaturesPresent.IsEmpty())
+		{
+			return Foe->CreaturesPresent.Last();
+		}
+	}
+	return nullptr;
+}
+
+void AHerbivorous::RunAway(const ACreature* Foe)
+{
+	FVector DirAwayFromBro = Owner->GetActorLocation() - Foe->GetActorLocation();
+	DirAwayFromBro.Normalize();
+
+	const TMap<EDirection, FVector> DirectionToVector = {
+		{EDirection::N, {0, -1, 0}},
+		{EDirection::NE, {0.5, -0.5, 0}},
+		{EDirection::E, {1, 0, 0}},
+		{EDirection::SE, {0.5, 0.5, 0}},
+		{EDirection::S, {0, 1, 0}},
+		{EDirection::SW, {-0.5, 0.5, 0}},
+		{EDirection::W, {-1, 0, 0}},
+		{EDirection::NW, {-0.5, -0.5, 0}}
+	};
+
+	EDirection SmallestDotDirection = EDirection::S;
+	for(auto Dir : DirectionToVector)
+	{
+		if(!IsValid(CurrentTile->GetNeighbour(Dir.Key)))
+			continue;
+		const auto DotVal = FVector::Dist(DirAwayFromBro, Dir.Value);
+		if(FMath::Abs(DotVal) < 0.5)
+		{
+			SmallestDotDirection = Dir.Key;
+			break;
+		}
+	}
+	if(!Move(SmallestDotDirection))
+		ApplyRestMovement();
+}
+
 void AHerbivorous::BeginPlay()
 {
 	Super::BeginPlay();
@@ -70,6 +126,7 @@ void AHerbivorous::BeginPlay()
 	
 	Hunger = 45;	
 	Thirst = 40;
+	Randy = 80;
 
 	FovSphereComponent->SetSphereRadius(ViewDistance * 100);
 	AIComponent->InitializeStateMap({

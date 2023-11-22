@@ -19,7 +19,9 @@ public:
 
 	virtual void Reproduce(bool bMother, ACreature* Partner) override;
 	void GetHuntedDown(ACorpse* &Remains);
-	
+	virtual ACreature* IsInDanger() override;
+	virtual void RunAway(const ACreature* Foe) override;
+
 protected:
 	virtual void BeginPlay() override;
 };

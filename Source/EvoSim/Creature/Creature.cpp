@@ -65,6 +65,10 @@ void ACreature::Reproduce(bool bMother, ACreature* Partner)
 	Randy = 0;
 }
 
+ACreature* ACreature::IsInDanger() { return nullptr; }
+
+void ACreature::RunAway(const ACreature* Foe) {}
+
 ERestStrategyName ACreature::MutateStrategy(const ERestStrategyName Parent1, const ERestStrategyName Parent2)
 {
 	switch (FMath::RandRange(0, 2))

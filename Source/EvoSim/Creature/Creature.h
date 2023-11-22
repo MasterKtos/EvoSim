@@ -37,7 +37,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Reproduce(bool bMother, ACreature* Partner = nullptr);
-	
+
+	UFUNCTION()
+	virtual ACreature* IsInDanger();
+	UFUNCTION()
+	virtual void RunAway(const ACreature* Foe);
+
 	UPROPERTY(BlueprintReadWrite)
 	AMapManager* MapManager;
 	

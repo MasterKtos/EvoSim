@@ -9,6 +9,7 @@
 #include "AIComponent.generated.h"
 
 
+class ATile;
 class UCreatureState;
 enum class EDirection : uint8;
 class ACreature;
@@ -35,6 +36,7 @@ public:
 	bool ForceCurrentState(ECreatureStateName NewStateName, ACreature* ForcedBy);
 	UFUNCTION()
 	void ForcePath(const TArray<EDirection>& Array);
+	void ForcePathTo(ATile* Tile);
 
 	UPROPERTY(BlueprintReadOnly)
 	UCreatureState* CurrentCreatureState;

@@ -33,11 +33,15 @@ void ACarnivorous::Reproduce(const bool bMother, ACreature* Partner)
 	{
 		Child->CurrentTile = CurrentTile;
 		Child->MapManager = MapManager;
-		
-		Child->Speed = MutateFeature(Speed, Partner->Speed, 0.1f, 1.f, 0.1f);
-		Child->ViewDistance = MutateFeature(static_cast<int>(ViewDistance), static_cast<int>(Partner->ViewDistance), 1, 20, 2);
-		Child->FieldOfView = MutateFeature(static_cast<int>(FieldOfView), static_cast<int>(Partner->FieldOfView), 90, 360, 36);
-		Child->RestStrategy->SetStrategy(MutateStrategy(this->RestStrategy->StrategyName, Partner->RestStrategy->StrategyName));
+
+		const auto PartnerSpeed = IsValid(Partner) ? Partner->Speed : Speed;
+		const auto PartnerViewDistance = IsValid(Partner) ? Partner->ViewDistance : ViewDistance;
+		const auto PartnerFieldOfView = IsValid(Partner) ? Partner->FieldOfView : FieldOfView;
+		const auto PartnerRestStrategy = IsValid(Partner) ? Partner->RestStrategy->StrategyName : RestStrategy->StrategyName;
+		Child->Speed = MutateFeature(Speed, PartnerSpeed, 0.1f, 1.f, 0.1f);
+		Child->ViewDistance = MutateFeature(static_cast<int>(ViewDistance), static_cast<int>(PartnerViewDistance), 1, 20, 2);
+		Child->FieldOfView = MutateFeature(static_cast<int>(FieldOfView), static_cast<int>(PartnerFieldOfView), 90, 360, 36);
+		Child->RestStrategy->SetStrategy(MutateStrategy(this->RestStrategy->StrategyName, PartnerRestStrategy));
 	}
 }
 
@@ -59,6 +63,7 @@ void ACarnivorous::BeginPlay()
 	
 	Hunger = 45;	
 	Thirst = 40;
+	Randy = 80;
 
 	FovSphereComponent->SetSphereRadius(ViewDistance * 100);
 	AIComponent->InitializeStateMap({

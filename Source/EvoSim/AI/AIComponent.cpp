@@ -9,6 +9,7 @@
 #include "EvoSim/Creature/States/CreatureState.h"
 #include "EvoSim/Creature/States/CreatureStateTravel.h"
 #include "EvoSim/Manager/SimManager.h"
+#include "Pathfinding/AIManager.h"
 
 UAIComponent::UAIComponent()
 {
@@ -46,7 +47,15 @@ void UAIComponent::Update()
 	{
 		CurrentSpeed--;
 		Owner->MemoryComponent->CheckTilesToForget();
-		CurrentCreatureState->Update();
+
+		const ACreature* Foe = Owner->IsInDanger();
+		if(IsValid(Foe))
+		{
+			CurrentCreatureState = CreatureStateMap[ECreatureStateName::Rest];
+			Owner->RunAway(Foe);
+		}
+		else
+			CurrentCreatureState->Update();
 	}
 }
 
@@ -102,4 +111,9 @@ bool UAIComponent::ForceCurrentState(const ECreatureStateName NewStateName, ACre
 void UAIComponent::ForcePath(const TArray<EDirection>& Array)
 {
 	Cast<UCreatureStateTravel>(CreatureStateMap[ECreatureStateName::Travel])->MovesToDo = Array;
+}
+
+void UAIComponent::ForcePathTo(ATile* Tile)
+{
+	Cast<UCreatureStateTravel>(CreatureStateMap[ECreatureStateName::Travel])->MovesToDo = Cast<USimManager>(GetWorld()->GetGameInstance())->AIManager->FindPathToTile(Owner->CurrentTile, Tile);
 }
