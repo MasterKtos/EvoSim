@@ -25,9 +25,9 @@ public:
 	UFUNCTION()
 	void ApplyMovement() const;
 
-private:
 	ERestStrategyName StrategyName = ERestStrategyName::None;
-	
+
+private:
 	void RandomMovement() const;
 	void CloseToBrosMovement() const;
 	void AwayFromBrosMovement() const;

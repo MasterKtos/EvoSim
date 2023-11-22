@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "States/RestStrategy/RestStrategy.h"
 #include "Creature.generated.h"
 
 class URestStrategy;
@@ -88,6 +89,8 @@ public:
 	UMemoryComponent* MemoryComponent;
 
 protected:
+	static ERestStrategyName MutateStrategy(ERestStrategyName Parent1, ERestStrategyName Parent2);
+	
 	template< class T >
 	static FORCEINLINE T MutateFeature(T Value1, T Value2, T MinValue, T MaxValue, T MaxMutationRange)
 	{
